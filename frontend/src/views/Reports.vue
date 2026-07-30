@@ -33,29 +33,26 @@
         </div>
       </div>
 
-      <div class="score-banner">
-        <div class="score-circle">
-          <span class="score-num">98.5</span>
-          <span class="score-label">综合感控合规得分</span>
+      <div class="score-grid">
+        <div class="grid-card score-card">
+          <span class="val green-text">98.5</span>
+          <span class="lbl">综合感控合规得分</span>
         </div>
-        <div class="score-grid">
-          <div class="grid-card">
-            <!-- 动态响应式读取设备总数 -->
-            <span class="val">{{ totalDeviceCount }} 台</span>
-            <span class="lbl">监测设备总数</span>
-          </div>
-          <div class="grid-card">
-            <span class="val">100%</span>
-            <span class="lbl">水源消毒达标率</span>
-          </div>
-          <div class="grid-card">
-            <span class="val">99.8%</span>
-            <span class="lbl">气源洁净达标率</span>
-          </div>
-          <div class="grid-card">
-            <span class="val">0 起</span>
-            <span class="lbl">严重安全事件</span>
-          </div>
+        <div class="grid-card">
+          <span class="val">{{ totalDeviceCount }} 台</span>
+          <span class="lbl">监测设备总数</span>
+        </div>
+        <div class="grid-card">
+          <span class="val">100%</span>
+          <span class="lbl">水源消毒达标率</span>
+        </div>
+        <div class="grid-card">
+          <span class="val">99.8%</span>
+          <span class="lbl">气源洁净达标率</span>
+        </div>
+        <div class="grid-card">
+          <span class="val">0 起</span>
+          <span class="lbl">严重安全事件</span>
         </div>
       </div>
 
@@ -443,50 +440,12 @@ onMounted(() => {
   color: var(--text-main);
 }
 
-.score-banner {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid var(--card-border);
-  border-radius: 10px;
-  padding: 20px 28px;
-}
 
-.score-circle {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 124px;
-  height: 124px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, rgba(16, 185, 129, 0) 70%);
-  border: 3px solid var(--success-color);
-  box-shadow: 0 0 16px rgba(16, 185, 129, 0.3);
-  padding: 8px;
-  box-sizing: border-box;
-}
-
-.score-num {
-  font-size: 32px;
-  font-weight: bold;
-  color: var(--success-color);
-  line-height: 1;
-}
-
-.score-label {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 6px;
-  white-space: nowrap;
-}
 
 .score-grid {
-  flex: 1;
+  width: 100%;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 16px;
 }
 
@@ -494,22 +453,34 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16px 12px;
+  justify-content: center;
+  padding: 20px 16px;
   background: rgba(30, 41, 59, 0.5);
   border: 1px solid rgba(56, 189, 248, 0.2);
-  border-radius: 8px;
+  border-radius: 10px;
+}
+
+.grid-card.score-card {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.35);
 }
 
 .grid-card .val {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: bold;
   color: var(--text-main);
+  line-height: 1.2;
+}
+
+.grid-card .val.green-text {
+  color: var(--success-color);
 }
 
 .grid-card .lbl {
   font-size: 12px;
   color: var(--text-muted);
   margin-top: 6px;
+  white-space: nowrap;
 }
 
 .section-block h3 {
