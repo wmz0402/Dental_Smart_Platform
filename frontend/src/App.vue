@@ -1,117 +1,118 @@
 <template>
-  <el-container class="app-layout">
+  <el-container class="app-layout" direction="vertical">
     <!-- 未登录状态：渲染纯净全屏登录页 -->
     <template v-if="!userStore.isLoggedIn">
       <router-view />
     </template>
 
-    <!-- 已登录状态：渲染整体科技感控制台主框架 -->
+    <!-- 已登录状态：渲染全屏打通顶栏控制台主框架 -->
     <template v-else>
-      <el-aside width="240px" class="sidebar">
-        <div class="logo-area flex-align">
-          <img :src="logoSvg" class="logo-icon-img" alt="Logo" />
-          <div class="logo-text">
-            <h1>智护牙境</h1>
-            <p>口腔智能感控平台</p>
-          </div>
-        </div>
-
-        <el-menu
-          :default-active="$route.path"
-          router
-          class="sidebar-menu"
-          background-color="transparent"
-          text-color="#94a3b8"
-          active-text-color="#38bdf8"
-        >
-          <el-menu-item index="/">
-            <el-icon><DataBoard /></el-icon>
-            <span>全局监控概览</span>
-          </el-menu-item>
-          <el-menu-item index="/water">
-            <el-icon><Filter /></el-icon>
-            <span>水源消毒处理系统</span>
-          </el-menu-item>
-          <el-menu-item index="/air">
-            <el-icon><WindPower /></el-icon>
-            <span>气源洁净处理系统</span>
-          </el-menu-item>
-          <el-menu-item index="/telemetry">
-            <el-icon><TrendCharts /></el-icon>
-            <span>实时遥测与数据流</span>
-          </el-menu-item>
-          <el-menu-item index="/alarm">
-            <el-icon><Warning /></el-icon>
-            <span>告警与预测性维护</span>
-          </el-menu-item>
-          <el-menu-item index="/reports">
-            <el-icon><Document /></el-icon>
-            <span>感控合规报表</span>
-          </el-menu-item>
-          <el-menu-item index="/settings">
-            <el-icon><Setting /></el-icon>
-            <span>系统与机构配置</span>
-          </el-menu-item>
-        </el-menu>
-
-        <div class="sidebar-footer">
-          <span class="status-dot green"></span>
-          <span>云端数据链路实时通畅</span>
-        </div>
-      </el-aside>
-
-      <el-container class="main-container">
-        <!-- 顶部全宽亮底黑蓝科技导航头 -->
-        <el-header height="64px" class="header flex-between">
-          <div class="header-left flex-align">
-            <span class="clinic-tag">示范总院中心控制台</span>
-          </div>
-
-          <div class="header-right flex-align">
-            <!-- 经典深浅主题转换按钮 -->
-            <el-tooltip :content="userStore.isDarkTheme ? '切换为浅色明亮模式' : '切换为深色科技模式'" placement="bottom">
-              <el-button circle class="theme-toggle-btn" @click="userStore.toggleTheme">
-                <el-icon v-if="userStore.isDarkTheme"><Sunny /></el-icon>
-                <el-icon v-else><Moon /></el-icon>
-              </el-button>
-            </el-tooltip>
-
-            <!-- 系统实时打卡时间 -->
-            <div class="system-time">
-              <el-icon><Clock /></el-icon>
-              <span>{{ currentTime }}</span>
+      <!-- 顶部 100% 贯穿打通的 Header 导航栏 -->
+      <el-header height="64px" class="header flex-between">
+        <div class="header-left flex-align">
+          <div class="logo-area flex-align">
+            <img :src="logoSvg" class="logo-icon-img" alt="Logo" />
+            <div class="logo-text">
+              <h1>智护牙境</h1>
+              <p>口腔智能感控平台</p>
             </div>
-
-            <!-- 用户信息精美区域 (圆形头像 + 下拉菜单) -->
-            <el-dropdown trigger="click" popper-class="user-dropdown-popper" @command="handleUserCommand">
-              <div class="user-profile flex-align">
-                <el-avatar
-                  :size="36"
-                  :src="userStore.user?.avatar"
-                  class="user-avatar"
-                >
-                  {{ userAvatarInitial }}
-                </el-avatar>
-                <div class="user-info">
-                  <span class="user-email">{{ userStore.user?.email || 'admin@qq.com' }}</span>
-                  <span class="user-role">{{ userRoleLabel }}</span>
-                </div>
-              </div>
-              <template #dropdown>
-                <el-dropdown-menu class="user-dropdown-menu">
-                  <el-dropdown-item command="profile">
-                    <el-icon><User /></el-icon>
-                    <span>个人信息设置</span>
-                  </el-dropdown-item>
-                  <el-dropdown-item command="logout" divided class="logout-item">
-                    <el-icon><SwitchButton /></el-icon>
-                    <span>退出登录</span>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown>
           </div>
-        </el-header>
+          <div class="header-divider"></div>
+          <span class="clinic-tag">示范总院中心控制台</span>
+        </div>
+
+        <div class="header-right flex-align">
+          <!-- 经典深浅主题转换按钮 -->
+          <el-tooltip :content="userStore.isDarkTheme ? '切换为浅色明亮模式' : '切换为深色科技模式'" placement="bottom">
+            <el-button circle class="theme-toggle-btn" @click="userStore.toggleTheme">
+              <el-icon v-if="userStore.isDarkTheme"><Sunny /></el-icon>
+              <el-icon v-else><Moon /></el-icon>
+            </el-button>
+          </el-tooltip>
+
+          <!-- 系统实时打卡时间 -->
+          <div class="system-time">
+            <el-icon><Clock /></el-icon>
+            <span>{{ currentTime }}</span>
+          </div>
+
+          <!-- 用户信息精美区域 (圆形头像 + 下拉菜单) -->
+          <el-dropdown trigger="click" popper-class="user-dropdown-popper" @command="handleUserCommand">
+            <div class="user-profile flex-align">
+              <el-avatar
+                :size="36"
+                :src="userStore.user?.avatar"
+                class="user-avatar"
+              >
+                {{ userAvatarInitial }}
+              </el-avatar>
+              <div class="user-info">
+                <span class="user-email">{{ userStore.user?.email || 'admin@qq.com' }}</span>
+                <span class="user-role">{{ userRoleLabel }}</span>
+              </div>
+            </div>
+            <template #dropdown>
+              <el-dropdown-menu class="user-dropdown-menu">
+                <el-dropdown-item command="profile">
+                  <el-icon><User /></el-icon>
+                  <span>个人信息设置</span>
+                </el-dropdown-item>
+                <el-dropdown-item command="logout" divided class="logout-item">
+                  <el-icon><SwitchButton /></el-icon>
+                  <span>退出登录</span>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+      </el-header>
+
+      <!-- 顶栏下方的 body 容器：包含侧边栏与主内容区 -->
+      <el-container class="body-container">
+        <el-aside width="240px" class="sidebar">
+          <el-menu
+            :default-active="$route.path"
+            router
+            class="sidebar-menu"
+            background-color="transparent"
+            text-color="#94a3b8"
+            active-text-color="#38bdf8"
+          >
+            <el-menu-item index="/">
+              <el-icon><DataBoard /></el-icon>
+              <span>全局监控概览</span>
+            </el-menu-item>
+            <el-menu-item index="/water">
+              <el-icon><Filter /></el-icon>
+              <span>水源消毒处理系统</span>
+            </el-menu-item>
+            <el-menu-item index="/air">
+              <el-icon><WindPower /></el-icon>
+              <span>气源洁净处理系统</span>
+            </el-menu-item>
+            <el-menu-item index="/telemetry">
+              <el-icon><TrendCharts /></el-icon>
+              <span>实时遥测与数据流</span>
+            </el-menu-item>
+            <el-menu-item index="/alarm">
+              <el-icon><Warning /></el-icon>
+              <span>告警与预测性维护</span>
+            </el-menu-item>
+            <el-menu-item index="/reports">
+              <el-icon><Document /></el-icon>
+              <span>感控合规报表</span>
+            </el-menu-item>
+            <el-menu-item index="/settings">
+              <el-icon><Setting /></el-icon>
+              <span>系统与机构配置</span>
+            </el-menu-item>
+          </el-menu>
+
+          <div class="sidebar-footer">
+            <span class="status-dot green"></span>
+            <span>云端数据链路实时通畅</span>
+          </div>
+        </el-aside>
 
         <!-- 主内容容器 -->
         <el-main class="content-area">
@@ -376,19 +377,95 @@ onUnmounted(() => {
 <style scoped>
 .app-layout {
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   background-color: var(--bg-dark);
+  overflow: hidden;
+}
+
+.header {
+  width: 100%;
+  height: 64px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+  padding: 0 24px;
+  flex-shrink: 0;
+  z-index: 100;
+}
+
+:global(html.light-theme) .header {
+  background: linear-gradient(135deg, #2b529a 0%, #3b629b 100%) !important;
+  border-bottom: 1px solid #254685 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.logo-area {
+  padding: 0;
+  gap: 10px;
+  margin-right: 8px;
+}
+
+.header-divider {
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 16px;
+}
+
+:global(html.light-theme) .header-divider {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.logo-icon-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4));
+}
+
+:global(html.light-theme) .logo-icon-img {
+  filter: drop-shadow(0 2px 6px rgba(255, 255, 255, 0.3));
+}
+
+.logo-text h1 {
+  font-size: 16px;
+  color: #ffffff;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+:global(html.light-theme) .logo-text h1 {
+  color: #ffffff !important;
+}
+
+.logo-text p {
+  font-size: 10px;
+  color: #38bdf8;
+}
+
+:global(html.light-theme) .logo-text p {
+  color: #93c5fd !important;
+}
+
+.body-container {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  height: calc(100vh - 64px);
 }
 
 .sidebar {
+  width: 240px;
   background-color: #0b1120 !important;
   border-right: 1px solid rgba(56, 189, 248, 0.12);
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  height: 100%;
+  flex-shrink: 0;
 }
 
 :global(html.light-theme) .sidebar {
@@ -396,47 +473,11 @@ onUnmounted(() => {
   border-right: 1px solid #e2e8f0 !important;
 }
 
-.logo-area {
-  padding: 20px;
-  gap: 12px;
-  border-bottom: 1px solid rgba(56, 189, 248, 0.1);
-}
-
-:global(html.light-theme) .logo-area {
-  border-bottom: 1px solid #f1f5f9;
-}
-
-.logo-icon-img {
-  width: 38px;
-  height: 38px;
-  border-radius: 8px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4));
-}
-
-:global(html.light-theme) .logo-icon-img {
-  filter: drop-shadow(0 2px 6px rgba(37, 99, 235, 0.2));
-}
-
-.logo-text h1 {
-  font-size: 16px;
-  color: var(--text-main);
-  font-weight: 700;
-}
-
-.logo-text p {
-  font-size: 10px;
-  color: var(--accent-cyan);
-}
-
-:global(html.light-theme) .logo-text p {
-  color: #2563eb;
-}
-
 .sidebar-menu {
   flex: 1;
   border-right: none;
   padding-top: 12px;
+  overflow-y: auto;
 }
 
 :deep(.el-menu-item) {
@@ -471,26 +512,13 @@ onUnmounted(() => {
   box-shadow: 0 0 8px var(--success-color);
 }
 
-.header {
-  background: rgba(15, 23, 42, 0.9);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(56, 189, 248, 0.12);
-  padding: 0 24px;
-}
-
-:global(html.light-theme) .header {
-  background: linear-gradient(135deg, #2b529a 0%, #3b629b 100%) !important;
-  border-bottom: 1px solid #254685 !important;
-  color: #ffffff !important;
-}
-
 .clinic-tag {
-  background: rgba(2, 132, 199, 0.15);
-  color: var(--accent-cyan);
-  padding: 6px 12px;
+  background: rgba(2, 132, 199, 0.2);
+  color: #38bdf8;
+  padding: 5px 12px;
   border-radius: 20px;
   font-size: 12px;
-  border: 1px solid rgba(56, 189, 248, 0.3);
+  border: 1px solid rgba(56, 189, 248, 0.35);
 }
 
 :global(html.light-theme) .clinic-tag {
