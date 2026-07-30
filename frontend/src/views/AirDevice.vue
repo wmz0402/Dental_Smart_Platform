@@ -14,13 +14,13 @@
     <!-- 气源设备卡片网格 -->
     <div class="device-grid">
       <div v-for="dev in airDevices" :key="dev.id" class="glass-card device-card">
-        <div class="card-top flex-between">
+        <div class="card-top flex-between align-start">
           <div class="dev-title-box">
             <span class="status-indicator" :class="dev.status.toLowerCase()"></span>
             <h4>{{ dev.name }}</h4>
           </div>
-          <div class="flex-align gap-8">
-            <el-tag :type="dev.status === 'ONLINE' ? 'success' : (dev.status === 'MAINTENANCE' ? 'warning' : 'info')">{{ dev.status }}</el-tag>
+          <div class="flex-align gap-8 flex-shrink-0">
+            <el-tag :type="dev.status === 'ONLINE' ? 'success' : (dev.status === 'MAINTENANCE' ? 'warning' : 'info')" size="small">{{ dev.status }}</el-tag>
             <!-- 管理员专属编辑与删除功能按钮组 -->
             <template v-if="userStore.isAdmin">
               <el-tooltip content="管理员编辑设备信息" placement="top">
@@ -37,9 +37,13 @@
           </div>
         </div>
 
-        <div class="dev-sn">{{ dev.sn }} | {{ dev.location }}</div>
+        <div class="dev-sn">
+          <span class="sn-code">{{ dev.sn }}</span>
+          <span class="sn-divider">|</span>
+          <span class="loc-text">{{ dev.location }}</span>
+        </div>
 
-        <div class="metrics-grid mb-16">
+        <div class="metrics-grid mb-18">
           <div class="sub-metric">
             <span class="m-label">气源稳定压力</span>
             <span class="m-value text-cyan">{{ getTelemetry(dev.sn).pressure || 0.65 }} <small>MPa</small></span>
@@ -53,25 +57,25 @@
             <span class="m-value">{{ getTelemetry(dev.sn).air_flow || 180 }} <small>L/min</small></span>
           </div>
           <div class="sub-metric">
-            <span class="m-label">PM2.5尘埃颗粒</span>
+            <span class="m-label">PM2.5 尘埃颗粒</span>
             <span class="m-value">{{ getTelemetry(dev.sn).pm25 || 0.002 }} <small>mg/m³</small></span>
           </div>
         </div>
 
-        <div class="progress-box mb-16">
-          <div class="flex-between text-sub mb-4">
+        <div class="progress-box mb-14">
+          <div class="flex-between text-sub mb-6">
             <span>高效空气过滤网健康度</span>
-            <span>{{ dev.filter_level }}%</span>
+            <span class="val-bold">{{ dev.filter_level }}%</span>
           </div>
-          <el-progress :percentage="dev.filter_level" :status="dev.filter_level < 80 ? 'warning' : 'success'" :show-text="false" />
+          <el-progress :percentage="dev.filter_level" :stroke-width="8" :status="dev.filter_level < 80 ? 'warning' : 'success'" :show-text="false" />
         </div>
 
         <div class="progress-box mb-20">
-          <div class="flex-between text-sub mb-4">
+          <div class="flex-between text-sub mb-6">
             <span>干燥离心除水机寿命</span>
-            <span>{{ dev.uv_lamp_health }}%</span>
+            <span class="val-bold">{{ dev.uv_lamp_health }}%</span>
           </div>
-          <el-progress :percentage="dev.uv_lamp_health" status="success" :show-text="false" />
+          <el-progress :percentage="dev.uv_lamp_health" :stroke-width="8" status="success" :show-text="false" />
         </div>
 
         <div class="card-actions flex-between">
@@ -316,32 +320,39 @@ onMounted(() => {
 
 .device-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 22px;
 }
 
 .device-card {
-  padding: 20px;
+  padding: 22px 24px;
   display: flex;
   flex-direction: column;
+}
+
+.align-start {
+  align-items: flex-start;
 }
 
 .dev-title-box {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  flex: 1;
 }
 
 .dev-title-box h4 {
   font-size: 15px;
   color: var(--text-main);
-  font-weight: 600;
+  font-weight: 700;
+  line-height: 1.4;
 }
 
 .status-indicator {
   width: 8px;
   height: 8px;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .status-indicator.online {
@@ -351,17 +362,34 @@ onMounted(() => {
 
 .dev-sn {
   font-size: 12px;
-  color: #64748b;
-  margin: 6px 0 16px 0;
+  color: var(--text-secondary);
+  margin: 10px 0 18px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sn-code {
+  font-family: monospace;
+  color: #94a3b8;
+}
+
+.sn-divider {
+  color: rgba(148, 163, 184, 0.4);
+}
+
+.loc-text {
+  color: #cbd5e1;
 }
 
 .metrics-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  background: rgba(30, 41, 59, 0.4);
-  padding: 12px;
-  border-radius: 8px;
+  gap: 14px 16px;
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  padding: 14px 16px;
+  border-radius: 10px;
 }
 
 .sub-metric {
@@ -372,19 +400,20 @@ onMounted(() => {
 .m-label {
   font-size: 11px;
   color: #94a3b8;
+  margin-bottom: 3px;
 }
 
 .m-value {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
   color: #f8fafc;
-  margin-top: 2px;
 }
 
 .m-value small {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 400;
-  color: #64748b;
+  color: #94a3b8;
+  margin-left: 2px;
 }
 
 .text-cyan { color: #38bdf8 !important; }
@@ -395,10 +424,23 @@ onMounted(() => {
   color: #94a3b8;
 }
 
-.mb-4 { margin-bottom: 4px; }
-.mb-16 { margin-bottom: 16px; }
+.val-bold {
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.mb-6 { margin-bottom: 6px; }
+.mb-14 { margin-bottom: 14px; }
+.mb-18 { margin-bottom: 18px; }
 .mb-20 { margin-bottom: 20px; }
 .mb-24 { margin-bottom: 24px; }
 .gap-8 { gap: 8px; }
 .gap-12 { gap: 12px; }
+.flex-shrink-0 { flex-shrink: 0; }
+
+.card-actions {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid rgba(56, 189, 248, 0.12);
+}
 </style>
