@@ -190,6 +190,13 @@ const forgetForm = ref({
   newPassword: ''
 });
 
+const formatError = (e: any): string => {
+  if (!e) return '请求错误';
+  if (typeof e === 'string') return e;
+  if (e.message && typeof e.message === 'string') return e.message;
+  return '系统处理异常，请重试';
+};
+
 const handleSendRegCode = async () => {
   if (!regForm.value.email) {
     return ElMessage.error('请先填写需要注册的电子邮箱地址');
@@ -198,7 +205,7 @@ const handleSendRegCode = async () => {
     await userStore.sendEmailCode(regForm.value.email);
     ElMessage.success(`验证码已成功发送至 ${regForm.value.email}`);
   } catch (e: any) {
-    ElMessage.error(e.message || '发送失败');
+    ElMessage.error(formatError(e));
   }
 };
 
@@ -210,7 +217,7 @@ const handleSendForgetCode = async () => {
     await userStore.sendEmailCode(forgetForm.value.email);
     ElMessage.success(`重置验证码已发送至 ${forgetForm.value.email}`);
   } catch (e: any) {
-    ElMessage.error(e.message || '发送失败');
+    ElMessage.error(formatError(e));
   }
 };
 
@@ -220,7 +227,7 @@ const handlePasswordLogin = async () => {
     ElMessage.success(`登录成功！欢迎回来: ${userStore.user?.realName}`);
     router.push('/');
   } catch (e: any) {
-    ElMessage.error(e.message || '密码不正确');
+    ElMessage.error(formatError(e));
   }
 };
 
@@ -230,7 +237,7 @@ const handleRegister = async () => {
     ElMessage.success('账号注册成功！已为您自动登录进入系统');
     router.push('/');
   } catch (e: any) {
-    ElMessage.error(e.message || '注册失败');
+    ElMessage.error(formatError(e));
   }
 };
 
@@ -246,7 +253,7 @@ const handleResetPassword = async () => {
     loginForm.value.password = forgetForm.value.newPassword;
     showForgetDialog.value = false;
   } catch (e: any) {
-    ElMessage.error(e.message || '重置失败');
+    ElMessage.error(formatError(e));
   }
 };
 </script>
@@ -289,7 +296,6 @@ const handleResetPassword = async () => {
   margin-top: 8px;
 }
 
-/* 深色背景下的高对比度标签页字体与 Label 强化 */
 :deep(.el-tabs__item) {
   color: #cbd5e1 !important;
   font-size: 15px !important;
