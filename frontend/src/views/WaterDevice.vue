@@ -200,7 +200,13 @@ const defaultWaterDevices: Device[] = [
   { id: 5, sn: 'W-SYS-2026-05', name: '5号种植专科水路无菌消毒站', type: 'WATER', clinic_id: 101, location: '种植中心 牙椅08', work_mode: 'DEEP_CLEAN', status: 'ONLINE', uv_status: 1, filter_level: 94, uv_lamp_health: 97 },
   { id: 6, sn: 'W-SYS-2026-06', name: '6号正畸中心综合水路净化机', type: 'WATER', clinic_id: 101, location: '正畸中心 牙椅10', work_mode: 'NORMAL', status: 'ONLINE', uv_status: 1, filter_level: 89, uv_lamp_health: 91 },
   { id: 7, sn: 'W-SYS-2026-07', name: '二楼牙体牙髓科水路处理终端', type: 'WATER', clinic_id: 101, location: '二楼诊区 牙椅12', work_mode: 'NORMAL', status: 'ONLINE', uv_status: 1, filter_level: 92, uv_lamp_health: 95 },
-  { id: 8, sn: 'W-SYS-2026-08', name: '消毒供应中心次氯酸水发生主站', type: 'WATER', clinic_id: 101, location: '消毒供应室 主柜01', work_mode: 'DEEP_CLEAN', status: 'ONLINE', uv_status: 1, filter_level: 98, uv_lamp_health: 99 }
+  { id: 8, sn: 'W-SYS-2026-08', name: '消毒供应中心次氯酸水发生主站', type: 'WATER', clinic_id: 101, location: '消毒供应室 主柜01', work_mode: 'DEEP_CLEAN', status: 'ONLINE', uv_status: 1, filter_level: 98, uv_lamp_health: 99 },
+  { id: 9, sn: 'W-SYS-2026-09', name: '9号修复专科综合牙椅水路净化站', type: 'WATER', clinic_id: 101, location: '修复科 牙椅15', work_mode: 'NORMAL', status: 'ONLINE', uv_status: 1, filter_level: 90, uv_lamp_health: 93 },
+  { id: 10, sn: 'W-SYS-2026-10', name: '10号牙周专科超声洁治高洁水站', type: 'WATER', clinic_id: 101, location: '牙周科 牙椅18', work_mode: 'DEEP_CLEAN', status: 'ONLINE', uv_status: 1, filter_level: 87, uv_lamp_health: 89 },
+  { id: 11, sn: 'W-SYS-2026-11', name: '11号急诊颌面外科无菌冲洗机', type: 'WATER', clinic_id: 101, location: '急诊室 牙椅20', work_mode: 'DEEP_CLEAN', status: 'ONLINE', uv_status: 1, filter_level: 96, uv_lamp_health: 98 },
+  { id: 12, sn: 'W-SYS-2026-12', name: '12号预防齿科水路软化消毒终端', type: 'WATER', clinic_id: 101, location: '预防齿科 牙椅22', work_mode: 'ECO', status: 'ONLINE', uv_status: 1, filter_level: 93, uv_lamp_health: 95 },
+  { id: 13, sn: 'W-SYS-2026-13', name: '三楼特诊中心高洁抑菌水路节点', type: 'WATER', clinic_id: 101, location: '三楼VIP区 牙椅25', work_mode: 'NORMAL', status: 'ONLINE', uv_status: 1, filter_level: 91, uv_lamp_health: 94 },
+  { id: 14, sn: 'W-SYS-2026-14', name: '技工室印模清洗消毒水路专机', type: 'WATER', clinic_id: 101, location: '技工中心 消毒台02', work_mode: 'DEEP_CLEAN', status: 'ONLINE', uv_status: 1, filter_level: 95, uv_lamp_health: 97 }
 ];
 
 const waterDevices = computed(() => {

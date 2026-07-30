@@ -182,12 +182,18 @@ const editDevForm = ref<{
 
 // 默认气源设备兜底
 const defaultAirDevices: Device[] = [
-  { id: 9, sn: 'A-SYS-2026-01', name: '中央气源超净处理工作站', type: 'AIR', clinic_id: 101, location: '主设备间 气源机组A', work_mode: 'NORMAL', status: 'ONLINE', uv_status: 1, filter_level: 78, uv_lamp_health: 85 },
-  { id: 10, sn: 'A-SYS-2026-02', name: '种植手术室无菌气源站', type: 'AIR', clinic_id: 102, location: '分院 手术室01', work_mode: 'NORMAL', status: 'ONLINE', uv_status: 1, filter_level: 92, uv_lamp_health: 96 },
-  { id: 11, sn: 'A-SYS-2026-03', name: '二楼正畸中心高洁净气源站', type: 'AIR', clinic_id: 101, location: '二楼正畸中心 机组B', work_mode: 'ECO', status: 'ONLINE', uv_status: 1, filter_level: 89, uv_lamp_health: 93 },
-  { id: 12, sn: 'A-SYS-2026-04', name: '牙科负压抽吸高效除菌处理站', type: 'AIR', clinic_id: 101, location: '设备负压间 机组C', work_mode: 'DEEP_CLEAN', status: 'ONLINE', uv_status: 1, filter_level: 85, uv_lamp_health: 90 },
-  { id: 13, sn: 'A-SYS-2026-05', name: '儿童牙科诊区舒适低噪气源站', type: 'AIR', clinic_id: 101, location: '诊室二 气源分支02', work_mode: 'ECO', status: 'ONLINE', uv_status: 1, filter_level: 91, uv_lamp_health: 94 },
-  { id: 14, sn: 'A-SYS-2026-06', name: 'VIP特诊中心高压无油无菌气源站', type: 'AIR', clinic_id: 101, location: 'VIP层 气源主节点', work_mode: 'NORMAL', status: 'ONLINE', uv_status: 1, filter_level: 96, uv_lamp_health: 98 }
+  { id: 15, sn: 'A-SYS-2026-01', name: '中央气源超净处理工作站', type: 'AIR', clinic_id: 101, location: '主设备间 气源机组A', work_mode: 'NORMAL', status: 'ONLINE', uv_status: 1, filter_level: 78, uv_lamp_health: 85 },
+  { id: 16, sn: 'A-SYS-2026-02', name: '种植手术室无菌气源站', type: 'AIR', clinic_id: 102, location: '分院 手术室01', work_mode: 'NORMAL', status: 'ONLINE', uv_status: 1, filter_level: 92, uv_lamp_health: 96 },
+  { id: 17, sn: 'A-SYS-2026-03', name: '二楼正畸中心高洁净气源站', type: 'AIR', clinic_id: 101, location: '二楼正畸中心 机组B', work_mode: 'ECO', status: 'ONLINE', uv_status: 1, filter_level: 89, uv_lamp_health: 93 },
+  { id: 18, sn: 'A-SYS-2026-04', name: '牙科负压抽吸高效除菌处理站', type: 'AIR', clinic_id: 101, location: '设备负压间 机组C', work_mode: 'DEEP_CLEAN', status: 'ONLINE', uv_status: 1, filter_level: 85, uv_lamp_health: 90 },
+  { id: 19, sn: 'A-SYS-2026-05', name: '儿童牙科诊区舒适低噪气源站', type: 'AIR', clinic_id: 101, location: '诊室二 气源分支02', work_mode: 'ECO', status: 'ONLINE', uv_status: 1, filter_level: 91, uv_lamp_health: 94 },
+  { id: 20, sn: 'A-SYS-2026-06', name: 'VIP特诊中心高压无油无菌气源站', type: 'AIR', clinic_id: 101, location: 'VIP层 气源主节点', work_mode: 'NORMAL', status: 'ONLINE', uv_status: 1, filter_level: 96, uv_lamp_health: 98 },
+  { id: 21, sn: 'A-SYS-2026-07', name: '7号修复中心气源高精度过滤工作站', type: 'AIR', clinic_id: 101, location: '修复科 气源机组D', work_mode: 'NORMAL', status: 'ONLINE', uv_status: 1, filter_level: 88, uv_lamp_health: 91 },
+  { id: 22, sn: 'A-SYS-2026-08', name: '8号牙周洁治区气溶胶抽吸净化工作站', type: 'AIR', clinic_id: 101, location: '牙周科 气源分支04', work_mode: 'DEEP_CLEAN', status: 'ONLINE', uv_status: 1, filter_level: 84, uv_lamp_health: 87 },
+  { id: 23, sn: 'A-SYS-2026-09', name: '9号急诊手术室医用压缩空气净化机', type: 'AIR', clinic_id: 101, location: '急诊手术室 机组E', work_mode: 'NORMAL', status: 'ONLINE', uv_status: 1, filter_level: 93, uv_lamp_health: 96 },
+  { id: 24, sn: 'A-SYS-2026-10', name: '10号口腔放射影像室除湿除尘气源机', type: 'AIR', clinic_id: 101, location: '放射科 机组F', work_mode: 'ECO', status: 'ONLINE', uv_status: 1, filter_level: 90, uv_lamp_health: 92 },
+  { id: 25, sn: 'A-SYS-2026-11', name: '技工中心高压气动研磨无尘气源站', type: 'AIR', clinic_id: 101, location: '技工室 气源分支06', work_mode: 'DEEP_CLEAN', status: 'ONLINE', uv_status: 1, filter_level: 87, uv_lamp_health: 89 },
+  { id: 26, sn: 'A-SYS-2026-12', name: '消毒供应中心器械吹干无菌气源站', type: 'AIR', clinic_id: 101, location: '消毒供应室 吹干台01', work_mode: 'NORMAL', status: 'ONLINE', uv_status: 1, filter_level: 95, uv_lamp_health: 97 }
 ];
 
 const airDevices = computed(() => {
