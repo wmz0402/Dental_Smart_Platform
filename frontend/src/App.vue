@@ -7,8 +7,8 @@
 
     <!-- 已登录状态：渲染全屏打通顶栏控制台主框架 -->
     <template v-else>
-      <!-- 顶部 100% 贯穿打通的 Header 导航栏 -->
-      <el-header height="64px" class="header flex-between">
+      <!-- 顶部 100% 贯穿打通的 Header 导航栏 (精致调窄至 52px) -->
+      <el-header height="52px" class="header flex-between">
         <div class="header-left flex-align">
           <div class="logo-area flex-align">
             <img :src="logoSvg" class="logo-icon-img" alt="Logo" />
@@ -40,7 +40,7 @@
           <el-dropdown trigger="click" popper-class="user-dropdown-popper" @command="handleUserCommand">
             <div class="user-profile flex-align">
               <el-avatar
-                :size="36"
+                :size="32"
                 :src="userStore.user?.avatar"
                 class="user-avatar"
               >
@@ -386,13 +386,14 @@ onUnmounted(() => {
 
 .header {
   width: 100%;
-  height: 64px;
-  background: linear-gradient(135deg, #4467ad 0%, #557cc7 100%) !important;
-  border-bottom: 1px solid #3d5e9e !important;
-  padding: 0 24px;
+  height: 52px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+  padding: 0 20px;
   flex-shrink: 0;
   z-index: 100;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 :global(html.light-theme) .header {
@@ -404,15 +405,15 @@ onUnmounted(() => {
 
 .logo-area {
   padding: 0;
-  gap: 10px;
-  margin-right: 8px;
+  gap: 8px;
+  margin-right: 6px;
 }
 
 .header-divider {
   width: 1px;
-  height: 18px;
+  height: 16px;
   background: rgba(255, 255, 255, 0.2);
-  margin: 0 16px;
+  margin: 0 12px;
 }
 
 :global(html.light-theme) .header-divider {
@@ -420,9 +421,9 @@ onUnmounted(() => {
 }
 
 .logo-icon-img {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
   object-fit: contain;
   filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4));
 }
@@ -432,7 +433,7 @@ onUnmounted(() => {
 }
 
 .logo-text h1 {
-  font-size: 16px;
+  font-size: 14px;
   color: #ffffff;
   font-weight: 700;
   line-height: 1.2;
@@ -443,7 +444,7 @@ onUnmounted(() => {
 }
 
 .logo-text p {
-  font-size: 10px;
+  font-size: 9px;
   color: #38bdf8;
 }
 
@@ -455,7 +456,7 @@ onUnmounted(() => {
   flex: 1;
   display: flex;
   overflow: hidden;
-  height: calc(100vh - 64px);
+  height: calc(100vh - 52px);
 }
 
 .sidebar {
