@@ -82,7 +82,7 @@
         <el-button type="primary" size="small" @click="store.fetchDevices(true)">刷新列表</el-button>
       </div>
 
-      <el-table :data="store.devices" class="custom-dark-table" style="width: 100%">
+      <el-table :data="store.devices" border stripe class="custom-dark-table" style="width: 100%">
         <el-table-column prop="sn" label="设备编号" width="180" />
         <el-table-column prop="name" label="设备名称" min-width="220" />
         <el-table-column prop="type" label="系统分类" width="140">

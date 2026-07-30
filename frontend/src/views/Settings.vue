@@ -27,7 +27,7 @@
     <div class="settings-grid">
       <!-- 机构基础信息 -->
       <div class="glass-card settings-card">
-        <div class="card-header">
+        <div class="card-header pb-12 mb-16">
           <h3>诊所机构档案信息</h3>
         </div>
         <el-form label-position="top">
@@ -48,7 +48,7 @@
 
       <!-- 物联网与通信协议参数 -->
       <div class="glass-card settings-card">
-        <div class="card-header">
+        <div class="card-header pb-12 mb-16">
           <h3>物联网协议与接入服务</h3>
         </div>
         <el-form label-position="top">
@@ -70,7 +70,7 @@
 
       <!-- 告警规则配置 -->
       <div class="glass-card settings-card span-2">
-        <div class="card-header">
+        <div class="card-header pb-12 mb-16">
           <h3>智能告警与阈值策略设置</h3>
         </div>
         <div class="rules-grid">
@@ -152,13 +152,12 @@ const saveSettings = () => {
 .settings-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  gap: 24px;
 }
 
 .settings-card {
   display: flex;
   flex-direction: column;
-  gap: 16px;
 }
 
 .span-2 {
@@ -168,6 +167,16 @@ const saveSettings = () => {
 .card-header h3 {
   font-size: 16px;
   color: var(--text-main);
+  font-weight: 700;
+}
+
+.pb-12 {
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+}
+
+.mb-16 {
+  margin-bottom: 16px;
 }
 
 .rules-grid {
@@ -179,13 +188,14 @@ const saveSettings = () => {
 .rule-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
   font-size: 13px;
-  color: var(--text-muted);
-  background: var(--bg-dark);
-  padding: 16px;
+  color: var(--text-main);
+  background: rgba(30, 41, 59, 0.4);
+  padding: 18px 20px;
   border-radius: 8px;
-  border: 1px solid var(--card-border);
+  border: 1px solid rgba(56, 189, 248, 0.2);
 }
 
 .unit-text {

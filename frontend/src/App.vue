@@ -28,11 +28,11 @@
             <el-icon><DataBoard /></el-icon>
             <span>全局监控概览</span>
           </el-menu-item>
-          <el-menu-item index="/water-device">
+          <el-menu-item index="/water">
             <el-icon><Filter /></el-icon>
             <span>水源消毒处理系统</span>
           </el-menu-item>
-          <el-menu-item index="/air-device">
+          <el-menu-item index="/air">
             <el-icon><WindPower /></el-icon>
             <span>气源洁净处理系统</span>
           </el-menu-item>

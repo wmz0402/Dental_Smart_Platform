@@ -36,10 +36,10 @@
 
     <!-- 异常告警列表 -->
     <div class="glass-card alarm-table-box">
-      <div class="card-header">
+      <div class="card-header mb-16">
         <h3>感控故障与风险告警日志</h3>
       </div>
-      <el-table :data="alarmList" style="width: 100%">
+      <el-table :data="alarmList" border stripe style="width: 100%">
         <el-table-column prop="id" label="告警ID" width="100" />
         <el-table-column prop="level" label="严重等级" width="120">
           <template #default="{ row }">
@@ -151,12 +151,21 @@ onMounted(() => {
 .consumables-section {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+  padding-bottom: 12px;
 }
 
 .card-header h3 {
   font-size: 16px;
   color: #f8fafc;
+  font-weight: 700;
 }
 
 .sub-tip {
@@ -167,17 +176,17 @@ onMounted(() => {
 .consumables-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 16px;
+  gap: 18px;
 }
 
 .consumable-card {
   background: rgba(15, 23, 42, 0.6);
-  padding: 16px;
+  padding: 18px;
   border-radius: 8px;
-  border: 1px solid #334155;
+  border: 1px solid rgba(56, 189, 248, 0.2);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .c-top {
@@ -202,7 +211,7 @@ onMounted(() => {
   color: #94a3b8;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .c-footer {
@@ -214,6 +223,10 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.mb-16 {
+  margin-bottom: 16px;
 }
 
 .text-muted {

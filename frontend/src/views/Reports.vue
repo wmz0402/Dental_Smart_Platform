@@ -61,66 +61,68 @@
 
       <div class="section-block">
         <h3>国家规范与审计指标检验表 (WS/T842-2024)</h3>
-        <table class="report-table">
-          <thead>
-            <tr>
-              <th>审计分类</th>
-              <th>国家标准限量 / 规范要求</th>
-              <th>今日实测均值</th>
-              <th>极值范围</th>
-              <th>合规判定</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>水路菌落总数</td>
-              <td>&le; 100 CFU/mL</td>
-              <td>12.4 CFU/mL</td>
-              <td>8.0 - 18.2</td>
-              <td><span class="status-pass">合格 (PASS)</span></td>
-            </tr>
-            <tr>
-              <td>水路 TDS 溶解固形物</td>
-              <td>&le; 50 ppm</td>
-              <td>14.2 ppm</td>
-              <td>11.0 - 18.5</td>
-              <td><span class="status-pass">合格 (PASS)</span></td>
-            </tr>
-            <tr>
-              <td>消毒剂有效浓度 (微酸性次氯酸)</td>
-              <td>50 - 100 mg/L</td>
-              <td>72.5 mg/L</td>
-              <td>65.0 - 82.0</td>
-              <td><span class="status-pass">合格 (PASS)</span></td>
-            </tr>
-            <tr>
-              <td>气源压力稳定度</td>
-              <td>0.55 - 0.70 MPa</td>
-              <td>0.65 MPa</td>
-              <td>0.62 - 0.68</td>
-              <td><span class="status-pass">合格 (PASS)</span></td>
-            </tr>
-            <tr>
-              <td>气源露点温度 (干燥度)</td>
-              <td>&le; -40 &deg;C</td>
-              <td>-42.5 &deg;C</td>
-              <td>-45.0 - -40.2</td>
-              <td><span class="status-pass">合格 (PASS)</span></td>
-            </tr>
-            <tr>
-              <td>气源油雾与尘埃粒子</td>
-              <td>无油 0.01 mg/m&sup3;</td>
-              <td>0.002 mg/m&sup3;</td>
-              <td>0.001 - 0.003</td>
-              <td><span class="status-pass">合格 (PASS)</span></td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-wrapper">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>审计分类</th>
+                <th>国家标准限量 / 规范要求</th>
+                <th>今日实测均值</th>
+                <th>极值范围</th>
+                <th>合规判定</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>水路菌落总数</strong></td>
+                <td>&le; 100 CFU/mL</td>
+                <td>12.4 CFU/mL</td>
+                <td>8.0 - 18.2</td>
+                <td><span class="status-pass">合格 (PASS)</span></td>
+              </tr>
+              <tr>
+                <td><strong>水路 TDS 溶解固形物</strong></td>
+                <td>&le; 50 ppm</td>
+                <td>14.2 ppm</td>
+                <td>11.0 - 18.5</td>
+                <td><span class="status-pass">合格 (PASS)</span></td>
+              </tr>
+              <tr>
+                <td><strong>消毒剂有效浓度 (微酸性次氯酸)</strong></td>
+                <td>50 - 100 mg/L</td>
+                <td>72.5 mg/L</td>
+                <td>65.0 - 82.0</td>
+                <td><span class="status-pass">合格 (PASS)</span></td>
+              </tr>
+              <tr>
+                <td><strong>气源压力稳定度</strong></td>
+                <td>0.55 - 0.70 MPa</td>
+                <td>0.65 MPa</td>
+                <td>0.62 - 0.68</td>
+                <td><span class="status-pass">合格 (PASS)</span></td>
+              </tr>
+              <tr>
+                <td><strong>气源露点温度 (干燥度)</strong></td>
+                <td>&le; -40 &deg;C</td>
+                <td>-42.5 &deg;C</td>
+                <td>-45.0 - -40.2</td>
+                <td><span class="status-pass">合格 (PASS)</span></td>
+              </tr>
+              <tr>
+                <td><strong>气源油雾与尘埃粒子</strong></td>
+                <td>无油 0.01 mg/m&sup3;</td>
+                <td>0.002 mg/m&sup3;</td>
+                <td>0.001 - 0.003</td>
+                <td><span class="status-pass">合格 (PASS)</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <div class="section-block">
         <h3>感控硬件设备列表与实时监控履历 (共 {{ totalDeviceCount }} 台)</h3>
-        <el-table :data="deviceStore.devices" style="width: 100%">
+        <el-table :data="deviceStore.devices" border stripe style="width: 100%">
           <el-table-column prop="sn" label="设备编号" width="160" />
           <el-table-column prop="name" label="设备名称" min-width="200" />
           <el-table-column prop="type" label="系统分类" width="140">
@@ -456,22 +458,29 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100px;
-  height: 100px;
+  width: 124px;
+  height: 124px;
+  flex-shrink: 0;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0) 70%);
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, rgba(16, 185, 129, 0) 70%);
   border: 3px solid var(--success-color);
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.3);
+  padding: 8px;
+  box-sizing: border-box;
 }
 
 .score-num {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: bold;
   color: var(--success-color);
+  line-height: 1;
 }
 
 .score-label {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--text-muted);
+  margin-top: 6px;
+  white-space: nowrap;
 }
 
 .score-grid {
@@ -485,14 +494,14 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 12px;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
+  padding: 16px 12px;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(56, 189, 248, 0.2);
   border-radius: 8px;
 }
 
 .grid-card .val {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
   color: var(--text-main);
 }
@@ -500,40 +509,56 @@ onMounted(() => {
 .grid-card .lbl {
   font-size: 12px;
   color: var(--text-muted);
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 .section-block h3 {
   font-size: 15px;
   color: var(--text-main);
   font-weight: 600;
-  margin-bottom: 12px;
-  border-left: 3px solid var(--primary-color);
+  margin-bottom: 14px;
+  border-left: 4px solid var(--primary-color);
   padding-left: 10px;
+}
+
+.table-wrapper {
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .report-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 8px;
 }
 
 .report-table th,
 .report-table td {
-  border: 1px solid var(--card-border);
-  padding: 10px 14px;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.18);
+  border-right: 1px solid rgba(56, 189, 248, 0.15);
+  padding: 14px 18px;
   font-size: 13px;
   text-align: left;
 }
 
+.report-table td:last-child,
+.report-table th:last-child {
+  border-right: none;
+}
+
 .report-table th {
-  background-color: rgba(30, 45, 82, 0.5);
-  color: var(--text-main);
-  font-weight: 600;
+  background-color: #111c30;
+  color: #93c5fd;
+  font-weight: 700;
+  border-bottom: 2px solid rgba(56, 189, 248, 0.3);
+}
+
+.report-table tr:nth-child(even) td {
+  background-color: rgba(30, 41, 59, 0.45);
 }
 
 .report-table td {
-  color: var(--text-muted);
+  color: var(--text-main);
 }
 
 .status-pass {

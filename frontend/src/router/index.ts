@@ -12,8 +12,8 @@ import { useUserStore } from '../stores/userStore';
 const routes = [
   { path: '/login', name: 'Login', component: Login },
   { path: '/', name: 'Dashboard', component: Dashboard },
-  { path: '/water', name: 'WaterDevice', component: WaterDevice },
-  { path: '/air', name: 'AirDevice', component: AirDevice },
+  { path: '/water', alias: ['/water-device'], name: 'WaterDevice', component: WaterDevice },
+  { path: '/air', alias: ['/air-device'], name: 'AirDevice', component: AirDevice },
   { path: '/telemetry', name: 'Telemetry', component: Telemetry },
   { path: '/alarm', name: 'Alarm', component: Alarm },
   { path: '/reports', name: 'Reports', component: Reports },

@@ -41,7 +41,7 @@
         <h3>数据日志明细 (实况遥测记录)</h3>
         <span class="badge-tag">在线数据流正常</span>
       </div>
-      <el-table :data="tableData" class="custom-dark-table" style="width: 100%">
+      <el-table :data="tableData" border stripe class="custom-dark-table" style="width: 100%">
         <el-table-column prop="id" label="日志编号" min-width="140" />
         <el-table-column prop="sn" label="设备编号" min-width="160" />
         <el-table-column prop="tds" label="水质TDS (ppm)" min-width="120">

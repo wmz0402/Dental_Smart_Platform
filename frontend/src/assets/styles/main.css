@@ -41,6 +41,8 @@ html, body {
   border: 1px solid var(--border-color);
   border-radius: 12px;
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  padding: 24px;
+  box-sizing: border-box;
 }
 
 .flex-between {
@@ -97,8 +99,9 @@ html, body {
 /* 弹窗专用样式 */
 .el-dialog {
   background-color: #0f172a !important;
-  border: 1px solid rgba(56, 189, 248, 0.2) !important;
+  border: 1px solid rgba(56, 189, 248, 0.25) !important;
   border-radius: 12px !important;
+  padding: 20px !important;
 }
 
 .el-dialog__title {
@@ -108,17 +111,31 @@ html, body {
 
 .el-dialog__body {
   color: #cbd5e1 !important;
+  padding: 16px 0 !important;
+}
+
+.el-form-item {
+  margin-bottom: 20px !important;
 }
 
 .el-form-item__label {
   color: #f8fafc !important;
   font-weight: 600 !important;
+  padding-bottom: 6px !important;
 }
 
-.el-input__wrapper {
+.el-input__wrapper,
+.el-select__wrapper {
   background-color: #1e293b !important;
-  border: 1px solid #334155 !important;
+  border: 1px solid rgba(56, 189, 248, 0.2) !important;
   box-shadow: none !important;
+  border-radius: 6px !important;
+  padding: 4px 12px !important;
+}
+
+.el-input__wrapper:hover,
+.el-select__wrapper:hover {
+  border-color: #38bdf8 !important;
 }
 
 .el-input__inner {
@@ -129,7 +146,20 @@ html, body {
   color: #64748b !important;
 }
 
-/* 彻底消除所有页面 Element Plus 表格的白条条背景，全盘融入极客暗黑风 */
+/* 彻底解决表格无划格线问题：强化 Element Plus 表格网格划分 */
+.el-table {
+  --el-table-bg-color: transparent !important;
+  --el-table-tr-bg-color: transparent !important;
+  --el-table-header-bg-color: #111c30 !important;
+  --el-table-header-text-color: #93c5fd !important;
+  --el-table-row-hover-bg-color: rgba(56, 189, 248, 0.12) !important;
+  --el-table-text-color: #f8fafc !important;
+  --el-table-border-color: rgba(56, 189, 248, 0.2) !important;
+  border: 1px solid rgba(56, 189, 248, 0.25) !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+
 .el-table,
 .el-table__expanded-cell,
 .el-table th,
@@ -137,31 +167,44 @@ html, body {
 .el-table td {
   background-color: transparent !important;
   color: #f8fafc !important;
-  border-color: #1e293b !important;
 }
 
 .el-table th.el-table__cell {
-  background-color: #1e293b !important;
-  color: #cbd5e1 !important;
-  font-weight: 600 !important;
+  background-color: #111c30 !important;
+  color: #93c5fd !important;
+  font-weight: 700 !important;
+  border-bottom: 2px solid rgba(56, 189, 248, 0.3) !important;
+  border-right: 1px solid rgba(56, 189, 248, 0.15) !important;
+  padding: 12px 16px !important;
+}
+
+.el-table td.el-table__cell {
+  border-bottom: 1px solid rgba(56, 189, 248, 0.15) !important;
+  border-right: 1px solid rgba(56, 189, 248, 0.12) !important;
+  padding: 12px 16px !important;
+}
+
+.el-table td.el-table__cell:last-child,
+.el-table th.el-table__cell:last-child {
+  border-right: none !important;
 }
 
 .el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
-  background-color: rgba(30, 41, 59, 0.4) !important;
+  background-color: rgba(30, 41, 59, 0.45) !important;
   color: #f8fafc !important;
 }
 
 .el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell {
-  background-color: rgba(56, 189, 248, 0.1) !important;
+  background-color: rgba(56, 189, 248, 0.12) !important;
   color: #38bdf8 !important;
 }
 
-/* 图五：重写 el-input-number 的刺眼加减白色方块按钮，换为精致极客暗黑深蓝 */
+/* 重置 el-input-number 样式 */
 .el-input-number__decrease,
 .el-input-number__increase {
   background-color: #1e293b !important;
   color: #38bdf8 !important;
-  border-color: #334155 !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
 }
 
 .el-input-number__decrease:hover,
