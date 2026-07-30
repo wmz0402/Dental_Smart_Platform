@@ -419,11 +419,14 @@ html.light-theme .sub-tip {
   color: #64748b !important;
 }
 
-/* 全局防止 Element Plus 标签 (el-tag) 文字过度挤压出现省略号 ... */
-.el-tag {
+/* 全局终极禁止 Element Plus 标签 (el-tag) 及内部容器产生任何省略号点点 ... */
+.el-tag,
+.el-tag .el-tag__content {
   white-space: nowrap !important;
   max-width: none !important;
+  width: auto !important;
   overflow: visible !important;
+  text-overflow: clip !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;

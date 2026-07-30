@@ -85,7 +85,7 @@
       <el-table :data="store.devices" border stripe class="custom-dark-table" style="width: 100%">
         <el-table-column prop="sn" label="设备编号" width="180" />
         <el-table-column prop="name" label="设备名称" min-width="220" />
-        <el-table-column prop="type" label="系统分类" width="140">
+        <el-table-column prop="type" label="系统分类" width="180" align="center">
           <template #default="{ row }">
             <el-tag :type="row.type === 'WATER' ? 'primary' : 'success'">
               {{ row.type === 'WATER' ? '水源消毒系统' : '气源净化系统' }}
