@@ -125,7 +125,7 @@
         <el-table :data="deviceStore.devices" border stripe style="width: 100%">
           <el-table-column prop="sn" label="设备编号" width="160" />
           <el-table-column prop="name" label="设备名称" min-width="200" />
-          <el-table-column prop="type" label="系统分类" width="140">
+          <el-table-column prop="type" label="系统分类" width="160" align="center">
             <template #default="scope">
               <el-tag :type="scope.row.type === 'WATER' ? 'primary' : 'success'" size="small">
                 {{ scope.row.type === 'WATER' ? '水源消毒系统' : '气源洁净系统' }}
@@ -133,8 +133,8 @@
             </template>
           </el-table-column>
           <el-table-column prop="location" label="部署位置" width="180" />
-          <el-table-column prop="work_mode" label="运行模式" width="120" />
-          <el-table-column prop="filter_level" label="健康度" width="120">
+          <el-table-column prop="work_mode" label="运行模式" width="140" align="center" />
+          <el-table-column prop="filter_level" label="健康度" width="120" align="center">
             <template #default="scope">
               <span style="color: #10b981; font-weight: bold;">{{ scope.row.filter_level }}%</span>
             </template>

@@ -40,8 +40,8 @@
         <h3>感控故障与风险告警日志</h3>
       </div>
       <el-table :data="alarmList" border stripe style="width: 100%">
-        <el-table-column prop="id" label="告警ID" width="100" />
-        <el-table-column prop="level" label="严重等级" width="120">
+        <el-table-column prop="id" label="告警ID" width="100" align="center" />
+        <el-table-column prop="level" label="严重等级" width="140" align="center">
           <template #default="{ row }">
             <el-tag :type="row.level === 'CRITICAL' ? 'danger' : 'warning'" effect="dark">
               {{ row.level === 'CRITICAL' ? '严重告警' : '警告提醒' }}
@@ -51,15 +51,15 @@
         <el-table-column prop="device_sn" label="设备编号" width="180" />
         <el-table-column prop="title" label="告警名称" width="220" />
         <el-table-column prop="description" label="详细故障诊断描述" min-width="280" />
-        <el-table-column prop="status" label="处置状态" width="140">
+        <el-table-column prop="status" label="处置状态" width="165" align="center">
           <template #default="{ row }">
             <el-tag :type="row.status === 'RESOLVED' ? 'success' : 'danger'">
               {{ row.status === 'RESOLVED' ? '已处置解决' : '未响应待处理' }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="triggered_at" label="触发时间" width="200" />
-        <el-table-column label="快捷操作" width="140" fixed="right">
+        <el-table-column prop="triggered_at" label="触发时间" width="200" align="center" />
+        <el-table-column label="快捷操作" width="140" align="center" fixed="right">
           <template #default="{ row }">
             <el-button
               v-if="row.status === 'UNRESOLVED'"
