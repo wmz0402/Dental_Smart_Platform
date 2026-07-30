@@ -197,13 +197,35 @@ export const useDeviceStore = defineStore('device', {
       try {
         const res = await axios.get('/api/devices');
         if (Array.isArray(res.data) && res.data.length > 0) {
-          this.devices = res.data;
+          const serverSns = new Set(res.data.map((d: any) => d.sn));
+          const localOnly = this.devices.filter(d => !serverSns.has(d.sn));
+          this.devices = [...res.data, ...localOnly];
           localStorage.setItem('local_devices', JSON.stringify(this.devices));
         } else if (this.devices.length === 0 || force) {
+          const saved = localStorage.getItem('local_devices');
+          if (saved) {
+            try {
+              const parsed = JSON.parse(saved);
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                this.devices = parsed;
+                return;
+              }
+            } catch (e) {}
+          }
           this.devices = defaultFallbackDevices;
           localStorage.setItem('local_devices', JSON.stringify(this.devices));
         }
       } catch (err) {
+        const saved = localStorage.getItem('local_devices');
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              this.devices = parsed;
+              return;
+            }
+          } catch (e) {}
+        }
         if (this.devices.length === 0 || force) {
           this.devices = defaultFallbackDevices;
         }

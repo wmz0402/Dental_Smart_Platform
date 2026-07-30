@@ -139,8 +139,11 @@ router.get('/devices', async (req: Request, res: Response) => {
   const { type } = req.query;
 
   try {
+    await connectMongoDB();
     const mongoDevices = await DeviceModel.find().lean();
     if (mongoDevices && mongoDevices.length > 0) {
+      memoryDevices.length = 0;
+      memoryDevices.push(...(mongoDevices as any));
       let result = mongoDevices;
       if (type) {
         result = mongoDevices.filter(d => d.type === String(type).toUpperCase());
@@ -254,6 +257,7 @@ router.post('/devices', async (req: Request, res: Response) => {
 
   // 2. 存入 MongoDB Atlas 云数据库
   try {
+    await connectMongoDB();
     await DeviceModel.create(newDev);
   } catch (e) {
     console.error('保存设备到 MongoDB 失败:', e);
