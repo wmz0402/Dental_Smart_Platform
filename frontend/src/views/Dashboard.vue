@@ -109,19 +109,21 @@
             />
           </template>
         </el-table-column>
-        <el-table-column label="快捷调控" width="200" fixed="right">
+        <el-table-column label="快捷调控" width="220" align="center" fixed="right">
           <template #default="{ row }">
-            <el-button
-              size="small"
-              type="primary"
-              plain
-              @click="store.changeWorkMode(row.id, row.work_mode === 'ECO' ? 'NORMAL' : 'ECO')"
-            >
-              {{ row.work_mode === 'ECO' ? '常规模式' : '节能模式' }}
-            </el-button>
-            <el-button size="small" type="danger" plain @click="handleLock(row)">
-              切断锁止
-            </el-button>
+            <div class="action-btn-group">
+              <el-button
+                size="small"
+                type="primary"
+                plain
+                @click="store.changeWorkMode(row.id, row.work_mode === 'ECO' ? 'NORMAL' : 'ECO')"
+              >
+                {{ row.work_mode === 'ECO' ? '常规模式' : '节能模式' }}
+              </el-button>
+              <el-button size="small" type="danger" plain @click="handleLock(row)">
+                切断锁止
+              </el-button>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -383,5 +385,17 @@ onUnmounted(() => {
 
 .mb-16 {
   margin-bottom: 16px;
+}
+
+.action-btn-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.action-btn-group .el-button {
+  margin: 0 !important;
 }
 </style>

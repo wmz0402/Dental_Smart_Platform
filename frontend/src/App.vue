@@ -555,22 +555,22 @@ onUnmounted(() => {
 
 .user-email {
   font-size: 13px;
-  color: var(--text-main);
+  color: #ffffff !important;
   font-weight: 600;
   line-height: 1.2;
 }
 
-:global(html.light-theme) .user-email {
-  color: #ffffff;
-}
-
 .user-role {
   font-size: 11px;
-  color: var(--accent-cyan);
+  color: #38bdf8 !important;
+}
+
+:global(html.light-theme) .user-email {
+  color: #ffffff !important;
 }
 
 :global(html.light-theme) .user-role {
-  color: #93c5fd;
+  color: #93c5fd !important;
 }
 
 .content-area {

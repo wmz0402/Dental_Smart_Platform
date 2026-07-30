@@ -498,3 +498,29 @@ html.light-theme .logout-item:hover {
   background-color: rgba(239, 68, 68, 0.12) !important;
   color: #ef4444 !important;
 }
+
+/* 确保顶部 Header 右上角用户信息与时间永远高亮清晰可辨 */
+.header .user-email,
+html.light-theme .header .user-email {
+  color: #ffffff !important;
+}
+
+.header .user-role,
+html.light-theme .header .user-role {
+  color: #93c5fd !important;
+}
+
+.header .system-time,
+html.light-theme .header .system-time {
+  color: #e2e8f0 !important;
+}
+
+/* 解决表格操作列中 Element Plus 按钮发生换行重叠的冲突 */
+.el-table .el-table__cell .el-button + .el-button {
+  margin-left: 8px !important;
+}
+
+.el-table .el-table__cell .el-button {
+  display: inline-flex !important;
+  vertical-align: middle !important;
+}
