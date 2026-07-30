@@ -387,19 +387,19 @@ onUnmounted(() => {
 .header {
   width: 100%;
   height: 64px;
-  background: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+  background: linear-gradient(135deg, #4467ad 0%, #557cc7 100%) !important;
+  border-bottom: 1px solid #3d5e9e !important;
   padding: 0 24px;
   flex-shrink: 0;
   z-index: 100;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 :global(html.light-theme) .header {
-  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%) !important;
-  border-bottom: 1px solid #93c5fd !important;
+  background: linear-gradient(135deg, #4467ad 0%, #557cc7 100%) !important;
+  border-bottom: 1px solid #3d5e9e !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
 .logo-area {
