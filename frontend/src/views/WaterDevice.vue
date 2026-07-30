@@ -19,7 +19,22 @@
             <span class="status-indicator" :class="dev.status.toLowerCase()"></span>
             <h4>{{ dev.name }}</h4>
           </div>
-          <el-tag :type="dev.status === 'ONLINE' ? 'success' : 'info'">{{ dev.status }}</el-tag>
+          <div class="flex-align gap-8">
+            <el-tag :type="dev.status === 'ONLINE' ? 'success' : (dev.status === 'MAINTENANCE' ? 'warning' : 'info')">{{ dev.status }}</el-tag>
+            <!-- 管理员专属编辑与删除功能按钮组 -->
+            <template v-if="userStore.isAdmin">
+              <el-tooltip content="管理员编辑设备信息" placement="top">
+                <el-button circle size="small" type="primary" plain @click="openEditDialog(dev)">
+                  <el-icon><Edit /></el-icon>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip content="管理员删除该设备" placement="top">
+                <el-button circle size="small" type="danger" plain @click="handleDeleteDevice(dev)">
+                  <el-icon><Delete /></el-icon>
+                </el-button>
+              </el-tooltip>
+            </template>
+          </div>
         </div>
 
         <div class="dev-sn">{{ dev.sn }} | {{ dev.location }}</div>
@@ -105,22 +120,75 @@
         <el-button type="primary" @click="handleAddDevice">确认添加</el-button>
       </template>
     </el-dialog>
+
+    <!-- 管理员编辑设备对话框 -->
+    <el-dialog v-model="showEditDialog" title="管理员修改编辑感控设备" width="500px">
+      <el-form label-position="top">
+        <el-form-item label="设备名称">
+          <el-input v-model="editDevForm.name" placeholder="请输入新的设备名称" />
+        </el-form-item>
+        <el-form-item label="设备编号 (SN)">
+          <el-input v-model="editDevForm.sn" placeholder="请输入设备 SN" />
+        </el-form-item>
+        <el-form-item label="部署位置">
+          <el-input v-model="editDevForm.location" placeholder="请输入具体位置" />
+        </el-form-item>
+        <el-form-item label="工作模式">
+          <el-select v-model="editDevForm.work_mode" style="width: 100%">
+            <el-option label="常规巡检模式" value="NORMAL" />
+            <el-option label="绿色节能模式" value="ECO" />
+            <el-option label="深度冲洗消毒" value="DEEP_CLEAN" />
+            <el-option label="关机休眠" value="OFF" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="设备状态">
+          <el-select v-model="editDevForm.status" style="width: 100%">
+            <el-option label="ONLINE (正常在线)" value="ONLINE" />
+            <el-option label="MAINTENANCE (维保检修中)" value="MAINTENANCE" />
+            <el-option label="OFFLINE (已关机离线)" value="OFFLINE" />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="showEditDialog = false">取消</el-button>
+        <el-button type="primary" @click="handleSaveEdit">保存修改</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useDeviceStore, type Device } from '@/stores/deviceStore';
-import { ArrowDown } from '@element-plus/icons-vue';
-import { ElMessage } from 'element-plus';
+import { useUserStore } from '@/stores/userStore';
+import { ArrowDown, Edit, Delete } from '@element-plus/icons-vue';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 const deviceStore = useDeviceStore();
+const userStore = useUserStore();
 const showAddDialog = ref(false);
+const showEditDialog = ref(false);
 
 const newDevForm = ref({
   sn: '',
   name: '',
   location: ''
+});
+
+const editDevForm = ref<{
+  id: number | string;
+  sn: string;
+  name: string;
+  location: string;
+  work_mode: 'NORMAL' | 'ECO' | 'DEEP_CLEAN' | 'OFF';
+  status: 'ONLINE' | 'OFFLINE' | 'MAINTENANCE';
+}>({
+  id: '',
+  sn: '',
+  name: '',
+  location: '',
+  work_mode: 'NORMAL',
+  status: 'ONLINE'
 });
 
 // 默认水源设备兜底
@@ -171,6 +239,42 @@ const handleAddDevice = () => {
   ElMessage.success('新水源感控设备添加成功');
   showAddDialog.value = false;
   newDevForm.value = { sn: '', name: '', location: '' };
+};
+
+const openEditDialog = (dev: Device) => {
+  editDevForm.value = {
+    id: dev.id,
+    sn: dev.sn,
+    name: dev.name,
+    location: dev.location,
+    work_mode: dev.work_mode,
+    status: dev.status
+  };
+  showEditDialog.value = true;
+};
+
+const handleSaveEdit = async () => {
+  if (!editDevForm.value.name || !editDevForm.value.sn) {
+    return ElMessage.error('设备名称与 SN 编号不能为空');
+  }
+  await deviceStore.updateDevice(editDevForm.value.id, editDevForm.value as any);
+  ElMessage.success('管理员修改设备信息成功');
+  showEditDialog.value = false;
+};
+
+const handleDeleteDevice = (dev: Device) => {
+  ElMessageBox.confirm(
+    `确认要彻底删除硬件设备【${dev.name}】(${dev.sn}) 吗？此操作将同步从云数据库中移除该设备，且无法撤销！`,
+    '管理员删除设备确认',
+    {
+      confirmButtonText: '确认删除',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }
+  ).then(async () => {
+    await deviceStore.deleteDevice(dev.id);
+    ElMessage.success(`设备【${dev.name}】已成功删除`);
+  }).catch(() => {});
 };
 
 onMounted(() => {
@@ -286,5 +390,6 @@ onMounted(() => {
 .mb-16 { margin-bottom: 16px; }
 .mb-20 { margin-bottom: 20px; }
 .mb-24 { margin-bottom: 24px; }
+.gap-8 { gap: 8px; }
 .gap-12 { gap: 12px; }
 </style>

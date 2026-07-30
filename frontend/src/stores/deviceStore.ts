@@ -235,6 +235,32 @@ export const useDeviceStore = defineStore('device', {
       }
     },
 
+    async updateDevice(deviceId: number | string, updatedData: Partial<Device>) {
+      const id = typeof deviceId === 'string' ? parseInt(deviceId, 10) : deviceId;
+      const dev = this.devices.find(d => d.id === id || d.sn === deviceId);
+      if (dev) {
+        Object.assign(dev, updatedData);
+        localStorage.setItem('local_devices', JSON.stringify(this.devices));
+      }
+      try {
+        await axios.put(`/api/devices/${id}`, updatedData);
+      } catch (err) {}
+    },
+
+    async deleteDevice(deviceId: number | string) {
+      const id = typeof deviceId === 'string' ? parseInt(deviceId, 10) : deviceId;
+      const index = this.devices.findIndex(d => d.id === id || d.sn === deviceId);
+      if (index !== -1) {
+        this.devices.splice(index, 1);
+        this.overview.totalDevices = this.devices.length;
+        this.overview.onlineDevices = this.devices.filter(d => d.status === 'ONLINE').length;
+        localStorage.setItem('local_devices', JSON.stringify(this.devices));
+      }
+      try {
+        await axios.delete(`/api/devices/${id}`);
+      } catch (err) {}
+    },
+
     async addDevice(newDevice: Partial<Device>) {
       const created: Device = {
         id: Date.now(),

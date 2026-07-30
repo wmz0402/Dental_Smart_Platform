@@ -182,6 +182,55 @@ router.post('/devices/:id/mode', async (req: Request, res: Response) => {
   res.json({ success: true, message: '设备模式更新成功 (已持久化)' });
 });
 
+// 3.1 管理员编辑/更新硬件设备基本信息
+router.put('/devices/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { name, sn, location, work_mode, status } = req.body;
+
+  const devId = parseInt(id, 10);
+  const memIndex = memoryDevices.findIndex(d => d.id === devId || d.sn === id);
+  if (memIndex !== -1) {
+    if (name) memoryDevices[memIndex].name = name;
+    if (sn) memoryDevices[memIndex].sn = sn;
+    if (location) memoryDevices[memIndex].location = location;
+    if (work_mode) memoryDevices[memIndex].work_mode = work_mode;
+    if (status) memoryDevices[memIndex].status = status;
+  }
+
+  try {
+    const updateObj: any = {};
+    if (name) updateObj.name = name;
+    if (sn) updateObj.sn = sn;
+    if (location) updateObj.location = location;
+    if (work_mode) updateObj.work_mode = work_mode;
+    if (status) updateObj.status = status;
+
+    await DeviceModel.updateOne(
+      { $or: [{ id: devId }, { sn: id }] },
+      { $set: updateObj }
+    );
+  } catch (e) {}
+
+  res.json({ success: true, message: '设备信息修改更新成功' });
+});
+
+// 3.2 管理员删除硬件设备
+router.delete('/devices/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const devId = parseInt(id, 10);
+
+  const memIndex = memoryDevices.findIndex(d => d.id === devId || d.sn === id);
+  if (memIndex !== -1) {
+    memoryDevices.splice(memIndex, 1);
+  }
+
+  try {
+    await DeviceModel.deleteOne({ $or: [{ id: devId }, { sn: id }] });
+  } catch (e) {}
+
+  res.json({ success: true, message: '设备已成功从系统中移除' });
+});
+
 // 4. 新增硬件设备 (彻底存入 MongoDB 云数据库)
 router.post('/devices', async (req: Request, res: Response) => {
   const { sn, name, type, clinic_id, location } = req.body;
