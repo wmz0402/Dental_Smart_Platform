@@ -66,6 +66,6 @@ const ConsumableSchema = new Schema<IConsumable>({
   estimated_replace_date: { type: String, required: true }
 }, { timestamps: true });
 
-export const DeviceModel = mongoose.models.Device || mongoose.model<IDevice>('Device', DeviceSchema);
-export const AlarmModel = mongoose.models.Alarm || mongoose.model<IAlarm>('Alarm', AlarmSchema);
-export const ConsumableModel = mongoose.models.Consumable || mongoose.model<IConsumable>('Consumable', ConsumableSchema);
+export const DeviceModel: any = mongoose.models.Device || mongoose.model<IDevice>('Device', DeviceSchema);
+export const AlarmModel: any = mongoose.models.Alarm || mongoose.model<IAlarm>('Alarm', AlarmSchema);
+export const ConsumableModel: any = mongoose.models.Consumable || mongoose.model<IConsumable>('Consumable', ConsumableSchema);

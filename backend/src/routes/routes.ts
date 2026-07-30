@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { getDb, memoryDevices } from '../db/database';
 import { DeviceModel, AlarmModel, ConsumableModel } from '../db/models';
+import { connectMongoDB } from '../db/mongodb';
 
 export const router = Router();
 
