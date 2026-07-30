@@ -103,7 +103,8 @@ const generateMockPoints = (count: number) => {
     const timeStr = t.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     times.push(timeStr);
     tdsData.push(Number((12 + Math.random() * 3).toFixed(1)));
-    uvData.push(Number((97 + Math.random() * 2.5).toFixed(1)));
+    const uvVal = 94.5 + Math.sin(i * 0.45) * 3.5 + (Math.random() - 0.5) * 1.5;
+    uvData.push(Number(uvVal.toFixed(1)));
   }
 
   return { times, tdsData, uvData };
@@ -204,6 +205,29 @@ const renderChart = (times: string[], tdsData: number[], uvData: number[]) => {
 const loadHistory = async () => {
   const { times, tdsData, uvData } = generateMockPoints(sampleLimit.value);
 
+  try {
+    const res = await axios.get(`/api/telemetry/history?deviceSn=${selectedDeviceSn.value}&limit=${sampleLimit.value}`);
+    if (Array.isArray(res.data) && res.data.length > 0) {
+      const apiTimes = res.data.map(d => d.timestamp);
+      const apiTds = res.data.map(d => d.tds || 14);
+      const apiUv = res.data.map((d, idx) => Number(d.uvIntensity || (94.5 + Math.sin(idx * 0.45) * 3.5 + (Math.random() - 0.5) * 1.5).toFixed(1)));
+      
+      tableData.value = apiTimes.map((t, idx) => ({
+        id: `LOG-${Date.now() - idx * 1000}`,
+        sn: selectedDeviceSn.value,
+        tds: apiTds[idx],
+        turbidity: '0.12',
+        pressure: '0.65',
+        dew_point: '-42',
+        uvIntensity: `${apiUv[idx]}%`,
+        timestamp: t
+      }));
+
+      renderChart(apiTimes, apiTds, apiUv);
+      return;
+    }
+  } catch (e) {}
+
   tableData.value = times.map((t, idx) => ({
     id: `LOG-${Date.now() - idx * 1000}`,
     sn: selectedDeviceSn.value,
@@ -211,20 +235,9 @@ const loadHistory = async () => {
     turbidity: '0.12',
     pressure: '0.65',
     dew_point: '-42',
-    uvIntensity: uvData[idx],
+    uvIntensity: `${uvData[idx]}%`,
     timestamp: t
   }));
-
-  try {
-    const res = await axios.get(`/api/telemetry/history?deviceSn=${selectedDeviceSn.value}&limit=${sampleLimit.value}`);
-    if (Array.isArray(res.data) && res.data.length > 0) {
-      const apiTimes = res.data.map(d => d.timestamp);
-      const apiTds = res.data.map(d => d.tds || 14);
-      const apiUv = res.data.map(d => 98.5);
-      renderChart(apiTimes, apiTds, apiUv);
-      return;
-    }
-  } catch (e) {}
 
   renderChart(times, tdsData, uvData);
 };

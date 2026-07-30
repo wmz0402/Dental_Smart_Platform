@@ -169,12 +169,14 @@ router.get('/telemetry/history', (req: Request, res: Response) => {
 
   for (let i = 10; i >= 0; i--) {
     const time = new Date(now - i * 60 * 1000).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+    const uvVal = Number((94.5 + Math.sin(i * 0.45) * 3.5 + (Math.random() - 0.5) * 1.5).toFixed(1));
     history.push({
       timestamp: time,
       tds: Math.floor(12 + Math.random() * 5),
       dew_point: -42 + Math.floor(Math.random() * 3),
       pressure: 0.65,
-      water_flow: 1.2
+      water_flow: 1.2,
+      uvIntensity: uvVal
     });
   }
 
