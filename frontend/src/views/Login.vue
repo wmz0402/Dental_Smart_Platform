@@ -13,8 +13,9 @@
             <el-form-item label="电子邮箱地址">
               <el-input
                 v-model="loginForm.email"
-                placeholder="请输入您的邮箱 (例: admin@qq.com)"
+                placeholder="请输入您的邮箱"
                 size="large"
+                autocomplete="off"
               >
                 <template #prefix>
                   <el-icon><Message /></el-icon>
@@ -29,6 +30,7 @@
                 show-password
                 placeholder="请输入登录密码"
                 size="large"
+                autocomplete="new-password"
               >
                 <template #prefix>
                   <el-icon><Lock /></el-icon>
@@ -61,6 +63,7 @@
                 v-model="regForm.email"
                 placeholder="请输入您的工作电子邮箱"
                 size="large"
+                autocomplete="off"
               >
                 <template #prefix>
                   <el-icon><Message /></el-icon>
@@ -74,6 +77,7 @@
                   v-model="regForm.code"
                   placeholder="请输入6位验证码"
                   size="large"
+                  autocomplete="off"
                 >
                   <template #prefix>
                     <el-icon><Key /></el-icon>
@@ -97,6 +101,7 @@
                 show-password
                 placeholder="请设置您的登录密码"
                 size="large"
+                autocomplete="new-password"
               >
                 <template #prefix>
                   <el-icon><Lock /></el-icon>
@@ -121,12 +126,12 @@
     <el-dialog v-model="showForgetDialog" title="找回并重置登录密码" width="460px" destroy-on-close>
       <el-form label-position="top">
         <el-form-item label="注册电子邮箱">
-          <el-input v-model="forgetForm.email" placeholder="请输入绑定的注册电子邮箱" />
+          <el-input v-model="forgetForm.email" placeholder="请输入绑定的注册电子邮箱" autocomplete="off" />
         </el-form-item>
 
         <el-form-item label="邮箱验证码">
           <div class="code-box">
-            <el-input v-model="forgetForm.code" placeholder="请输入6位邮件验证码" />
+            <el-input v-model="forgetForm.code" placeholder="请输入6位邮件验证码" autocomplete="off" />
             <el-button
               type="primary"
               :disabled="userStore.countdown > 0"
@@ -143,6 +148,7 @@
             type="password"
             show-password
             placeholder="请输入您要设置的新密码"
+            autocomplete="new-password"
           />
         </el-form-item>
       </el-form>
@@ -167,10 +173,10 @@ const userStore = useUserStore();
 const activeTab = ref('login');
 const showForgetDialog = ref(false);
 
-// 已注册用户表单 (默认预填内置管理员)
+// 已注册用户表单 (修改为空白，不自动填充)
 const loginForm = ref({
-  email: 'admin@qq.com',
-  password: 'luck0070402'
+  email: '',
+  password: ''
 });
 
 // 未注册用户注册表单
