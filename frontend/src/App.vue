@@ -389,10 +389,19 @@ onUnmounted(() => {
   z-index: 100;
 }
 
+:global(html.light-theme) .sidebar {
+  background-color: #ffffff !important;
+  border-right: 1px solid #e2e8f0 !important;
+}
+
 .logo-area {
   padding: 20px;
   gap: 12px;
   border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+}
+
+:global(html.light-theme) .logo-area {
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .logo-icon {
@@ -401,6 +410,11 @@ onUnmounted(() => {
   border-radius: 8px;
   background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
   box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+}
+
+:global(html.light-theme) .logo-icon {
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
 }
 
 .logo-text h1 {
@@ -412,6 +426,10 @@ onUnmounted(() => {
 .logo-text p {
   font-size: 10px;
   color: var(--accent-cyan);
+}
+
+:global(html.light-theme) .logo-text p {
+  color: #2563eb;
 }
 
 .sidebar-menu {
@@ -436,6 +454,11 @@ onUnmounted(() => {
   border-top: 1px solid rgba(56, 189, 248, 0.1);
 }
 
+:global(html.light-theme) .sidebar-footer {
+  border-top: 1px solid #f1f5f9;
+  color: #64748b;
+}
+
 .status-dot {
   width: 8px;
   height: 8px;
@@ -454,6 +477,12 @@ onUnmounted(() => {
   padding: 0 24px;
 }
 
+:global(html.light-theme) .header {
+  background: linear-gradient(135deg, #2b529a 0%, #3b629b 100%) !important;
+  border-bottom: 1px solid #254685 !important;
+  color: #ffffff !important;
+}
+
 .clinic-tag {
   background: rgba(2, 132, 199, 0.15);
   color: var(--accent-cyan);
@@ -461,6 +490,12 @@ onUnmounted(() => {
   border-radius: 20px;
   font-size: 12px;
   border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+:global(html.light-theme) .clinic-tag {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
 .header-right {
@@ -473,6 +508,12 @@ onUnmounted(() => {
   color: #38bdf8 !important;
 }
 
+:global(html.light-theme) .theme-toggle-btn {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
 .theme-toggle-btn:hover {
   background: rgba(56, 189, 248, 0.2) !important;
 }
@@ -483,6 +524,10 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+:global(html.light-theme) .system-time {
+  color: #e2e8f0;
 }
 
 .user-profile {
@@ -515,9 +560,17 @@ onUnmounted(() => {
   line-height: 1.2;
 }
 
+:global(html.light-theme) .user-email {
+  color: #ffffff;
+}
+
 .user-role {
   font-size: 11px;
   color: var(--accent-cyan);
+}
+
+:global(html.light-theme) .user-role {
+  color: #93c5fd;
 }
 
 .content-area {

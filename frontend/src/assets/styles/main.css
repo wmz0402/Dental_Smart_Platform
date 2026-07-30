@@ -4,6 +4,7 @@
   --border-color: rgba(56, 189, 248, 0.15);
   --text-main: #f8fafc;
   --text-secondary: #94a3b8;
+  --text-muted: #64748b;
   --primary-color: #0284c7;
   --accent-cyan: #38bdf8;
   --success-color: #10b981;
@@ -11,13 +12,19 @@
   --danger-color: #ef4444;
 }
 
-/* 浅色主题模式支持 */
+/* 高颜值优雅浅色主题模式支持 (对标医疗服务平台专业实操风格) */
 html.light-theme {
   --bg-dark: #f1f5f9;
   --bg-card: #ffffff;
-  --border-color: #cbd5e1;
+  --border-color: #e2e8f0;
   --text-main: #0f172a;
   --text-secondary: #475569;
+  --text-muted: #64748b;
+  --primary-color: #2563eb;
+  --accent-cyan: #0284c7;
+  --success-color: #059669;
+  --warning-color: #d97706;
+  --danger-color: #dc2626;
 }
 
 * {
@@ -43,6 +50,13 @@ html, body {
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   padding: 24px;
   box-sizing: border-box;
+}
+
+html.light-theme .glass-card {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03) !important;
+  backdrop-filter: none !important;
 }
 
 .flex-between {
@@ -79,9 +93,19 @@ html, body {
   border-right: 1px solid rgba(56, 189, 248, 0.12) !important;
 }
 
+html.light-theme .sidebar,
+html.light-theme .el-menu {
+  background-color: #ffffff !important;
+  border-right: 1px solid #e2e8f0 !important;
+}
+
 .el-menu-item {
   color: #94a3b8 !important;
   background-color: transparent !important;
+}
+
+html.light-theme .el-menu-item {
+  color: #475569 !important;
 }
 
 .el-menu-item:hover {
@@ -89,10 +113,22 @@ html, body {
   background-color: rgba(56, 189, 248, 0.08) !important;
 }
 
+html.light-theme .el-menu-item:hover {
+  color: #2563eb !important;
+  background-color: #f1f5f9 !important;
+}
+
 .el-menu-item.is-active {
   color: #38bdf8 !important;
   background: linear-gradient(90deg, rgba(2, 132, 199, 0.25) 0%, rgba(56, 189, 248, 0.05) 100%) !important;
   border-right: 3px solid #38bdf8 !important;
+  font-weight: 700 !important;
+}
+
+html.light-theme .el-menu-item.is-active {
+  color: #2563eb !important;
+  background: #eff6ff !important;
+  border-right: 3px solid #2563eb !important;
   font-weight: 700 !important;
 }
 
@@ -104,14 +140,27 @@ html, body {
   padding: 20px !important;
 }
 
+html.light-theme .el-dialog {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
 .el-dialog__title {
   color: #f8fafc !important;
   font-weight: 700 !important;
 }
 
+html.light-theme .el-dialog__title {
+  color: #0f172a !important;
+}
+
 .el-dialog__body {
   color: #cbd5e1 !important;
   padding: 16px 0 !important;
+}
+
+html.light-theme .el-dialog__body {
+  color: #334155 !important;
 }
 
 .el-form-item {
@@ -124,6 +173,10 @@ html, body {
   padding-bottom: 6px !important;
 }
 
+html.light-theme .el-form-item__label {
+  color: #1e293b !important;
+}
+
 .el-input__wrapper,
 .el-select__wrapper {
   background-color: #1e293b !important;
@@ -133,20 +186,35 @@ html, body {
   padding: 4px 12px !important;
 }
 
+html.light-theme .el-input__wrapper,
+html.light-theme .el-select__wrapper {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
 .el-input__wrapper:hover,
 .el-select__wrapper:hover {
   border-color: #38bdf8 !important;
+}
+
+html.light-theme .el-input__wrapper:hover,
+html.light-theme .el-select__wrapper:hover {
+  border-color: #2563eb !important;
 }
 
 .el-input__inner {
   color: #f8fafc !important;
 }
 
+html.light-theme .el-input__inner {
+  color: #0f172a !important;
+}
+
 .el-input__inner::placeholder {
   color: #64748b !important;
 }
 
-/* 彻底解决表格无划格线问题：强化 Element Plus 表格网格划分 */
+/* 强化 Element Plus 表格网格划分（深浅主题适配） */
 .el-table {
   --el-table-bg-color: transparent !important;
   --el-table-tr-bg-color: transparent !important;
@@ -160,6 +228,17 @@ html, body {
   overflow: hidden !important;
 }
 
+html.light-theme .el-table {
+  --el-table-bg-color: #ffffff !important;
+  --el-table-tr-bg-color: #ffffff !important;
+  --el-table-header-bg-color: #f8fafc !important;
+  --el-table-header-text-color: #1e293b !important;
+  --el-table-row-hover-bg-color: #f1f5f9 !important;
+  --el-table-text-color: #0f172a !important;
+  --el-table-border-color: #e2e8f0 !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
 .el-table,
 .el-table__expanded-cell,
 .el-table th,
@@ -167,6 +246,15 @@ html, body {
 .el-table td {
   background-color: transparent !important;
   color: #f8fafc !important;
+}
+
+html.light-theme .el-table,
+html.light-theme .el-table__expanded-cell,
+html.light-theme .el-table th,
+html.light-theme .el-table tr,
+html.light-theme .el-table td {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
 }
 
 .el-table th.el-table__cell {
@@ -178,10 +266,24 @@ html, body {
   padding: 12px 16px !important;
 }
 
+html.light-theme .el-table th.el-table__cell {
+  background-color: #f1f5f9 !important;
+  color: #1e293b !important;
+  font-weight: 700 !important;
+  border-bottom: 2px solid #cbd5e1 !important;
+  border-right: 1px solid #e2e8f0 !important;
+}
+
 .el-table td.el-table__cell {
   border-bottom: 1px solid rgba(56, 189, 248, 0.15) !important;
   border-right: 1px solid rgba(56, 189, 248, 0.12) !important;
   padding: 12px 16px !important;
+}
+
+html.light-theme .el-table td.el-table__cell {
+  border-bottom: 1px solid #e2e8f0 !important;
+  border-right: 1px solid #e2e8f0 !important;
+  color: #1e293b !important;
 }
 
 .el-table td.el-table__cell:last-child,
@@ -194,9 +296,19 @@ html, body {
   color: #f8fafc !important;
 }
 
+html.light-theme .el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
 .el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell {
   background-color: rgba(56, 189, 248, 0.12) !important;
   color: #38bdf8 !important;
+}
+
+html.light-theme .el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell {
+  background-color: #eff6ff !important;
+  color: #2563eb !important;
 }
 
 /* 重置 el-input-number 样式 */
@@ -207,8 +319,102 @@ html, body {
   border-color: rgba(56, 189, 248, 0.3) !important;
 }
 
+html.light-theme .el-input-number__decrease,
+html.light-theme .el-input-number__increase {
+  background-color: #f1f5f9 !important;
+  color: #2563eb !important;
+  border-color: #cbd5e1 !important;
+}
+
 .el-input-number__decrease:hover,
 .el-input-number__increase:hover {
   background-color: #0284c7 !important;
   color: #ffffff !important;
+}
+
+html.light-theme .el-input-number__decrease:hover,
+html.light-theme .el-input-number__increase:hover {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+/* 业务组件浅色模式适配 */
+html.light-theme .score-banner {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+html.light-theme .grid-card {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+html.light-theme .grid-card .val {
+  color: #0f172a !important;
+}
+
+html.light-theme .grid-card .lbl {
+  color: #64748b !important;
+}
+
+html.light-theme .table-wrapper {
+  border: 1px solid #cbd5e1 !important;
+}
+
+html.light-theme .report-table th {
+  background-color: #f1f5f9 !important;
+  color: #1e293b !important;
+  border-bottom: 2px solid #cbd5e1 !important;
+  border-right: 1px solid #e2e8f0 !important;
+}
+
+html.light-theme .report-table td {
+  border-bottom: 1px solid #e2e8f0 !important;
+  border-right: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+html.light-theme .report-table tr:nth-child(even) td {
+  background-color: #f8fafc !important;
+}
+
+html.light-theme .consumable-card {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+html.light-theme .c-title {
+  color: #0f172a !important;
+}
+
+html.light-theme .rule-item {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+html.light-theme .metrics-grid {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+html.light-theme .m-value {
+  color: #0f172a !important;
+}
+
+html.light-theme .page-title h2,
+html.light-theme .card-header h3,
+html.light-theme .brand-title h2,
+html.light-theme .section-block h3,
+html.light-theme .metric-number {
+  color: #0f172a !important;
+}
+
+html.light-theme .page-title span,
+html.light-theme .subtitle,
+html.light-theme .metric-title,
+html.light-theme .metric-sub,
+html.light-theme .text-muted,
+html.light-theme .sub-tip {
+  color: #64748b !important;
 }

@@ -78,11 +78,13 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue';
 import { useDeviceStore } from '@/stores/deviceStore';
+import { useUserStore } from '@/stores/userStore';
 import { Refresh } from '@element-plus/icons-vue';
 import * as echarts from 'echarts';
 import axios from 'axios';
 
 const deviceStore = useDeviceStore();
+const userStore = useUserStore();
 const selectedDeviceSn = ref('W-SYS-2026-01');
 const sampleLimit = ref(30);
 const chartRef = ref<HTMLElement | null>(null);
@@ -110,22 +112,28 @@ const generateMockPoints = (count: number) => {
 const renderChart = (times: string[], tdsData: number[], uvData: number[]) => {
   if (!chartRef.value) return;
 
-  if (!chartInstance) {
-    chartInstance = echarts.init(chartRef.value, 'dark');
+  const isDark = userStore.isDarkTheme;
+  const textColor = isDark ? '#94a3b8' : '#475569';
+  const splitLineColor = isDark ? '#1e293b' : '#e2e8f0';
+  const axisLineColor = isDark ? '#334155' : '#cbd5e1';
+
+  if (chartInstance) {
+    chartInstance.dispose();
   }
+  chartInstance = echarts.init(chartRef.value, isDark ? 'dark' : undefined);
 
   const option: echarts.EChartsOption = {
     backgroundColor: 'transparent',
     tooltip: {
       trigger: 'axis',
-      backgroundColor: '#0f172a',
-      borderColor: '#38bdf8',
-      textStyle: { color: '#f8fafc' }
+      backgroundColor: isDark ? '#0f172a' : '#ffffff',
+      borderColor: isDark ? '#38bdf8' : '#0284c7',
+      textStyle: { color: isDark ? '#f8fafc' : '#0f172a' }
     },
     legend: {
       data: ['TDS水质(ppm)', 'UV杀菌强度(%)'],
       top: 10,
-      textStyle: { color: '#94a3b8' }
+      textStyle: { color: textColor }
     },
     grid: {
       left: '3%',
@@ -137,16 +145,16 @@ const renderChart = (times: string[], tdsData: number[], uvData: number[]) => {
       type: 'category',
       boundaryGap: false,
       data: times,
-      axisLine: { lineStyle: { color: '#334155' } },
-      axisLabel: { color: '#94a3b8' }
+      axisLine: { lineStyle: { color: axisLineColor } },
+      axisLabel: { color: textColor }
     },
     yAxis: [
       {
         type: 'value',
         name: 'TDS水质(ppm)',
         position: 'left',
-        splitLine: { lineStyle: { color: '#1e293b' } },
-        axisLabel: { color: '#94a3b8' }
+        splitLine: { lineStyle: { color: splitLineColor } },
+        axisLabel: { color: textColor }
       },
       {
         type: 'value',
@@ -155,7 +163,7 @@ const renderChart = (times: string[], tdsData: number[], uvData: number[]) => {
         min: 80,
         max: 100,
         splitLine: { show: false },
-        axisLabel: { color: '#94a3b8' }
+        axisLabel: { color: textColor }
       }
     ],
     series: [
@@ -164,11 +172,11 @@ const renderChart = (times: string[], tdsData: number[], uvData: number[]) => {
         type: 'line',
         smooth: true,
         data: tdsData,
-        itemStyle: { color: '#38bdf8' },
+        itemStyle: { color: isDark ? '#38bdf8' : '#0284c7' },
         areaStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: 'rgba(56, 189, 248, 0.4)' },
-            { offset: 1, color: 'rgba(56, 189, 248, 0.0)' }
+            { offset: 0, color: isDark ? 'rgba(56, 189, 248, 0.4)' : 'rgba(2, 132, 199, 0.25)' },
+            { offset: 1, color: isDark ? 'rgba(56, 189, 248, 0.0)' : 'rgba(2, 132, 199, 0.0)' }
           ])
         }
       },
@@ -178,11 +186,11 @@ const renderChart = (times: string[], tdsData: number[], uvData: number[]) => {
         yAxisIndex: 1,
         smooth: true,
         data: uvData,
-        itemStyle: { color: '#10b981' },
+        itemStyle: { color: isDark ? '#10b981' : '#059669' },
         areaStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: 'rgba(16, 185, 129, 0.3)' },
-            { offset: 1, color: 'rgba(16, 185, 129, 0.0)' }
+            { offset: 0, color: isDark ? 'rgba(16, 185, 129, 0.3)' : 'rgba(5, 150, 105, 0.2)' },
+            { offset: 1, color: isDark ? 'rgba(16, 185, 129, 0.0)' : 'rgba(5, 150, 105, 0.0)' }
           ])
         }
       }
@@ -232,7 +240,7 @@ const handleResize = () => {
   }
 };
 
-watch(selectedDeviceSn, () => {
+watch([selectedDeviceSn, () => userStore.isDarkTheme], () => {
   loadHistory();
 });
 

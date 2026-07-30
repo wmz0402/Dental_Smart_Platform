@@ -130,13 +130,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick } from 'vue';
+import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue';
 import { useDeviceStore } from '@/stores/deviceStore';
+import { useUserStore } from '@/stores/userStore';
 import { Monitor, Filter, WindPower, Warning } from '@element-plus/icons-vue';
 import * as echarts from 'echarts';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
 const store = useDeviceStore();
+const userStore = useUserStore();
 
 const trendChartRef = ref<HTMLElement | null>(null);
 const pieChartRef = ref<HTMLElement | null>(null);
@@ -165,20 +167,26 @@ const getModeTagType = (mode: string) => {
 };
 
 const initCharts = () => {
+  const isDark = userStore.isDarkTheme;
+  const textColor = isDark ? '#94a3b8' : '#475569';
+  const splitLineColor = isDark ? '#1e293b' : '#e2e8f0';
+  const axisLineColor = isDark ? '#334155' : '#cbd5e1';
+
   if (trendChartRef.value) {
-    trendChart = echarts.init(trendChartRef.value, 'dark');
+    if (trendChart) trendChart.dispose();
+    trendChart = echarts.init(trendChartRef.value, isDark ? 'dark' : undefined);
     trendChart.setOption({
       backgroundColor: 'transparent',
       tooltip: { trigger: 'axis' },
-      legend: { data: ['水质TDS(ppm)', '露点温度(°C)'], top: 10, textStyle: { color: '#94a3b8' } },
+      legend: { data: ['水质TDS(ppm)', '露点温度(°C)'], top: 10, textStyle: { color: textColor } },
       grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
       xAxis: {
         type: 'category',
         data: ['02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00'],
-        axisLine: { lineStyle: { color: '#334155' } }
+        axisLine: { lineStyle: { color: axisLineColor } }
       },
       yAxis: [
-        { type: 'value', name: 'TDS (ppm)', splitLine: { lineStyle: { color: '#1e293b' } } },
+        { type: 'value', name: 'TDS (ppm)', splitLine: { lineStyle: { color: splitLineColor } } },
         { type: 'value', name: '露点 (°C)', min: -50, max: -30, splitLine: { show: false } }
       ],
       series: [
@@ -187,7 +195,7 @@ const initCharts = () => {
           type: 'line',
           smooth: true,
           data: [14.2, 13.8, 14.5, 12.9, 14.1, 19.5, 15.2, 13.6, 17.1],
-          itemStyle: { color: '#38bdf8' }
+          itemStyle: { color: isDark ? '#38bdf8' : '#0284c7' }
         },
         {
           name: '露点温度(°C)',
@@ -195,25 +203,26 @@ const initCharts = () => {
           yAxisIndex: 1,
           smooth: true,
           data: [-43, -42, -44, -42, -45, -43, -44, -42, -44],
-          itemStyle: { color: '#10b981' }
+          itemStyle: { color: isDark ? '#10b981' : '#059669' }
         }
       ]
     });
   }
 
   if (pieChartRef.value) {
-    pieChart = echarts.init(pieChartRef.value, 'dark');
+    if (pieChart) pieChart.dispose();
+    pieChart = echarts.init(pieChartRef.value, isDark ? 'dark' : undefined);
     pieChart.setOption({
       backgroundColor: 'transparent',
       tooltip: { trigger: 'item' },
-      legend: { orient: 'vertical', right: 10, top: 'center', textStyle: { color: '#94a3b8' } },
+      legend: { orient: 'vertical', right: 10, top: 'center', textStyle: { color: textColor } },
       series: [
         {
           name: '运行模式',
           type: 'pie',
           radius: ['45%', '70%'],
           avoidLabelOverlap: false,
-          itemStyle: { borderRadius: 8, borderColor: '#0f172a', borderWidth: 2 },
+          itemStyle: { borderRadius: 8, borderColor: isDark ? '#0f172a' : '#ffffff', borderWidth: 2 },
           label: { show: false },
           data: [
             { value: 4, name: '正常巡检', itemStyle: { color: '#0284c7' } },
@@ -230,6 +239,12 @@ const handleResize = () => {
   trendChart?.resize();
   pieChart?.resize();
 };
+
+watch(() => userStore.isDarkTheme, () => {
+  nextTick(() => {
+    initCharts();
+  });
+});
 
 const handleLock = (row: any) => {
   ElMessageBox.confirm(`确认紧急切断锁止设备 ${row.name} (${row.sn}) 吗？`, '安全调控警示', {
