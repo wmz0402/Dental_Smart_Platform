@@ -397,10 +397,10 @@ onUnmounted(() => {
 }
 
 :global(html.light-theme) .header {
-  background: linear-gradient(135deg, #4467ad 0%, #557cc7 100%) !important;
-  border-bottom: 1px solid #3d5e9e !important;
-  color: #ffffff !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .logo-area {
@@ -417,7 +417,7 @@ onUnmounted(() => {
 }
 
 :global(html.light-theme) .header-divider {
-  background: rgba(255, 255, 255, 0.3);
+  background: #cbd5e1 !important;
 }
 
 .logo-icon-img {
@@ -429,7 +429,7 @@ onUnmounted(() => {
 }
 
 :global(html.light-theme) .logo-icon-img {
-  filter: drop-shadow(0 2px 6px rgba(255, 255, 255, 0.3));
+  filter: drop-shadow(0 2px 6px rgba(2, 132, 199, 0.2));
 }
 
 .logo-text h1 {
@@ -440,7 +440,7 @@ onUnmounted(() => {
 }
 
 :global(html.light-theme) .logo-text h1 {
-  color: #ffffff !important;
+  color: #0f172a !important;
 }
 
 .logo-text p {
@@ -449,7 +449,7 @@ onUnmounted(() => {
 }
 
 :global(html.light-theme) .logo-text p {
-  color: #93c5fd !important;
+  color: #0284c7 !important;
 }
 
 .body-container {
@@ -523,9 +523,9 @@ onUnmounted(() => {
 }
 
 :global(html.light-theme) .clinic-tag {
-  background: rgba(255, 255, 255, 0.18);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: #eff6ff !important;
+  color: #2563eb !important;
+  border: 1px solid #bfdbfe !important;
 }
 
 .header-right {
@@ -539,13 +539,18 @@ onUnmounted(() => {
 }
 
 :global(html.light-theme) .theme-toggle-btn {
-  background: rgba(255, 255, 255, 0.15) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  color: #ffffff !important;
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0284c7 !important;
 }
 
 .theme-toggle-btn:hover {
   background: rgba(56, 189, 248, 0.2) !important;
+}
+
+:global(html.light-theme) .theme-toggle-btn:hover {
+  background: #e2e8f0 !important;
+  color: #1d4ed8 !important;
 }
 
 .system-time {
@@ -557,7 +562,7 @@ onUnmounted(() => {
 }
 
 :global(html.light-theme) .system-time {
-  color: #e2e8f0;
+  color: #475569 !important;
 }
 
 .user-profile {
@@ -570,6 +575,10 @@ onUnmounted(() => {
 
 .user-profile:hover {
   background: rgba(255, 255, 255, 0.05);
+}
+
+:global(html.light-theme) .user-profile:hover {
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .user-avatar {
@@ -596,11 +605,11 @@ onUnmounted(() => {
 }
 
 :global(html.light-theme) .user-email {
-  color: #ffffff !important;
+  color: #0f172a !important;
 }
 
 :global(html.light-theme) .user-role {
-  color: #93c5fd !important;
+  color: #0284c7 !important;
 }
 
 .content-area {
