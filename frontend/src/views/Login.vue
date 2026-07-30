@@ -2,7 +2,7 @@
   <div class="login-container">
     <div class="glass-card login-card">
       <div class="login-header">
-        <div class="logo-circle"></div>
+        <img :src="logoSvg" class="login-logo-img" alt="Logo" />
         <h2>智护牙境 - 智能管控平台登录</h2>
       </div>
 
@@ -163,6 +163,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import logoSvg from '../assets/logo.svg';
 import { useUserStore } from '@/stores/userStore';
 import { Message, Lock, Key } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
@@ -307,13 +308,13 @@ html.light-theme .login-card {
   text-align: center;
 }
 
-.logo-circle {
-  width: 52px;
-  height: 52px;
+.login-logo-img {
+  width: 56px;
+  height: 56px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
   margin: 0 auto 14px;
-  box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.5));
 }
 
 .login-header h2 {

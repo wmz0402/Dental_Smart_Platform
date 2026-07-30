@@ -9,7 +9,7 @@
     <template v-else>
       <el-aside width="240px" class="sidebar">
         <div class="logo-area flex-align">
-          <div class="logo-icon"></div>
+          <img :src="logoSvg" class="logo-icon-img" alt="Logo" />
           <div class="logo-text">
             <h1>智护牙境</h1>
             <p>口腔智能感控平台</p>
@@ -189,6 +189,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
+import logoSvg from './assets/logo.svg';
 import { useUserStore } from '@/stores/userStore';
 import { useDeviceStore } from '@/stores/deviceStore';
 import {
@@ -405,17 +406,16 @@ onUnmounted(() => {
   border-bottom: 1px solid #f1f5f9;
 }
 
-.logo-icon {
-  width: 36px;
-  height: 36px;
+.logo-icon-img {
+  width: 38px;
+  height: 38px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4));
 }
 
-:global(html.light-theme) .logo-icon {
-  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+:global(html.light-theme) .logo-icon-img {
+  filter: drop-shadow(0 2px 6px rgba(37, 99, 235, 0.2));
 }
 
 .logo-text h1 {
