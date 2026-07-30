@@ -396,10 +396,10 @@ onUnmounted(() => {
 }
 
 :global(html.light-theme) .header {
-  background: linear-gradient(135deg, #2b529a 0%, #3b629b 100%) !important;
-  border-bottom: 1px solid #254685 !important;
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%) !important;
+  border-bottom: 1px solid #93c5fd !important;
   color: #ffffff !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.2);
 }
 
 .logo-area {
