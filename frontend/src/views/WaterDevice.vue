@@ -196,7 +196,11 @@ const defaultWaterDevices: Device[] = [
   { id: 1, sn: 'W-SYS-2026-01', name: '1号口腔椅位水源精准消毒机', type: 'WATER', clinic_id: 101, location: '诊室一 牙椅01', work_mode: 'DEEP_CLEAN', status: 'ONLINE', uv_status: 1, filter_level: 88, uv_lamp_health: 94 },
   { id: 2, sn: 'W-SYS-2026-02', name: '2号口腔椅位水源精准消毒机', type: 'WATER', clinic_id: 101, location: '诊室一 牙椅02', work_mode: 'DEEP_CLEAN', status: 'ONLINE', uv_status: 1, filter_level: 95, uv_lamp_health: 98 },
   { id: 3, sn: 'W-SYS-2026-03', name: '3号儿童诊室水路智能处理机', type: 'WATER', clinic_id: 101, location: '诊室二 牙椅03', work_mode: 'NORMAL', status: 'ONLINE', uv_status: 1, filter_level: 91, uv_lamp_health: 92 },
-  { id: 4, sn: 'W-SYS-2026-04', name: 'VIP特诊间高阶水路消毒终端', type: 'WATER', clinic_id: 101, location: 'VIP套间 牙椅05', work_mode: 'ECO', status: 'ONLINE', uv_status: 1, filter_level: 86, uv_lamp_health: 90 }
+  { id: 4, sn: 'W-SYS-2026-04', name: 'VIP特诊间高阶水路消毒终端', type: 'WATER', clinic_id: 101, location: 'VIP套间 牙椅05', work_mode: 'ECO', status: 'ONLINE', uv_status: 1, filter_level: 86, uv_lamp_health: 90 },
+  { id: 5, sn: 'W-SYS-2026-05', name: '5号种植专科水路无菌消毒站', type: 'WATER', clinic_id: 101, location: '种植中心 牙椅08', work_mode: 'DEEP_CLEAN', status: 'ONLINE', uv_status: 1, filter_level: 94, uv_lamp_health: 97 },
+  { id: 6, sn: 'W-SYS-2026-06', name: '6号正畸中心综合水路净化机', type: 'WATER', clinic_id: 101, location: '正畸中心 牙椅10', work_mode: 'NORMAL', status: 'ONLINE', uv_status: 1, filter_level: 89, uv_lamp_health: 91 },
+  { id: 7, sn: 'W-SYS-2026-07', name: '二楼牙体牙髓科水路处理终端', type: 'WATER', clinic_id: 101, location: '二楼诊区 牙椅12', work_mode: 'NORMAL', status: 'ONLINE', uv_status: 1, filter_level: 92, uv_lamp_health: 95 },
+  { id: 8, sn: 'W-SYS-2026-08', name: '消毒供应中心次氯酸水发生主站', type: 'WATER', clinic_id: 101, location: '消毒供应室 主柜01', work_mode: 'DEEP_CLEAN', status: 'ONLINE', uv_status: 1, filter_level: 98, uv_lamp_health: 99 }
 ];
 
 const waterDevices = computed(() => {
