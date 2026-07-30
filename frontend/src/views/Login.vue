@@ -39,8 +39,8 @@
             </el-form-item>
 
             <div class="forget-link-row">
-              <el-button type="primary" link @click="showForgetDialog = true">
-                忘记密码？点此通过邮箱验证码重置
+              <el-button type="primary" link class="forget-btn" @click="showForgetDialog = true">
+                忘记密码？
               </el-button>
             </div>
 
@@ -173,20 +173,17 @@ const userStore = useUserStore();
 const activeTab = ref('login');
 const showForgetDialog = ref(false);
 
-// 已注册用户表单 (修改为空白，不自动填充)
 const loginForm = ref({
   email: '',
   password: ''
 });
 
-// 未注册用户注册表单
 const regForm = ref({
   email: '',
   code: '',
   password: ''
 });
 
-// 忘记密码重置表单
 const forgetForm = ref({
   email: '',
   code: '',
@@ -292,6 +289,27 @@ const handleResetPassword = async () => {
   margin-top: 8px;
 }
 
+/* 深色背景下的高对比度标签页字体与 Label 强化 */
+:deep(.el-tabs__item) {
+  color: #cbd5e1 !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+}
+
+:deep(.el-tabs__item:hover) {
+  color: #38bdf8 !important;
+}
+
+:deep(.el-tabs__item.is-active) {
+  color: #38bdf8 !important;
+  font-weight: 700 !important;
+}
+
+:deep(.el-form-item__label) {
+  color: #f8fafc !important;
+  font-weight: 600 !important;
+}
+
 .login-form {
   display: flex;
   flex-direction: column;
@@ -303,6 +321,16 @@ const handleResetPassword = async () => {
   display: flex;
   justify-content: flex-end;
   margin-top: -8px;
+}
+
+.forget-btn {
+  color: #38bdf8 !important;
+  font-size: 13px !important;
+}
+
+.forget-btn:hover {
+  color: #7dd3fc !important;
+  text-decoration: underline;
 }
 
 .code-box {
