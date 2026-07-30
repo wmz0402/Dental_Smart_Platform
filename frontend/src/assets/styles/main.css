@@ -17,9 +17,11 @@
   padding: 0;
 }
 
-body {
-  background-color: var(--bg-dark);
-  color: var(--text-main);
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: #090d16 !important;
+  color: #f8fafc !important;
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
@@ -60,7 +62,30 @@ body {
   color: var(--warning-color);
 }
 
-/* 全局弹窗样式精确定向约束在 .el-dialog 内部，不破坏侧边栏与主布局暗黑科技风格 */
+/* 保护侧边栏 menu 全效保持高端极客暗黑风 */
+.sidebar, .el-menu {
+  background-color: #0b1120 !important;
+  border-right: 1px solid rgba(56, 189, 248, 0.1) !important;
+}
+
+.el-menu-item {
+  color: #94a3b8 !important;
+  background-color: transparent !important;
+}
+
+.el-menu-item:hover {
+  color: #38bdf8 !important;
+  background-color: rgba(56, 189, 248, 0.08) !important;
+}
+
+.el-menu-item.is-active {
+  color: #38bdf8 !important;
+  background: linear-gradient(90deg, rgba(2, 132, 199, 0.25) 0%, rgba(56, 189, 248, 0.05) 100%) !important;
+  border-right: 3px solid #38bdf8 !important;
+  font-weight: 700 !important;
+}
+
+/* 弹窗专用暗黑约束 */
 .el-dialog {
   background-color: #0f172a !important;
   border: 1px solid rgba(56, 189, 248, 0.2) !important;
@@ -93,26 +118,4 @@ body {
 
 .el-input__inner::placeholder {
   color: #64748b !important;
-}
-
-/* 消除 Element Plus 表格在暗黑模式下的白条条背景与残影 */
-.el-table {
-  --el-table-bg-color: transparent !important;
-  --el-table-tr-bg-color: transparent !important;
-  --el-table-header-bg-color: #1e293b !important;
-  --el-table-header-text-color: #cbd5e1 !important;
-  --el-table-row-hover-bg-color: rgba(30, 41, 59, 0.9) !important;
-  --el-table-text-color: #f8fafc !important;
-  --el-table-border-color: #1e293b !important;
-  background-color: transparent !important;
-}
-
-.el-table tr, .el-table td, .el-table th.el-table__cell {
-  background-color: transparent !important;
-  color: #f8fafc !important;
-}
-
-.el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
-  background-color: rgba(30, 41, 59, 0.5) !important;
-  color: #f8fafc !important;
 }
