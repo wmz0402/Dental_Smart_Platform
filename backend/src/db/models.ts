@@ -1,59 +1,71 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-// 1. 设备模型
 export interface IDevice extends Document {
+  id: number;
   sn: string;
   name: string;
-  type: string;
-  clinicId: number;
+  type: 'WATER' | 'AIR';
+  clinic_id: number;
   location: string;
-  workMode: string;
-  status: string;
-  uvStatus: number;
-  filterLevel: number;
-  uvLampHealth: number;
-  createdAt: Date;
+  work_mode: 'NORMAL' | 'ECO' | 'DEEP_CLEAN' | 'OFF';
+  status: 'ONLINE' | 'OFFLINE' | 'MAINTENANCE';
+  uv_status: number;
+  filter_level: number;
+  uv_lamp_health: number;
 }
 
-const DeviceSchema: Schema = new Schema({
-  sn: { type: String, required: true, unique: true },
+const DeviceSchema = new Schema<IDevice>({
+  id: { type: Number, required: true, unique: true },
+  sn: { type: String, required: true },
   name: { type: String, required: true },
-  type: { type: String, required: true },
-  clinicId: { type: Number, default: 1 },
-  location: { type: String, default: '诊所科室' },
-  workMode: { type: String, default: 'NORMAL' },
+  type: { type: String, enum: ['WATER', 'AIR'], required: true },
+  clinic_id: { type: Number, default: 101 },
+  location: { type: String, default: '诊室' },
+  work_mode: { type: String, default: 'NORMAL' },
   status: { type: String, default: 'ONLINE' },
-  uvStatus: { type: Number, default: 1 },
-  filterLevel: { type: Number, default: 100 },
-  uvLampHealth: { type: Number, default: 100 },
-  createdAt: { type: Date, default: Date.now }
-});
+  uv_status: { type: Number, default: 1 },
+  filter_level: { type: Number, default: 100 },
+  uv_lamp_health: { type: Number, default: 100 }
+}, { timestamps: true });
 
-export const MongoDevice = mongoose.model<IDevice>('Device', DeviceSchema);
-
-// 2. 遥测日志模型
-export interface ITelemetryLog extends Document {
-  deviceSn: string;
-  tdsVal: number;
-  turbidity: number;
-  flowRate: number;
-  pressure: number;
-  dewPoint: number;
-  pm25: number;
-  uvIntensity: number;
-  recordedAt: Date;
+export interface IAlarm extends Document {
+  id: number;
+  device_sn: string;
+  device_name: string;
+  level: 'CRITICAL' | 'WARNING';
+  title: string;
+  description: string;
+  status: 'UNRESOLVED' | 'RESOLVED';
+  triggered_at: string;
 }
 
-const TelemetryLogSchema: Schema = new Schema({
-  deviceSn: { type: String, required: true },
-  tdsVal: { type: Number },
-  turbidity: { type: Number },
-  flowRate: { type: Number },
-  pressure: { type: Number },
-  dewPoint: { type: Number },
-  pm25: { type: Number },
-  uvIntensity: { type: Number },
-  recordedAt: { type: Date, default: Date.now }
-});
+const AlarmSchema = new Schema<IAlarm>({
+  id: { type: Number, required: true, unique: true },
+  device_sn: { type: String, required: true },
+  device_name: { type: String, required: true },
+  level: { type: String, default: 'WARNING' },
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  status: { type: String, default: 'UNRESOLVED' },
+  triggered_at: { type: String, required: true }
+}, { timestamps: true });
 
-export const MongoTelemetry = mongoose.model<ITelemetryLog>('TelemetryLog', TelemetryLogSchema);
+export interface IConsumable extends Document {
+  id: number;
+  device_sn: string;
+  item_name: string;
+  life_remaining: number;
+  estimated_replace_date: string;
+}
+
+const ConsumableSchema = new Schema<IConsumable>({
+  id: { type: Number, required: true, unique: true },
+  device_sn: { type: String, required: true },
+  item_name: { type: String, required: true },
+  life_remaining: { type: Number, required: true },
+  estimated_replace_date: { type: String, required: true }
+}, { timestamps: true });
+
+export const DeviceModel = mongoose.models.Device || mongoose.model<IDevice>('Device', DeviceSchema);
+export const AlarmModel = mongoose.models.Alarm || mongoose.model<IAlarm>('Alarm', AlarmSchema);
+export const ConsumableModel = mongoose.models.Consumable || mongoose.model<IConsumable>('Consumable', ConsumableSchema);

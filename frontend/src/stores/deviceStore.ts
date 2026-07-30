@@ -148,25 +148,37 @@ const defaultFallbackDevices: Device[] = [
 ];
 
 export const useDeviceStore = defineStore('device', {
-  state: () => ({
-    devices: defaultFallbackDevices as Device[],
-    overview: {
-      totalDevices: 7,
-      totalClinics: 2,
-      onlineDevices: 7,
-      waterDisinfectionRate: 99.99,
-      waterSterilizeRate: 99.99,
-      avgWaterTds: 14.2,
-      airSterilizationRate: 99.85,
-      airBacteriaKillRate: 99.85,
-      avgAirPressure: 0.65,
-      activeAlarmsCount: 1,
-      unresolvedAlarms: 1
-    } as OverviewData,
-    realtimeTelemetry: {} as Record<string, TelemetryData>,
-    wsConnected: false,
-    socket: null as WebSocket | null
-  }),
+  state: () => {
+    const saved = localStorage.getItem('local_devices');
+    let initDevices = defaultFallbackDevices as Device[];
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          initDevices = parsed;
+        }
+      } catch (e) {}
+    }
+    return {
+      devices: initDevices,
+      overview: {
+        totalDevices: initDevices.length,
+        totalClinics: 2,
+        onlineDevices: initDevices.filter(d => d.status === 'ONLINE').length,
+        waterDisinfectionRate: 99.99,
+        waterSterilizeRate: 99.99,
+        avgWaterTds: 14.2,
+        airSterilizationRate: 99.85,
+        airBacteriaKillRate: 99.85,
+        avgAirPressure: 0.65,
+        activeAlarmsCount: 3,
+        unresolvedAlarms: 3
+      } as OverviewData,
+      realtimeTelemetry: {} as Record<string, TelemetryData>,
+      wsConnected: false,
+      socket: null as WebSocket | null
+    };
+  },
 
   actions: {
     async fetchOverview() {
@@ -186,8 +198,10 @@ export const useDeviceStore = defineStore('device', {
         const res = await axios.get('/api/devices');
         if (Array.isArray(res.data) && res.data.length > 0) {
           this.devices = res.data;
+          localStorage.setItem('local_devices', JSON.stringify(this.devices));
         } else if (this.devices.length === 0 || force) {
           this.devices = defaultFallbackDevices;
+          localStorage.setItem('local_devices', JSON.stringify(this.devices));
         }
       } catch (err) {
         if (this.devices.length === 0 || force) {
@@ -201,6 +215,7 @@ export const useDeviceStore = defineStore('device', {
       const dev = this.devices.find(d => d.id === id || d.sn === deviceId);
       if (dev) {
         dev.work_mode = mode as any;
+        localStorage.setItem('local_devices', JSON.stringify(this.devices));
       }
       try {
         await axios.post(`/api/devices/${id}/mode`, { mode });
@@ -216,6 +231,7 @@ export const useDeviceStore = defineStore('device', {
       const dev = this.devices.find(d => d.id === id || d.sn === deviceId);
       if (dev) {
         dev.uv_status = status !== undefined ? status : (dev.uv_status === 1 ? 0 : 1);
+        localStorage.setItem('local_devices', JSON.stringify(this.devices));
       }
     },
 
@@ -238,6 +254,7 @@ export const useDeviceStore = defineStore('device', {
       this.devices.unshift(created);
       this.overview.totalDevices = this.devices.length;
       this.overview.onlineDevices = this.devices.filter(d => d.status === 'ONLINE').length;
+      localStorage.setItem('local_devices', JSON.stringify(this.devices));
 
       try {
         await axios.post('/api/devices', newDevice);
