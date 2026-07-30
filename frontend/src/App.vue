@@ -83,7 +83,7 @@
             </div>
 
             <!-- 用户信息精美区域 (圆形头像 + 下拉菜单) -->
-            <el-dropdown trigger="click" @command="handleUserCommand">
+            <el-dropdown trigger="click" popper-class="user-dropdown-popper" @command="handleUserCommand">
               <div class="user-profile flex-align">
                 <el-avatar
                   :size="36"
@@ -599,11 +599,6 @@ onUnmounted(() => {
 .tip-text {
   font-size: 12px;
   color: #64748b;
-}
-
-.user-dropdown-menu {
-  background-color: #0f172a !important;
-  border: 1px solid rgba(56, 189, 248, 0.2) !important;
 }
 
 .logout-item {

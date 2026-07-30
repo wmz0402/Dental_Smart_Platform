@@ -428,3 +428,73 @@ html.light-theme .sub-tip {
   align-items: center !important;
   justify-content: center !important;
 }
+
+/* 对标图二大厂质感的精美全局下拉菜单 (el-dropdown) 深浅主题规范 */
+.user-dropdown-popper .el-dropdown-menu,
+.el-dropdown-menu {
+  background-color: #0f172a !important;
+  border: 1px solid rgba(56, 189, 248, 0.25) !important;
+  border-radius: 10px !important;
+  padding: 6px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+html.light-theme .user-dropdown-popper .el-dropdown-menu,
+html.light-theme .el-dropdown-menu {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 浮窗小三角指针背景颜色对齐 */
+.user-dropdown-popper .el-popper__arrow::before,
+.el-popper__arrow::before {
+  background-color: #0f172a !important;
+  border-color: rgba(56, 189, 248, 0.25) !important;
+}
+
+html.light-theme .user-dropdown-popper .el-popper__arrow::before,
+html.light-theme .el-popper__arrow::before {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+.el-dropdown-menu__item {
+  color: #f8fafc !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  padding: 9px 14px !important;
+  margin: 2px 0 !important;
+  border-radius: 6px !important;
+  transition: all 0.15s ease !important;
+}
+
+html.light-theme .el-dropdown-menu__item {
+  color: #0f172a !important;
+}
+
+.el-dropdown-menu__item:hover {
+  background-color: rgba(56, 189, 248, 0.15) !important;
+  color: #38bdf8 !important;
+}
+
+html.light-theme .el-dropdown-menu__item:hover {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+.el-dropdown-menu__item--divided {
+  border-top: 1px solid rgba(56, 189, 248, 0.15) !important;
+  margin-top: 6px !important;
+}
+
+html.light-theme .el-dropdown-menu__item--divided {
+  border-top: 1px solid #f1f5f9 !important;
+}
+
+/* 危险操作/退出登录选项高亮 */
+.logout-item:hover,
+html.light-theme .logout-item:hover {
+  background-color: rgba(239, 68, 68, 0.12) !important;
+  color: #ef4444 !important;
+}
