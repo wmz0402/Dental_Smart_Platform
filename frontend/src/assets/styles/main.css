@@ -1,26 +1,14 @@
 :root {
-  --bg-dark: #0b1329;
-  --card-bg: #131f3d;
-  --card-border: #1e2d52;
+  --bg-dark: #090d16;
+  --bg-card: rgba(15, 23, 42, 0.75);
+  --border-color: rgba(56, 189, 248, 0.15);
   --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --primary-color: #38bdf8;
+  --text-secondary: #94a3b8;
+  --primary-color: #0284c7;
+  --accent-cyan: #38bdf8;
   --success-color: #10b981;
   --warning-color: #f59e0b;
   --danger-color: #ef4444;
-}
-
-/* 明亮模式变量声明 */
-html.light-theme {
-  --bg-dark: #f1f5f9;
-  --card-bg: #ffffff;
-  --card-border: #e2e8f0;
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --primary-color: #0284c7;
-  --success-color: #059669;
-  --warning-color: #d97706;
-  --danger-color: #dc2626;
 }
 
 * {
@@ -30,136 +18,101 @@ html.light-theme {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   background-color: var(--bg-dark);
   color: var(--text-main);
-  overflow-x: hidden;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 .glass-card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
-/* 保证侧边栏导航菜单保持原汁原味的暗黑科技风 */
-.sidebar {
-  background-color: var(--bg-dark) !important;
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.sidebar .el-menu {
-  background-color: transparent !important;
-  border-right: none !important;
+.flex-align {
+  display: flex;
+  align-items: center;
 }
 
-.sidebar .el-menu-item {
-  color: var(--text-muted) !important;
-}
-
-.sidebar .el-menu-item.is-active {
-  color: var(--primary-color) !important;
-  background-color: rgba(56, 189, 248, 0.15) !important;
-  border-right: 3px solid var(--primary-color);
-}
-
-.sidebar .el-menu-item:hover {
-  background-color: rgba(56, 189, 248, 0.1) !important;
-  color: var(--primary-color) !important;
-}
-
-/* Element Plus 表格悬停对比度样式 */
-.el-table {
-  --el-table-bg-color: transparent !important;
-  --el-table-tr-bg-color: transparent !important;
-  --el-table-header-bg-color: rgba(30, 45, 82, 0.5) !important;
-  --el-table-header-text-color: var(--text-main) !important;
-  --el-table-text-color: var(--text-main) !important;
-  --el-table-border-color: var(--card-border) !important;
-  --el-table-row-hover-bg-color: rgba(56, 189, 248, 0.15) !important;
-  background-color: transparent !important;
-  color: var(--text-main) !important;
-}
-
-.el-table th.el-table__cell {
-  background-color: rgba(30, 45, 82, 0.5) !important;
-  color: var(--text-main) !important;
+.badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
   font-weight: 600;
 }
 
-.el-table td.el-table__cell {
-  border-bottom: 1px solid var(--card-border) !important;
+.badge.online {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--success-color);
 }
 
-.el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell {
-  background-color: rgba(56, 189, 248, 0.15) !important;
-  color: var(--text-main) !important;
+.badge.warning {
+  background: rgba(245, 158, 11, 0.2);
+  color: var(--warning-color);
 }
 
-/* 仅将高对比度深色模式限定在对话框与个人中心弹窗内部 */
+/* 全局弹窗样式精确定向约束在 .el-dialog 内部，不破坏侧边栏与主布局暗黑科技风格 */
 .el-dialog {
-  background-color: var(--card-bg) !important;
-  border: 1px solid var(--card-border) !important;
+  background-color: #0f172a !important;
+  border: 1px solid rgba(56, 189, 248, 0.2) !important;
   border-radius: 12px !important;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
 }
 
 .el-dialog__title {
-  color: var(--text-main) !important;
-  font-weight: 700 !important;
-  font-size: 16px !important;
-}
-
-.el-dialog__headerbtn .el-dialog__close {
-  color: var(--text-muted) !important;
-}
-
-.el-dialog__headerbtn:hover .el-dialog__close {
-  color: var(--primary-color) !important;
-}
-
-.el-dialog .el-tabs__item {
-  color: #94a3b8 !important;
-  font-size: 14px !important;
-  font-weight: 500 !important;
-}
-
-.el-dialog .el-tabs__item:hover {
-  color: #38bdf8 !important;
-}
-
-.el-dialog .el-tabs__item.is-active {
-  color: #38bdf8 !important;
+  color: #f8fafc !important;
   font-weight: 700 !important;
 }
 
-.el-dialog .el-tabs__nav-wrap::after {
-  background-color: var(--card-border) !important;
+.el-dialog__body {
+  color: #cbd5e1 !important;
 }
 
-.el-dialog .el-form-item__label {
-  color: var(--text-main) !important;
+.el-form-item__label {
+  color: #f8fafc !important;
   font-weight: 600 !important;
-  font-size: 13px !important;
 }
 
-.el-dialog .el-input__wrapper {
-  background-color: var(--bg-dark) !important;
-  border: 1px solid var(--card-border) !important;
+.el-input__wrapper {
+  background-color: #1e293b !important;
+  border: 1px solid #334155 !important;
   box-shadow: none !important;
 }
 
-.el-dialog .el-input__wrapper.is-focus {
-  border-color: var(--primary-color) !important;
+.el-input__inner {
+  color: #f8fafc !important;
 }
 
-.el-dialog .el-input__inner {
-  color: var(--text-main) !important;
+.el-input__inner::placeholder {
+  color: #64748b !important;
 }
 
-.el-dialog .el-input__inner::placeholder {
-  color: var(--text-muted) !important;
+/* 消除 Element Plus 表格在暗黑模式下的白条条背景与残影 */
+.el-table {
+  --el-table-bg-color: transparent !important;
+  --el-table-tr-bg-color: transparent !important;
+  --el-table-header-bg-color: #1e293b !important;
+  --el-table-header-text-color: #cbd5e1 !important;
+  --el-table-row-hover-bg-color: rgba(30, 41, 59, 0.9) !important;
+  --el-table-text-color: #f8fafc !important;
+  --el-table-border-color: #1e293b !important;
+  background-color: transparent !important;
+}
+
+.el-table tr, .el-table td, .el-table th.el-table__cell {
+  background-color: transparent !important;
+  color: #f8fafc !important;
+}
+
+.el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
+  background-color: rgba(30, 41, 59, 0.5) !important;
+  color: #f8fafc !important;
 }

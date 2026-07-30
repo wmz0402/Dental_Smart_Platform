@@ -1,25 +1,27 @@
 <template>
   <div class="telemetry-view">
     <!-- 顶部设备选择与控制 -->
-    <div class="glass-card flex-between control-bar">
-      <div class="flex-align gap-16">
-        <span class="label-title">选择监控设备:</span>
-        <el-select v-model="selectedDeviceSn" placeholder="请选择设备" class="device-select" @change="loadHistory">
-          <el-option
-            v-for="item in deviceStore.devices"
-            :key="item.sn"
-            :label="`${item.name} (${item.sn})`"
-            :value="item.sn"
-          />
-        </el-select>
-      </div>
+    <div class="glass-card control-bar">
+      <div class="control-bar-inner">
+        <div class="control-left">
+          <span class="label-title">选择监控设备:</span>
+          <el-select v-model="selectedDeviceSn" placeholder="请选择设备" class="device-select" @change="loadHistory">
+            <el-option
+              v-for="item in deviceStore.devices"
+              :key="item.sn"
+              :label="`${item.name} (${item.sn})`"
+              :value="item.sn"
+            />
+          </el-select>
+        </div>
 
-      <div class="flex-align gap-12">
-        <el-button-group>
-          <el-button :type="sampleLimit === 30 ? 'primary' : 'default'" @click="changeLimit(30)">最近 30 条采样</el-button>
-          <el-button :type="sampleLimit === 100 ? 'primary' : 'default'" @click="changeLimit(100)">最近 100 条采样</el-button>
-        </el-button-group>
-        <el-button type="primary" :icon="Refresh" @click="loadHistory">刷新数据</el-button>
+        <div class="control-right">
+          <el-button-group class="limit-group">
+            <el-button :type="sampleLimit === 30 ? 'primary' : 'default'" @click="changeLimit(30)">最近 30 条采样</el-button>
+            <el-button :type="sampleLimit === 100 ? 'primary' : 'default'" @click="changeLimit(100)">最近 100 条采样</el-button>
+          </el-button-group>
+          <el-button type="primary" :icon="Refresh" @click="loadHistory">刷新数据</el-button>
+        </div>
       </div>
     </div>
 
@@ -39,35 +41,35 @@
         <h3>数据日志明细 (实况遥测记录)</h3>
         <span class="badge-tag">在线数据流正常</span>
       </div>
-      <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column prop="id" label="日志编号" width="120" />
-        <el-table-column prop="sn" label="设备编号" width="180" />
-        <el-table-column prop="tds" label="水质TDS (ppm)">
+      <el-table :data="tableData" class="custom-dark-table" style="width: 100%">
+        <el-table-column prop="id" label="日志编号" min-width="140" />
+        <el-table-column prop="sn" label="设备编号" min-width="160" />
+        <el-table-column prop="tds" label="水质TDS (ppm)" min-width="120">
           <template #default="{ row }">
             <span :class="row.tds > 30 ? 'text-warn' : 'text-normal'">{{ row.tds !== undefined ? row.tds : '-' }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="turbidity" label="水质浊度 (NTU)">
+        <el-table-column prop="turbidity" label="水质浊度 (NTU)" min-width="120">
           <template #default="{ row }">
-            <span>{{ row.turbidity !== undefined ? row.turbidity : '0.12' }}</span>
+            <span class="text-light">{{ row.turbidity !== undefined ? row.turbidity : '0.12' }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="pressure" label="气源压力 (MPa)">
+        <el-table-column prop="pressure" label="气源压力 (MPa)" min-width="120">
           <template #default="{ row }">
-            <span>{{ row.pressure !== undefined ? row.pressure : '0.65' }}</span>
+            <span class="text-light">{{ row.pressure !== undefined ? row.pressure : '0.65' }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="dew_point" label="露点温度 (°C)">
+        <el-table-column prop="dew_point" label="露点温度 (°C)" min-width="120">
           <template #default="{ row }">
-            <span>{{ row.dew_point !== undefined ? row.dew_point : '-42' }}</span>
+            <span class="text-light">{{ row.dew_point !== undefined ? row.dew_point : '-42' }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="uvIntensity" label="UV强度 (%)">
+        <el-table-column prop="uvIntensity" label="UV强度 (%)" min-width="120">
           <template #default="{ row }">
-            <span>98.5%</span>
+            <span class="text-light">98.5%</span>
           </template>
         </el-table-column>
-        <el-table-column prop="timestamp" label="采样时间" width="200" />
+        <el-table-column prop="timestamp" label="采样时间" min-width="180" />
       </el-table>
     </div>
   </div>
@@ -88,7 +90,6 @@ let chartInstance: echarts.ECharts | null = null;
 
 const tableData = ref<any[]>([]);
 
-// 生成高度平滑的高频模拟曲线数据（确保无网络时完美渲染图表）
 const generateMockPoints = (count: number) => {
   const times: string[] = [];
   const tdsData: number[] = [];
@@ -195,7 +196,6 @@ const renderChart = (times: string[], tdsData: number[], uvData: number[]) => {
 const loadHistory = async () => {
   const { times, tdsData, uvData } = generateMockPoints(sampleLimit.value);
 
-  // 构造表格明细数据
   tableData.value = times.map((t, idx) => ({
     id: `LOG-${Date.now() - idx * 1000}`,
     sn: selectedDeviceSn.value,
@@ -256,21 +256,44 @@ onUnmounted(() => {
 .telemetry-view {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .control-bar {
-  padding: 16px 24px;
+  padding: 20px 24px;
+}
+
+.control-bar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.control-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.control-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .label-title {
-  color: var(--text-secondary);
+  color: var(--text-main);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .device-select {
-  width: 320px;
+  width: 360px;
 }
 
 .chart-card {
@@ -306,6 +329,32 @@ onUnmounted(() => {
   font-size: 12px;
 }
 
+/* 消除深色模式下 Element Plus 表格白条条，并提升文字高对比度 */
+:deep(.custom-dark-table) {
+  --el-table-bg-color: transparent !important;
+  --el-table-tr-bg-color: transparent !important;
+  --el-table-header-bg-color: #1e293b !important;
+  --el-table-header-text-color: #cbd5e1 !important;
+  --el-table-row-hover-bg-color: rgba(30, 41, 59, 0.9) !important;
+  --el-table-text-color: #f8fafc !important;
+  --el-table-border-color: #1e293b !important;
+}
+
+:deep(.custom-dark-table .el-table__row) {
+  background-color: transparent !important;
+  color: #f8fafc !important;
+}
+
+:deep(.custom-dark-table td.el-table__cell) {
+  background-color: transparent !important;
+  color: #f8fafc !important;
+  border-bottom: 1px solid #1e293b !important;
+}
+
+.text-light {
+  color: #f8fafc !important;
+}
+
 .text-normal {
   color: #10b981;
   font-weight: 600;
@@ -314,14 +363,6 @@ onUnmounted(() => {
 .text-warn {
   color: #f59e0b;
   font-weight: 600;
-}
-
-.gap-16 {
-  gap: 16px;
-}
-
-.gap-12 {
-  gap: 12px;
 }
 
 .mb-16 {
