@@ -502,20 +502,124 @@ html.light-theme .logout-item:hover {
   color: #ef4444 !important;
 }
 
-/* 确保顶部 Header 右上角用户信息与时间永远高亮清晰可辨 */
-.header .user-email,
-html.light-theme .header .user-email {
+/* 顶部 100% 贯穿 Header 样式适配（支持深浅主题联动动态切换） */
+.header {
+  width: 100%;
+  height: 52px;
+  background: rgba(15, 23, 42, 0.95) !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.15) !important;
+  padding: 0 20px;
+  flex-shrink: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.header .logo-text h1 {
+  font-size: 14px;
   color: #ffffff !important;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
-.header .user-role,
-html.light-theme .header .user-role {
-  color: #93c5fd !important;
+.header .logo-text p {
+  font-size: 9px;
+  color: #38bdf8 !important;
 }
 
-.header .system-time,
+.header .header-divider {
+  width: 1px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.2) !important;
+  margin: 0 12px;
+}
+
+.header .clinic-tag {
+  background: rgba(2, 132, 199, 0.2) !important;
+  color: #38bdf8 !important;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+}
+
+.header .theme-toggle-btn {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  color: #38bdf8 !important;
+}
+
+.header .system-time {
+  color: #94a3b8 !important;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header .user-email {
+  font-size: 13px;
+  color: #ffffff !important;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.header .user-role {
+  font-size: 11px;
+  color: #38bdf8 !important;
+}
+
+/* 浅色主题模式 (html.light-theme) 下顶栏调浅调亮方案 */
+html.light-theme .header {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light-theme .header .logo-text h1 {
+  color: #0f172a !important;
+}
+
+html.light-theme .header .logo-text p {
+  color: #0284c7 !important;
+}
+
+html.light-theme .header .header-divider {
+  background: #cbd5e1 !important;
+}
+
+html.light-theme .header .clinic-tag {
+  background: #eff6ff !important;
+  color: #2563eb !important;
+  border: 1px solid #bfdbfe !important;
+}
+
+html.light-theme .header .theme-toggle-btn {
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0284c7 !important;
+}
+
+html.light-theme .header .theme-toggle-btn:hover {
+  background: #e2e8f0 !important;
+  color: #1d4ed8 !important;
+}
+
 html.light-theme .header .system-time {
-  color: #e2e8f0 !important;
+  color: #475569 !important;
+}
+
+html.light-theme .header .user-email {
+  color: #0f172a !important;
+}
+
+html.light-theme .header .user-role {
+  color: #0284c7 !important;
+}
+
+html.light-theme .header .user-profile:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
 }
 
 /* 解决表格操作列中 Element Plus 按钮发生换行重叠的冲突 */
