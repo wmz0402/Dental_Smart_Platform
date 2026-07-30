@@ -68,6 +68,14 @@
           </div>
 
           <div class="header-right flex-align">
+            <!-- 经典深浅主题转换按钮 -->
+            <el-tooltip :content="userStore.isDarkTheme ? '切换为浅色明亮模式' : '切换为深色科技模式'" placement="bottom">
+              <el-button circle class="theme-toggle-btn" @click="userStore.toggleTheme">
+                <el-icon v-if="userStore.isDarkTheme"><Sunny /></el-icon>
+                <el-icon v-else><Moon /></el-icon>
+              </el-button>
+            </el-tooltip>
+
             <!-- 系统实时打卡时间 -->
             <div class="system-time">
               <el-icon><Clock /></el-icon>
@@ -193,7 +201,9 @@ import {
   Setting,
   Clock,
   User,
-  SwitchButton
+  SwitchButton,
+  Sunny,
+  Moon
 } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
@@ -454,7 +464,17 @@ onUnmounted(() => {
 }
 
 .header-right {
-  gap: 24px;
+  gap: 20px;
+}
+
+.theme-toggle-btn {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  color: #38bdf8 !important;
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(56, 189, 248, 0.2) !important;
 }
 
 .system-time {

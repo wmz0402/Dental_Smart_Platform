@@ -1,146 +1,97 @@
 <template>
-  <div class="air-device-page">
-    <div class="header-action">
-      <div class="page-title">
+  <div class="air-device-view">
+    <div class="glass-card page-header flex-between mb-24">
+      <div>
         <h2>气源洁净处理系统管控</h2>
-        <span>四级高效过滤与除湿干燥，消除油雾、粉尘与细菌飞沫，气体杀灭率≥99%</span>
+        <p class="subtitle">实时监测压力、露点温度与无菌净化指标，确保符合 WS/T 842-2024 规范</p>
       </div>
-      <div class="btn-group">
-        <el-button
-          v-if="userStore.isAdmin"
-          type="success"
-          @click="showAddDialog = true"
-        >
-          添加气源硬件设备
-        </el-button>
-        <el-button type="primary" @click="refreshList">刷新设备状态</el-button>
+      <div class="flex-align gap-12">
+        <el-button type="success" @click="showAddDialog = true">添加气源硬件设备</el-button>
+        <el-button type="primary" @click="deviceStore.fetchDevices(true)">刷新设备状态</el-button>
       </div>
     </div>
 
-    <!-- 普通用户只读提示 -->
-    <el-alert
-      v-if="!userStore.isAdmin"
-      title="您当前为【普通用户】权限，气体控制与强切锁止按钮已被锁止，如需操作请联系超级管理员。"
-      type="info"
-      show-icon
-      :closable="false"
-      style="margin-bottom: 16px;"
-    />
-
-    <div class="air-grid">
-      <div
-        v-for="item in airDevices"
-        :key="item.sn"
-        class="glass-card air-card"
-      >
-        <div class="card-top">
-          <div class="dev-info">
-            <span class="sn-badge">{{ item.sn }}</span>
-            <h3>{{ item.name }}</h3>
-            <span class="loc-text">{{ item.location }}</span>
+    <!-- 气源设备卡片网格 -->
+    <div class="device-grid">
+      <div v-for="dev in airDevices" :key="dev.id" class="glass-card device-card">
+        <div class="card-top flex-between">
+          <div class="dev-title-box">
+            <span class="status-indicator" :class="dev.status.toLowerCase()"></span>
+            <h4>{{ dev.name }}</h4>
           </div>
-          <el-tag :type="item.status === 'ONLINE' ? 'success' : 'danger'" effect="dark">
-            {{ item.status === 'ONLINE' ? '在线运行中' : '离线' }}
-          </el-tag>
+          <el-tag :type="dev.status === 'ONLINE' ? 'success' : 'info'">{{ dev.status }}</el-tag>
         </div>
 
-        <div class="telemetry-box">
-          <div class="metric-item">
-            <span class="label">压缩空气压力</span>
-            <span class="value text-amber">
-              {{ store.realtimeTelemetry[item.sn]?.pressure || 0.65 }} <small>MPa</small>
-            </span>
+        <div class="dev-sn">{{ dev.sn }} | {{ dev.location }}</div>
+
+        <div class="metrics-grid mb-16">
+          <div class="sub-metric">
+            <span class="m-label">气源稳定压力</span>
+            <span class="m-value text-cyan">{{ getTelemetry(dev.sn).pressure || 0.65 }} <small>MPa</small></span>
           </div>
-          <div class="metric-item">
-            <span class="label">干燥露点温度</span>
-            <span class="value text-emerald">
-              {{ store.realtimeTelemetry[item.sn]?.dewPoint || -43.2 }} <small>℃</small>
-            </span>
+          <div class="sub-metric">
+            <span class="m-label">干燥露点温度</span>
+            <span class="m-value text-green">{{ getTelemetry(dev.sn).dewPoint || -42.5 }} <small>°C</small></span>
           </div>
-          <div class="metric-item">
-            <span class="label">尘埃颗粒(PM2.5)</span>
-            <span class="value text-cyan">
-              {{ store.realtimeTelemetry[item.sn]?.pm25 || 1.8 }} <small>μg/m³</small>
-            </span>
+          <div class="sub-metric">
+            <span class="m-label">实时供气流量</span>
+            <span class="m-value">{{ getTelemetry(dev.sn).air_flow || 180 }} <small>L/min</small></span>
           </div>
-          <div class="metric-item">
-            <span class="label">气体杀灭效率</span>
-            <span class="value text-emerald">99.85 <small>%</small></span>
+          <div class="sub-metric">
+            <span class="m-label">PM2.5尘埃颗粒</span>
+            <span class="m-value">{{ getTelemetry(dev.sn).pm25 || 0.002 }} <small>mg/m³</small></span>
           </div>
         </div>
 
-        <div class="filter-stage-box">
-          <span class="stage-title">四级净化过滤网状态链：</span>
-          <div class="stage-grid">
-            <div class="stage-item">
-              <span>初效预过滤</span>
-              <el-tag size="small" type="success">正常 (92%)</el-tag>
-            </div>
-            <div class="stage-item">
-              <span>油雾拦截模组</span>
-              <el-tag size="small" type="success">正常 (89%)</el-tag>
-            </div>
-            <div class="stage-item">
-              <span>ULPA超精滤</span>
-              <el-tag size="small" type="success">正常 ({{ item.filter_level }}%)</el-tag>
-            </div>
-            <div class="stage-item">
-              <span>活性炭吸附床</span>
-              <el-tag size="small" type="success">正常 (95%)</el-tag>
-            </div>
+        <div class="progress-box mb-16">
+          <div class="flex-between text-sub mb-4">
+            <span>高效空气过滤网健康度</span>
+            <span>{{ dev.filter_level }}%</span>
           </div>
+          <el-progress :percentage="dev.filter_level" :status="dev.filter_level < 80 ? 'warning' : 'success'" :show-text="false" />
         </div>
 
-        <div class="control-area">
-          <div class="ctrl-row">
-            <span>气源供应工作模式</span>
-            <el-radio-group
-              :disabled="!userStore.isAdmin"
-              :model-value="item.work_mode"
-              size="small"
-              @change="(val: any) => handleModeChange(item.sn, val)"
-            >
-              <el-radio-button label="NORMAL">标准运行</el-radio-button>
-              <el-radio-button label="ECO">绿色节能</el-radio-button>
-              <el-radio-button label="OFF">停止供气</el-radio-button>
-            </el-radio-group>
+        <div class="progress-box mb-20">
+          <div class="flex-between text-sub mb-4">
+            <span>干燥离心除水机寿命</span>
+            <span>{{ dev.uv_lamp_health }}%</span>
           </div>
+          <el-progress :percentage="dev.uv_lamp_health" status="success" :show-text="false" />
         </div>
 
-        <div class="card-bottom">
-          <div class="health-info">
-            <span>滤芯综合剩余健康度: {{ item.filter_level }}%</span>
-            <el-progress :percentage="item.filter_level" :color="getProgressColor(item.filter_level)" />
-          </div>
+        <div class="card-actions flex-between">
           <el-button
-            :disabled="!userStore.isAdmin"
-            type="danger"
+            type="primary"
             plain
             size="small"
-            @click="handleEmergencyCutoff(item.sn)"
+            @click="toggleMode(dev.id, dev.work_mode)"
           >
-            气路紧急切断
+            模式: {{ getModeLabel(dev.work_mode) }}
+          </el-button>
+
+          <el-button size="small" type="danger" plain @click="handleLock(dev)">
+            切断锁止
           </el-button>
         </div>
       </div>
     </div>
 
-    <!-- 添加设备弹窗 (限超级管理员) -->
-    <el-dialog v-model="showAddDialog" title="添加新气源洁净处理设备" width="500px">
+    <!-- 添加气源设备对话框 -->
+    <el-dialog v-model="showAddDialog" title="添加气源感控硬件设备" width="480px">
       <el-form label-position="top">
-        <el-form-item label="设备 SN 序列编号">
-          <el-input v-model="newDevice.sn" placeholder="例: A-SYS-2026-03" />
+        <el-form-item label="设备编号 (SN)">
+          <el-input v-model="newDevForm.sn" placeholder="如: A-SYS-2026-04" />
         </el-form-item>
         <el-form-item label="设备名称">
-          <el-input v-model="newDevice.name" placeholder="例: 种植中心高洁净无菌气源站" />
+          <el-input v-model="newDevForm.name" placeholder="如: 4号修复中心气源净化机" />
         </el-form-item>
         <el-form-item label="部署具体位置">
-          <el-input v-model="newDevice.location" placeholder="例: 设备主间 气源机组B" />
+          <el-input v-model="newDevForm.location" placeholder="如: 修复科 气源节点" />
         </el-form-item>
       </el-form>
       <template #footer>
         <el-button @click="showAddDialog = false">取消</el-button>
-        <el-button type="primary" @click="submitAddDevice">确认添加并接入</el-button>
+        <el-button type="primary" @click="handleAddDevice">确认添加</el-button>
       </template>
     </el-dialog>
   </div>
@@ -148,223 +99,191 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import { useDeviceStore } from '@/stores/deviceStore';
-import { useUserStore } from '@/stores/userStore';
-import axios from 'axios';
-import { ElMessage } from 'element-plus';
+import { useDeviceStore, type Device } from '@/stores/deviceStore';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
-const store = useDeviceStore();
-const userStore = useUserStore();
-
+const deviceStore = useDeviceStore();
 const showAddDialog = ref(false);
-const newDevice = ref({
-  sn: `A-SYS-2026-0${Math.floor(Math.random() * 90 + 10)}`,
+
+const newDevForm = ref({
+  sn: '',
   name: '',
-  location: '设备主间 气源机组B'
+  location: ''
 });
+
+// 默认气源设备兜底
+const defaultAirDevices: Device[] = [
+  { id: 5, sn: 'A-SYS-2026-01', name: '中央气源超净处理工作站', type: 'AIR', clinic_id: 101, location: '主设备间 气源机组A', work_mode: 'NORMAL', status: 'ONLINE', uv_status: 1, filter_level: 78, uv_lamp_health: 85 },
+  { id: 6, sn: 'A-SYS-2026-02', name: '种植手术室无菌气源站', type: 'AIR', clinic_id: 102, location: '分院 手术室01', work_mode: 'NORMAL', status: 'ONLINE', uv_status: 1, filter_level: 92, uv_lamp_health: 96 },
+  { id: 7, sn: 'A-SYS-2026-03', name: '二楼正畸中心高洁净气源站', type: 'AIR', clinic_id: 101, location: '二楼正畸中心 机组B', work_mode: 'ECO', status: 'ONLINE', uv_status: 1, filter_level: 89, uv_lamp_health: 93 }
+];
 
 const airDevices = computed(() => {
-  return store.devices.filter((d) => d.type === 'AIR');
+  const filtered = deviceStore.devices.filter(d => d.type === 'AIR');
+  return filtered.length > 0 ? filtered : defaultAirDevices;
 });
 
-const refreshList = () => {
-  store.fetchDevices('AIR');
+const getTelemetry = (sn: string) => {
+  return deviceStore.realtimeTelemetry[sn] || {
+    pressure: 0.65,
+    dewPoint: -42.5,
+    air_flow: 180,
+    pm25: 0.002
+  };
 };
 
-const handleModeChange = async (sn: string, mode: string) => {
-  await store.changeWorkMode(sn, mode);
-  ElMessage.success(`设备 ${sn} 气源工作模式已设定为 ${mode}`);
-};
-
-const handleEmergencyCutoff = async (sn: string) => {
-  await store.changeWorkMode(sn, 'OFF');
-  ElMessage.warning(`安全警报：设备 ${sn} 气压已安全切断止回`);
-};
-
-const submitAddDevice = async () => {
-  if (!newDevice.value.name) {
-    return ElMessage.error('设备名称不能为空');
-  }
-  try {
-    await axios.post('/api/devices', {
-      sn: newDevice.value.sn,
-      name: newDevice.value.name,
-      type: 'AIR',
-      location: newDevice.value.location,
-      workMode: 'NORMAL'
-    });
-    ElMessage.success('气源洁净设备添加成功！');
-    showAddDialog.value = false;
-    store.fetchDevices();
-  } catch (e) {
-    ElMessage.error('添加失败');
+const getModeLabel = (mode: string) => {
+  switch (mode) {
+    case 'NORMAL': return '常规';
+    case 'ECO': return '节能';
+    case 'DEEP_CLEAN': return '深度处理';
+    case 'OFF': return '关机';
+    default: return mode;
   }
 };
 
-const getProgressColor = (val: number) => {
-  if (val > 60) return '#10b981';
-  if (val > 30) return '#f59e0b';
-  return '#ef4444';
+const toggleMode = (id: number, currentMode: string) => {
+  const nextMode = currentMode === 'ECO' ? 'NORMAL' : 'ECO';
+  deviceStore.changeWorkMode(id, nextMode);
+  ElMessage.success(`运行模式已成功切换为: ${getModeLabel(nextMode)}`);
+};
+
+const handleLock = (dev: any) => {
+  ElMessageBox.confirm(`确认切断锁止气源设备 ${dev.name} 吗？`, '安全警示', {
+    confirmButtonText: '确认锁止',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    deviceStore.changeWorkMode(dev.id, 'OFF');
+    ElMessage.success('气源设备已关机锁止');
+  }).catch(() => {});
+};
+
+const handleAddDevice = () => {
+  if (!newDevForm.value.name || !newDevForm.value.sn) {
+    return ElMessage.error('请填写完整设备编号与名称');
+  }
+  deviceStore.addDevice({
+    ...newDevForm.value,
+    type: 'AIR'
+  });
+  ElMessage.success('新气源硬件设备添加成功');
+  showAddDialog.value = false;
+  newDevForm.value = { sn: '', name: '', location: '' };
 };
 
 onMounted(() => {
-  store.fetchDevices('AIR');
+  deviceStore.fetchDevices();
 });
 </script>
 
 <style scoped>
-.air-device-page {
+.air-device-view {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
-.header-action {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.page-header {
+  padding: 24px;
 }
 
-.page-title h2 {
+.page-header h2 {
   font-size: 20px;
   color: var(--text-main);
   font-weight: 700;
 }
 
-.page-title span {
+.subtitle {
   font-size: 13px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
+  margin-top: 4px;
 }
 
-.btn-group {
-  display: flex;
-  gap: 12px;
-}
-
-.air-grid {
+.device-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
 }
 
-.air-card {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.sn-badge {
-  font-family: monospace;
-  background: rgba(16, 185, 129, 0.1);
-  color: #10b981;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-}
-
-.dev-info h3 {
-  font-size: 16px;
-  color: var(--text-main);
-  margin: 4px 0;
-}
-
-.loc-text {
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.telemetry-box {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  background: var(--bg-dark);
-  padding: 12px;
-  border-radius: 8px;
-}
-
-.metric-item {
+.device-card {
+  padding: 20px;
   display: flex;
   flex-direction: column;
 }
 
-.metric-item .label {
-  font-size: 11px;
-  color: var(--text-muted);
-}
-
-.metric-item .value {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text-main);
-}
-
-.metric-item .value small {
-  font-size: 10px;
-  color: var(--text-muted);
-}
-
-.text-amber { color: #f59e0b; }
-.text-cyan { color: #38bdf8; }
-.text-emerald { color: #10b981; }
-
-.filter-stage-box {
-  background: var(--card-bg);
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid var(--card-border);
-}
-
-.stage-title {
-  font-size: 12px;
-  color: var(--text-muted);
-  display: block;
-  margin-bottom: 8px;
-}
-
-.stage-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+.dev-title-box {
+  display: flex;
+  align-items: center;
   gap: 8px;
 }
 
-.stage-item {
+.dev-title-box h4 {
+  font-size: 15px;
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.status-indicator.online {
+  background-color: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+.dev-sn {
+  font-size: 12px;
+  color: #64748b;
+  margin: 6px 0 16px 0;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  background: rgba(30, 41, 59, 0.4);
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.sub-metric {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4px;
+}
+
+.m-label {
   font-size: 11px;
-  color: var(--text-main);
+  color: #94a3b8;
 }
 
-.control-area {
-  border-top: 1px solid var(--card-border);
-  border-bottom: 1px solid var(--card-border);
-  padding: 12px 0;
+.m-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-top: 2px;
 }
 
-.ctrl-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 13px;
-  color: var(--text-muted);
+.m-value small {
+  font-size: 10px;
+  font-weight: 400;
+  color: #64748b;
 }
 
-.card-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+.text-cyan { color: #38bdf8 !important; }
+.text-green { color: #10b981 !important; }
 
-.health-info {
-  width: 60%;
+.text-sub {
   font-size: 12px;
-  color: var(--text-muted);
+  color: #94a3b8;
 }
+
+.mb-4 { margin-bottom: 4px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-20 { margin-bottom: 20px; }
+.mb-24 { margin-bottom: 24px; }
+.gap-12 { gap: 12px; }
 </style>

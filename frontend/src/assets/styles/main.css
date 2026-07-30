@@ -11,6 +11,15 @@
   --danger-color: #ef4444;
 }
 
+/* 浅色主题模式支持 */
+html.light-theme {
+  --bg-dark: #f1f5f9;
+  --bg-card: #ffffff;
+  --border-color: #cbd5e1;
+  --text-main: #0f172a;
+  --text-secondary: #475569;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -20,8 +29,8 @@
 html, body {
   width: 100%;
   height: 100%;
-  background-color: #090d16 !important;
-  color: #f8fafc !important;
+  background-color: var(--bg-dark) !important;
+  color: var(--text-main) !important;
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
@@ -62,10 +71,10 @@ html, body {
   color: var(--warning-color);
 }
 
-/* 保护侧边栏 menu 全效保持高端极客暗黑风 */
+/* 侧边栏样式 */
 .sidebar, .el-menu {
   background-color: #0b1120 !important;
-  border-right: 1px solid rgba(56, 189, 248, 0.1) !important;
+  border-right: 1px solid rgba(56, 189, 248, 0.12) !important;
 }
 
 .el-menu-item {
@@ -85,7 +94,7 @@ html, body {
   font-weight: 700 !important;
 }
 
-/* 弹窗专用暗黑约束 */
+/* 弹窗专用样式 */
 .el-dialog {
   background-color: #0f172a !important;
   border: 1px solid rgba(56, 189, 248, 0.2) !important;
@@ -118,4 +127,45 @@ html, body {
 
 .el-input__inner::placeholder {
   color: #64748b !important;
+}
+
+/* 彻底消除所有页面 Element Plus 表格的白条条背景，全盘融入极客暗黑风 */
+.el-table,
+.el-table__expanded-cell,
+.el-table th,
+.el-table tr,
+.el-table td {
+  background-color: transparent !important;
+  color: #f8fafc !important;
+  border-color: #1e293b !important;
+}
+
+.el-table th.el-table__cell {
+  background-color: #1e293b !important;
+  color: #cbd5e1 !important;
+  font-weight: 600 !important;
+}
+
+.el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
+  background-color: rgba(30, 41, 59, 0.4) !important;
+  color: #f8fafc !important;
+}
+
+.el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell {
+  background-color: rgba(56, 189, 248, 0.1) !important;
+  color: #38bdf8 !important;
+}
+
+/* 图五：重写 el-input-number 的刺眼加减白色方块按钮，换为精致极客暗黑深蓝 */
+.el-input-number__decrease,
+.el-input-number__increase {
+  background-color: #1e293b !important;
+  color: #38bdf8 !important;
+  border-color: #334155 !important;
+}
+
+.el-input-number__decrease:hover,
+.el-input-number__increase:hover {
+  background-color: #0284c7 !important;
+  color: #ffffff !important;
 }
