@@ -39,39 +39,39 @@
       <div class="card-header mb-16">
         <h3>感控故障与风险告警日志</h3>
       </div>
-      <el-table :data="alarmList" border stripe style="width: 100%">
-        <el-table-column prop="id" label="告警ID" width="100" align="center" />
-        <el-table-column prop="level" label="严重等级" width="140" align="center">
+      <el-table :data="alarmList" border stripe size="small" style="width: 100%">
+        <el-table-column prop="id" label="告警ID" width="75" align="center" />
+        <el-table-column prop="level" label="严重等级" width="105" align="center">
           <template #default="{ row }">
-            <el-tag :type="row.level === 'CRITICAL' ? 'danger' : 'warning'" effect="dark">
+            <el-tag :type="row.level === 'CRITICAL' ? 'danger' : 'warning'" size="small" effect="dark">
               {{ row.level === 'CRITICAL' ? '严重告警' : '警告提醒' }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="device_sn" label="设备编号" width="180" />
-        <el-table-column prop="title" label="告警名称" width="220">
+        <el-table-column prop="device_sn" label="设备编号" width="150" align="center" />
+        <el-table-column prop="title" label="告警名称" width="190" show-overflow-tooltip>
           <template #default="{ row }">
-            <span>{{ row.title || row.name || '感控设备风险告警' }}</span>
+            <span class="font-semibold">{{ row.title || row.name || '感控设备风险告警' }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="description" label="详细故障诊断描述" min-width="280">
+        <el-table-column prop="description" label="详细故障诊断描述" min-width="300">
           <template #default="{ row }">
-            <span>{{ row.description || row.message || '检测到部件效能衰减，建议进行例行性巡检保养' }}</span>
+            <span class="desc-text">{{ row.description || row.message || '检测到部件效能衰减，建议进行例行性巡检保养' }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="处置状态" width="165" align="center">
+        <el-table-column prop="status" label="处置状态" width="120" align="center">
           <template #default="{ row }">
-            <el-tag :type="row.status === 'RESOLVED' ? 'success' : 'danger'">
+            <el-tag :type="row.status === 'RESOLVED' ? 'success' : 'danger'" size="small">
               {{ row.status === 'RESOLVED' ? '已处置解决' : '未响应待处理' }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="triggered_at" label="触发时间" width="200" align="center">
+        <el-table-column prop="triggered_at" label="触发时间" width="165" align="center">
           <template #default="{ row }">
             <span>{{ row.triggered_at || row.created_at || '2026-07-30 17:00:00' }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="快捷操作" width="140" align="center" fixed="right">
+        <el-table-column label="快捷操作" width="110" align="center" fixed="right">
           <template #default="{ row }">
             <el-button
               v-if="row.status === 'UNRESOLVED'"
