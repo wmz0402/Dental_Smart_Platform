@@ -260,18 +260,47 @@ const handleResetPassword = async () => {
 
 <style scoped>
 .login-container {
+  width: 100%;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background-color: var(--bg-dark);
+  background: radial-gradient(circle at 50% 30%, #0f172a 0%, #090d16 100%);
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+html.light-theme .login-container {
+  background: radial-gradient(circle at 50% 30%, #ffffff 0%, #f1f5f9 100%);
+}
+
+/* 顶部与底层精致科幻光晕背景粒 */
+.login-container::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(56, 189, 248, 0) 70%);
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
 }
 
 .login-card {
   width: 440px;
+  max-width: 90vw;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  z-index: 10;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+}
+
+html.light-theme .login-card {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08) !important;
 }
 
 .login-header {
@@ -279,11 +308,12 @@ const handleResetPassword = async () => {
 }
 
 .logo-circle {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
   background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
-  margin: 0 auto 12px;
+  margin: 0 auto 14px;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
 }
 
 .login-header h2 {
@@ -302,8 +332,16 @@ const handleResetPassword = async () => {
   font-weight: 500 !important;
 }
 
+html.light-theme :deep(.el-tabs__item) {
+  color: #64748b !important;
+}
+
 :deep(.el-tabs__item:hover) {
   color: #38bdf8 !important;
+}
+
+html.light-theme :deep(.el-tabs__item:hover) {
+  color: #2563eb !important;
 }
 
 :deep(.el-tabs__item.is-active) {
@@ -311,9 +349,17 @@ const handleResetPassword = async () => {
   font-weight: 700 !important;
 }
 
+html.light-theme :deep(.el-tabs__item.is-active) {
+  color: #2563eb !important;
+}
+
 :deep(.el-form-item__label) {
   color: #f8fafc !important;
   font-weight: 600 !important;
+}
+
+html.light-theme :deep(.el-form-item__label) {
+  color: #1e293b !important;
 }
 
 .login-form {
@@ -332,6 +378,10 @@ const handleResetPassword = async () => {
 .forget-btn {
   color: #38bdf8 !important;
   font-size: 13px !important;
+}
+
+html.light-theme .forget-btn {
+  color: #2563eb !important;
 }
 
 .forget-btn:hover {

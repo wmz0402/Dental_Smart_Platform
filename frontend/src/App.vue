@@ -374,6 +374,7 @@ onUnmounted(() => {
 
 <style scoped>
 .app-layout {
+  width: 100%;
   min-height: 100vh;
   background-color: var(--bg-dark);
 }
