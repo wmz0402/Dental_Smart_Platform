@@ -138,12 +138,6 @@ const renderChart = (times: string[], tdsData: number[], uvData: number[]) => {
     chartInstance.dispose();
   }
   chartInstance = echarts.init(chartRef.value, isDark ? 'dark' : undefined);
-  chartInstance.on('finished', () => {
-    setTimeout(() => {
-      chartLoading.value = false;
-      deviceStore.loading = false;
-    }, 100);
-  });
 
   const option: echarts.EChartsOption = {
     backgroundColor: 'transparent',
@@ -223,11 +217,12 @@ const renderChart = (times: string[], tdsData: number[], uvData: number[]) => {
   chartInstance.setOption(option);
   chartInstance.resize();
 
-  // 保底兜底
-  setTimeout(() => {
-    chartLoading.value = false;
-    deviceStore.loading = false;
-  }, 500);
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      chartLoading.value = false;
+      deviceStore.loading = false;
+    }, 60);
+  });
 };
 
 const loadHistory = async () => {

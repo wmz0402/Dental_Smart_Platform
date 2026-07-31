@@ -190,25 +190,9 @@ const initCharts = () => {
   const splitLineColor = isDark ? '#1e293b' : '#e2e8f0';
   const axisLineColor = isDark ? '#334155' : '#cbd5e1';
 
-  let trendFinished = false;
-  let pieFinished = false;
-
-  const checkChartsFinish = () => {
-    if (trendFinished && pieFinished) {
-      setTimeout(() => {
-        chartsLoading.value = false;
-        store.loading = false;
-      }, 100);
-    }
-  };
-
   if (trendChartRef.value) {
     if (trendChart) trendChart.dispose();
     trendChart = echarts.init(trendChartRef.value, isDark ? 'dark' : undefined);
-    trendChart.on('finished', () => {
-      trendFinished = true;
-      checkChartsFinish();
-    });
     trendChart.setOption({
       backgroundColor: 'transparent',
       tooltip: { trigger: 'axis' },
@@ -246,10 +230,6 @@ const initCharts = () => {
   if (pieChartRef.value) {
     if (pieChart) pieChart.dispose();
     pieChart = echarts.init(pieChartRef.value, isDark ? 'dark' : undefined);
-    pieChart.on('finished', () => {
-      pieFinished = true;
-      checkChartsFinish();
-    });
     pieChart.setOption({
       backgroundColor: 'transparent',
       tooltip: { trigger: 'item' },
@@ -272,11 +252,12 @@ const initCharts = () => {
     });
   }
 
-  // 兜底保底，防止离线/快闪状态下重复加载
-  setTimeout(() => {
-    chartsLoading.value = false;
-    store.loading = false;
-  }, 500);
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      chartsLoading.value = false;
+      store.loading = false;
+    }, 60);
+  });
 };
 
 const handleResize = () => {

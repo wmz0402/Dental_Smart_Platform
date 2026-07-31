@@ -137,22 +137,8 @@
         </el-aside>
 
         <!-- 主内容容器（右侧区域） -->
-        <el-main class="content-area" style="position: relative;">
+        <el-main class="content-area">
           <router-view />
-
-          <!-- 右侧主内容区域专属半透明毛玻璃 Loading -->
-          <transition name="fade">
-            <div v-if="deviceStore.loading" class="right-content-loading">
-              <div class="loading-box">
-                <div class="loading-cube-wrapper">
-                  <div class="loading-cube"></div>
-                  <div class="loading-shadow"></div>
-                </div>
-                <div class="loading-title">智护牙境 · 感控数据协同同步中</div>
-                <div class="loading-sub">实时状态与日志流水拉取中...</div>
-              </div>
-            </div>
-          </transition>
         </el-main>
       </el-container>
 
@@ -706,30 +692,7 @@ onUnmounted(() => {
   color: #ef4444 !important;
 }
 
-.right-content-loading {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(11, 17, 32, 0.45) !important;
-  backdrop-filter: blur(10px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(10px) saturate(180%) !important;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 500;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  color: #f8fafc;
-  pointer-events: none;
-  border-radius: 8px;
-}
 
-:global(html.light-theme) .right-content-loading {
-  background: rgba(248, 250, 252, 0.55) !important;
-  color: #0f172a !important;
-}
 
 .loading-box {
   display: flex;

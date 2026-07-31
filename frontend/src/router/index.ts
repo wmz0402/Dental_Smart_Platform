@@ -36,28 +36,17 @@ export const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
-  const deviceStore = useDeviceStore();
 
   if (to.name !== 'Login' && !userStore.isLoggedIn) {
     next({ name: 'Login' });
   } else if (to.name === 'Login' && userStore.isLoggedIn) {
     next({ name: 'Dashboard' });
   } else {
-    if (to.name !== 'Login' && from.name) {
-      deviceStore.loading = true;
-    }
     next();
   }
 });
 
 router.afterEach((to) => {
-  // 设置 2.5s 安全超时保底，防止特殊无数据响应页面无限加载
   const deviceStore = useDeviceStore();
-  if (to.name !== 'Login') {
-    setTimeout(() => {
-      if (deviceStore.loading) {
-        deviceStore.loading = false;
-      }
-    }, 2500);
-  }
+  deviceStore.loading = false;
 });
