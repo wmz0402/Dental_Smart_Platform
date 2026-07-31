@@ -51,39 +51,6 @@
         >
           验证并登录
         </el-button>
-
-        <!-- 三个内置角色演示账号快捷选择区块 -->
-        <div class="demo-roles-section">
-          <div class="demo-roles-title">快捷体验内置角色账号</div>
-          <div class="demo-roles-grid">
-            <div
-              class="role-badge-card"
-              :class="{ active: loginForm.email === 'admin' }"
-              @click="quickSelectRole('admin', 'SUPER_ADMIN')"
-            >
-              <span class="role-badge-name">超级管理员</span>
-              <span class="role-badge-code">SUPER_ADMIN</span>
-            </div>
-
-            <div
-              class="role-badge-card"
-              :class="{ active: loginForm.email === 'demo_system_admin' }"
-              @click="quickSelectRole('demo_system_admin', 'SYSTEM_ADMIN')"
-            >
-              <span class="role-badge-name">系统管理员</span>
-              <span class="role-badge-code">SYSTEM_ADMIN</span>
-            </div>
-
-            <div
-              class="role-badge-card"
-              :class="{ active: loginForm.email === 'demo_operator' }"
-              @click="quickSelectRole('demo_operator', 'OPERATOR')"
-            >
-              <span class="role-badge-name">运维人员</span>
-              <span class="role-badge-code">OPERATOR</span>
-            </div>
-          </div>
-        </div>
       </el-form>
     </div>
 
@@ -156,11 +123,6 @@ const formatError = (e: any): string => {
   return '系统处理异常，请重试';
 };
 
-const quickSelectRole = (username: string, roleName: string) => {
-  loginForm.value.email = username;
-  loginForm.value.password = 'admin';
-  ElMessage.success(`已切换填充【${roleName}】账号: ${username}`);
-};
 
 const handleSendForgetCode = async () => {
   if (!forgetForm.value.email) {
@@ -312,81 +274,6 @@ html.light-theme .forget-btn {
 .submit-btn {
   width: 100%;
   margin-top: 8px;
-}
-
-/* 3 个内置角色选择区 */
-.demo-roles-section {
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px dashed rgba(56, 189, 248, 0.2);
-}
-
-html.light-theme .demo-roles-section {
-  border-top: 1px dashed #cbd5e1;
-}
-
-.demo-roles-title {
-  font-size: 12px;
-  color: #94a3b8;
-  text-align: center;
-  margin-bottom: 12px;
-}
-
-.demo-roles-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-
-.role-badge-card {
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(56, 189, 248, 0.2);
-  border-radius: 8px;
-  padding: 8px 6px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-html.light-theme .role-badge-card {
-  background: #f8fafc;
-  border: 1px solid #cbd5e1;
-}
-
-.role-badge-card:hover,
-.role-badge-card.active {
-  background: rgba(56, 189, 248, 0.15);
-  border-color: #38bdf8;
-  transform: translateY(-2px);
-}
-
-html.light-theme .role-badge-card:hover,
-html.light-theme .role-badge-card.active {
-  background: #eff6ff;
-  border-color: #2563eb;
-}
-
-.role-badge-name {
-  font-size: 12px;
-  font-weight: 600;
-  color: #f1f5f9;
-}
-
-html.light-theme .role-badge-name {
-  color: #0f172a;
-}
-
-.role-badge-code {
-  font-size: 9px;
-  color: #38bdf8;
-  font-family: monospace;
-}
-
-html.light-theme .role-badge-code {
-  color: #0284c7;
 }
 
 .code-box {

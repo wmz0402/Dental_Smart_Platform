@@ -92,6 +92,13 @@ export const useUserStore = defineStore('user', {
           loginTime: timeStr
         });
         sessionStorage.setItem('live_login_logs', JSON.stringify(list));
+
+        if (result === 'SUCCESS') {
+          const mapSaved = sessionStorage.getItem('user_last_login_map');
+          const map = mapSaved ? JSON.parse(mapSaved) : {};
+          map[username || 'admin'] = timeStr;
+          sessionStorage.setItem('user_last_login_map', JSON.stringify(map));
+        }
       } catch (e) {}
     },
 
