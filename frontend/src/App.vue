@@ -47,7 +47,7 @@
                 {{ userAvatarInitial }}
               </el-avatar>
               <div class="user-info">
-                <span class="user-email">{{ userStore.user?.email || 'admin@qq.com' }}</span>
+                <span class="user-email">{{ userStore.user?.email || '' }}</span>
                 <span class="user-role">{{ userRoleLabel }}</span>
               </div>
             </div>

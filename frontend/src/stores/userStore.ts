@@ -21,15 +21,12 @@ export interface UserState {
 
 export const useUserStore = defineStore('user', {
   state: (): UserState => {
-    const savedUser = localStorage.getItem('user_info');
+    try {
+      localStorage.removeItem('user_info');
+    } catch (e) {}
+    const savedUser = sessionStorage.getItem('user_info');
     return {
-      user: savedUser ? JSON.parse(savedUser) : {
-        email: 'admin@qq.com',
-        role: 'ADMIN',
-        realName: '超级管理员',
-        avatar: '',
-        token: 'local-demo-token'
-      },
+      user: savedUser ? JSON.parse(savedUser) : null,
       isDarkTheme: true,
       verifyCodeSent: false,
       countdown: 0,
@@ -78,7 +75,7 @@ export const useUserStore = defineStore('user', {
         const res = await axios.post('/api/auth/login', { email, password });
         if (res.data && res.data.user) {
           this.user = res.data.user;
-          localStorage.setItem('user_info', JSON.stringify(this.user));
+          sessionStorage.setItem('user_info', JSON.stringify(this.user));
           return true;
         }
       } catch (err: any) {
@@ -94,7 +91,7 @@ export const useUserStore = defineStore('user', {
         avatar: '',
         token: `demo-token-${Date.now()}`
       };
-      localStorage.setItem('user_info', JSON.stringify(this.user));
+      sessionStorage.setItem('user_info', JSON.stringify(this.user));
       return true;
     },
 
@@ -103,7 +100,7 @@ export const useUserStore = defineStore('user', {
         const res = await axios.post('/api/auth/register', { email, code, password });
         if (res.data && res.data.user) {
           this.user = res.data.user;
-          localStorage.setItem('user_info', JSON.stringify(this.user));
+          sessionStorage.setItem('user_info', JSON.stringify(this.user));
           return true;
         }
       } catch (err: any) {}
@@ -115,7 +112,7 @@ export const useUserStore = defineStore('user', {
         avatar: '',
         token: `demo-token-${Date.now()}`
       };
-      localStorage.setItem('user_info', JSON.stringify(this.user));
+      sessionStorage.setItem('user_info', JSON.stringify(this.user));
       return true;
     },
 
@@ -142,7 +139,7 @@ export const useUserStore = defineStore('user', {
         });
         if (res.data && res.data.user) {
           this.user = { ...this.user, ...res.data.user };
-          localStorage.setItem('user_info', JSON.stringify(this.user));
+          sessionStorage.setItem('user_info', JSON.stringify(this.user));
           return;
         }
       } catch (e) {}
@@ -150,7 +147,7 @@ export const useUserStore = defineStore('user', {
       if (this.user) {
         this.user.realName = realName;
         this.user.avatar = avatar;
-        localStorage.setItem('user_info', JSON.stringify(this.user));
+        sessionStorage.setItem('user_info', JSON.stringify(this.user));
       }
     },
 
@@ -164,6 +161,7 @@ export const useUserStore = defineStore('user', {
 
     logout() {
       this.user = null;
+      sessionStorage.removeItem('user_info');
       localStorage.removeItem('user_info');
     }
   }

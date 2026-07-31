@@ -52,6 +52,10 @@
             >
               密码验证并登录
             </el-button>
+
+            <div class="demo-account-tip">
+              <span>示范系统提示：超级管理员登录账号：<code>admin@qq.com</code> 密码：<code>admin</code>（也可直接注册新医师账号）</span>
+            </div>
           </el-form>
         </el-tab-pane>
 
@@ -399,5 +403,25 @@ html.light-theme .forget-btn {
 .submit-btn {
   width: 100%;
   margin-top: 12px;
+}
+
+.demo-account-tip {
+  margin-top: 16px;
+  padding: 10px 12px;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px dashed rgba(56, 189, 248, 0.3);
+  border-radius: 6px;
+  font-size: 12px;
+  color: #94a3b8;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.demo-account-tip code {
+  background: rgba(15, 23, 42, 0.6);
+  color: #38bdf8;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
 }
 </style>
