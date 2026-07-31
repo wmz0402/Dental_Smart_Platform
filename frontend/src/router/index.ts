@@ -51,10 +51,13 @@ router.beforeEach((to, from, next) => {
 });
 
 router.afterEach((to) => {
+  // 设置 2.5s 安全超时保底，防止特殊无数据响应页面无限加载
   const deviceStore = useDeviceStore();
   if (to.name !== 'Login') {
     setTimeout(() => {
-      deviceStore.loading = false;
-    }, 250);
+      if (deviceStore.loading) {
+        deviceStore.loading = false;
+      }
+    }, 2500);
   }
 });

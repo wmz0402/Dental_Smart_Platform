@@ -259,13 +259,16 @@ const handleLock = (row: any) => {
   }).catch(() => {});
 };
 
-onMounted(() => {
-  store.fetchOverview();
-  store.fetchDevices();
-  nextTick(() => {
-    initCharts();
-    window.addEventListener('resize', handleResize);
-  });
+onMounted(async () => {
+  store.loading = true;
+  await Promise.all([store.fetchOverview(), store.fetchDevices()]);
+  await nextTick();
+  initCharts();
+  window.addEventListener('resize', handleResize);
+  await nextTick();
+  setTimeout(() => {
+    store.loading = false;
+  }, 150);
 });
 
 onUnmounted(() => {

@@ -225,9 +225,10 @@ const loadHistory = async () => {
       }));
 
       renderChart(apiTimes, apiTds, apiUv);
+      await nextTick();
       setTimeout(() => {
         deviceStore.loading = false;
-      }, 250);
+      }, 150);
       return;
     }
   } catch (err) {}
@@ -244,9 +245,10 @@ const loadHistory = async () => {
   }));
 
   renderChart(times, tdsData, uvData);
+  await nextTick();
   setTimeout(() => {
     deviceStore.loading = false;
-  }, 250);
+  }, 150);
 };
 
 const changeLimit = (limit: number) => {
