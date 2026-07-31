@@ -7,6 +7,10 @@ import Alarm from '../views/Alarm.vue';
 import Reports from '../views/Reports.vue';
 import Settings from '../views/Settings.vue';
 import Login from '../views/Login.vue';
+import UserManagement from '../views/UserManagement.vue';
+import RoleManagement from '../views/RoleManagement.vue';
+import LoginLogs from '../views/LoginLogs.vue';
+import OperationLogs from '../views/OperationLogs.vue';
 import { useUserStore } from '../stores/userStore';
 
 const routes = [
@@ -17,7 +21,11 @@ const routes = [
   { path: '/telemetry', name: 'Telemetry', component: Telemetry },
   { path: '/alarm', name: 'Alarm', component: Alarm },
   { path: '/reports', name: 'Reports', component: Reports },
-  { path: '/settings', name: 'Settings', component: Settings }
+  { path: '/settings', name: 'Settings', component: Settings },
+  { path: '/system/users', name: 'UserManagement', component: UserManagement },
+  { path: '/system/roles', name: 'RoleManagement', component: RoleManagement },
+  { path: '/system/login-logs', name: 'LoginLogs', component: LoginLogs },
+  { path: '/system/op-logs', name: 'OperationLogs', component: OperationLogs }
 ];
 
 export const router = createRouter({

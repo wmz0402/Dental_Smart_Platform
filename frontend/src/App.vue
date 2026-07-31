@@ -106,6 +106,28 @@
               <el-icon><Setting /></el-icon>
               <span>系统与机构配置</span>
             </el-menu-item>
+            <el-sub-menu index="/system">
+              <template #title>
+                <el-icon><Management /></el-icon>
+                <span>系统管理</span>
+              </template>
+              <el-menu-item index="/system/users">
+                <el-icon><Avatar /></el-icon>
+                <span>用户管理</span>
+              </el-menu-item>
+              <el-menu-item index="/system/roles">
+                <el-icon><Lock /></el-icon>
+                <span>角色管理</span>
+              </el-menu-item>
+              <el-menu-item index="/system/login-logs">
+                <el-icon><DocumentChecked /></el-icon>
+                <span>登录日志</span>
+              </el-menu-item>
+              <el-menu-item index="/system/op-logs">
+                <el-icon><Files /></el-icon>
+                <span>操作日志</span>
+              </el-menu-item>
+            </el-sub-menu>
           </el-menu>
 
           <div class="sidebar-footer">
@@ -218,7 +240,12 @@ import {
   User,
   SwitchButton,
   Sunny,
-  Moon
+  Moon,
+  Management,
+  Avatar,
+  Lock,
+  DocumentChecked,
+  Files
 } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
@@ -498,6 +525,27 @@ onUnmounted(() => {
   height: 48px;
   margin: 4px 12px;
   border-radius: 8px;
+}
+
+:deep(.el-sub-menu__title) {
+  height: 48px;
+  margin: 4px 12px;
+  border-radius: 8px;
+  color: #94a3b8 !important;
+}
+
+:deep(.el-sub-menu__title:hover) {
+  background-color: rgba(56, 189, 248, 0.1) !important;
+  color: #38bdf8 !important;
+}
+
+:global(html.light-theme) :deep(.el-sub-menu__title) {
+  color: #475569 !important;
+}
+
+:global(html.light-theme) :deep(.el-sub-menu__title:hover) {
+  background-color: #f1f5f9 !important;
+  color: #0284c7 !important;
 }
 
 .sidebar-footer {

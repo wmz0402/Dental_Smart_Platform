@@ -335,3 +335,51 @@ router.get('/telemetry/history', (req: Request, res: Response) => {
 
   res.json(history);
 });
+
+// 7. 系统管理——用户管理 API
+router.get('/system/users', (req: Request, res: Response) => {
+  const users = [
+    { id: 1, username: 'admin', realName: '超级管理员', role: 'SUPER_ADMIN', roleName: '超级管理员', status: 'ACTIVE', lastLogin: '2026-07-31 09:13:58', createdAt: '2026-07-18 21:04:12' },
+    { id: 2, username: 'demo_system_admin', realName: '诊所系统管理员', role: 'SYSTEM_ADMIN', roleName: '系统管理员', status: 'ACTIVE', lastLogin: '2026-07-31 08:24:12', createdAt: '2026-07-18 21:04:12' },
+    { id: 3, username: 'demo_operator', realName: '诊所主治医师', role: 'OPERATOR', roleName: '运维人员', status: 'ACTIVE', lastLogin: '2026-07-30 23:01:02', createdAt: '2026-07-18 21:04:12' },
+    { id: 4, username: 'doctor_zhang', realName: '张敏 医生', role: 'OPERATOR', roleName: '运维人员', status: 'ACTIVE', lastLogin: '2026-07-29 16:45:22', createdAt: '2026-07-20 14:12:00' },
+    { id: 5, username: 'nurse_li', realName: '李华 护士长', role: 'OPERATOR', roleName: '运维人员', status: 'INACTIVE', lastLogin: '2026-07-25 11:30:10', createdAt: '2026-07-22 09:15:30' }
+  ];
+  res.json(users);
+});
+
+// 8. 系统管理——角色管理 API
+router.get('/system/roles', (req: Request, res: Response) => {
+  const roles = [
+    { id: 1, roleCode: 'SUPER_ADMIN', roleName: '超级管理员', status: 'ACTIVE', permissionCount: 55, description: '拥有平台全部最高管理与配置权限' },
+    { id: 2, roleCode: 'SYSTEM_ADMIN', roleName: '系统管理员', status: 'ACTIVE', permissionCount: 36, description: '负责用户、角色与机构资产管理' },
+    { id: 3, roleCode: 'OPERATOR', roleName: '运维人员', status: 'ACTIVE', permissionCount: 29, description: '负责设备监测、告警与工单处理' }
+  ];
+  res.json(roles);
+});
+
+// 9. 系统管理——登录日志 API
+router.get('/system/login-logs', (req: Request, res: Response) => {
+  const loginLogs = [
+    { id: 1, username: 'admin', result: 'SUCCESS', failReason: '—', ip: '127.0.0.1', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36', loginTime: '2026-07-31 09:13:58' },
+    { id: 2, username: 'demo_operator', result: 'SUCCESS', failReason: '—', ip: '127.0.0.1', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36', loginTime: '2026-07-31 08:14:50' },
+    { id: 3, username: 'admin', result: 'SUCCESS', failReason: '—', ip: '192.168.1.102', userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36', loginTime: '2026-07-30 20:58:13' },
+    { id: 4, username: 'e2e_admin_lweb', result: 'FAIL', failReason: '用户名或密码错误', ip: '127.0.0.1', userAgent: 'curl/8.5.0', loginTime: '2026-07-30 15:31:34' },
+    { id: 5, username: 'doctor_zhang', result: 'SUCCESS', failReason: '—', ip: '192.168.1.108', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Edge/126.0.0.0', loginTime: '2026-07-29 16:45:22' },
+    { id: 6, username: 'nurse_li', result: 'FAIL', failReason: '验证码校验失效', ip: '192.168.1.115', userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X)', loginTime: '2026-07-28 11:30:10' }
+  ];
+  res.json(loginLogs);
+});
+
+// 10. 系统管理——操作日志 API
+router.get('/system/op-logs', (req: Request, res: Response) => {
+  const opLogs = [
+    { id: 1, operator: 'admin', module: 'ALARM', actionName: '关闭严重告警', method: 'POST', targetType: 'ALARM', targetId: '101', result: 'SUCCESS', duration: '6 ms', ip: '127.0.0.1', opTime: '2026-07-31 09:20:15' },
+    { id: 2, operator: 'demo_operator', module: 'WORK_ORDER', actionName: '完成水路保养工单', method: 'POST', targetType: 'WORK_ORDER', targetId: '11', result: 'SUCCESS', duration: '8 ms', ip: '127.0.0.1', opTime: '2026-07-31 08:39:16' },
+    { id: 3, operator: 'demo_operator', module: 'WORK_ORDER', actionName: '添加工单备注说明', method: 'POST', targetType: 'WORK_ORDER', targetId: '11', result: 'SUCCESS', duration: '4 ms', ip: '127.0.0.1', opTime: '2026-07-31 08:39:15' },
+    { id: 4, operator: 'admin', module: 'DEVICE', actionName: '切换消毒工作模式', method: 'POST', targetType: 'DEVICE', targetId: 'W-SYS-2026-01', result: 'SUCCESS', duration: '12 ms', ip: '127.0.0.1', opTime: '2026-07-30 19:12:44' },
+    { id: 5, operator: 'doctor_zhang', module: 'USER', actionName: '更新医生称谓资料', method: 'PUT', targetType: 'USER', targetId: '4', result: 'SUCCESS', duration: '15 ms', ip: '192.168.1.108', opTime: '2026-07-29 16:50:00' },
+    { id: 6, operator: 'admin', module: 'ROLE', actionName: '修改运维人员权限规则', method: 'PUT', targetType: 'ROLE', targetId: '3', result: 'SUCCESS', duration: '22 ms', ip: '127.0.0.1', opTime: '2026-07-28 14:05:10' }
+  ];
+  res.json(opLogs);
+});
