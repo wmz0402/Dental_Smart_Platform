@@ -711,8 +711,9 @@ onUnmounted(() => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(11, 17, 32, 0.92);
-  backdrop-filter: blur(12px);
+  background: rgba(11, 17, 32, 0.45) !important;
+  backdrop-filter: blur(10px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(180%) !important;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -720,10 +721,11 @@ onUnmounted(() => {
   z-index: 99999;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color: #f8fafc;
+  pointer-events: none;
 }
 
 :global(html.light-theme) .global-loading-screen {
-  background: rgba(248, 250, 252, 0.92) !important;
+  background: rgba(248, 250, 252, 0.55) !important;
   color: #0f172a !important;
 }
 
@@ -803,7 +805,7 @@ onUnmounted(() => {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.35s ease;
+  transition: opacity 0.2s ease;
 }
 
 .fade-enter-from,

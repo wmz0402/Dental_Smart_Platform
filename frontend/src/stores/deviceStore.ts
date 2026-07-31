@@ -111,7 +111,9 @@ export const useDeviceStore = defineStore('device', {
     },
 
     async fetchDevices(typeOrForce?: any, force?: boolean) {
-      this.loading = true;
+      if (this.devices.length === 0) {
+        this.loading = true;
+      }
       try {
         const res = await axios.get('/api/devices');
         if (Array.isArray(res.data) && res.data.length > 0) {
