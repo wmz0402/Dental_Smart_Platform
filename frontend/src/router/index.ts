@@ -44,7 +44,7 @@ router.beforeEach((to, from, next) => {
     next({ name: 'Dashboard' });
   } else {
     if (to.name !== 'Login') {
-      deviceStore.loading = false;
+      deviceStore.loading = true;
     }
     next();
   }

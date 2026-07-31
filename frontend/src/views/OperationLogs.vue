@@ -52,10 +52,9 @@
         </el-form>
       </div>
 
-      <!-- 操作日志表格 -->
       <el-table
         :data="filteredLogs"
-        v-loading="loading"
+        v-loading="loading && !deviceStore.loading"
         stripe
         class="custom-dark-table"
         style="width: 100%"
@@ -203,7 +202,7 @@ const viewDetail = (row: OpLogItem) => {
 };
 
 onMounted(() => {
-  deviceStore.loading = false;
+  deviceStore.loading = true;
   fetchOpLogs();
 });
 </script>

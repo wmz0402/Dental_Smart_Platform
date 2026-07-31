@@ -58,10 +58,9 @@
         </div>
       </div>
 
-      <!-- 用户数据列表表格 -->
       <el-table
         :data="filteredUsers"
-        v-loading="loading"
+        v-loading="loading && !deviceStore.loading"
         stripe
         class="custom-dark-table"
         style="width: 100%"
@@ -298,7 +297,7 @@ const toggleUserStatus = (row: UserItem) => {
 };
 
 onMounted(() => {
-  deviceStore.loading = false;
+  deviceStore.loading = true;
   fetchUsers();
 });
 </script>

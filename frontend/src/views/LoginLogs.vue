@@ -45,10 +45,9 @@
         </el-form>
       </div>
 
-      <!-- 登录日志数据表格 -->
       <el-table
         :data="filteredLogs"
-        v-loading="loading"
+        v-loading="loading && !deviceStore.loading"
         stripe
         class="custom-dark-table"
         style="width: 100%"
@@ -159,7 +158,7 @@ const resetFilter = () => {
 };
 
 onMounted(() => {
-  deviceStore.loading = false;
+  deviceStore.loading = true;
   fetchLogs();
 });
 </script>

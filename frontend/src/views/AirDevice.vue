@@ -290,9 +290,13 @@ const handleDeleteDevice = (dev: Device) => {
   }).catch(() => {});
 };
 
-onMounted(() => {
-  deviceStore.loading = false;
-  deviceStore.fetchDevices();
+onMounted(async () => {
+  deviceStore.loading = true;
+  await deviceStore.fetchDevices();
+  await nextTick();
+  requestAnimationFrame(() => {
+    deviceStore.loading = false;
+  });
 });
 </script>
 

@@ -357,12 +357,15 @@ const exportPDF = async () => {
   }
 };
 
-onMounted(() => {
-  deviceStore.loading = false;
+onMounted(async () => {
+  deviceStore.loading = true;
   const today = new Date().toISOString().split('T')[0];
   reportDate.value = today;
-  deviceStore.fetchOverview();
-  deviceStore.fetchDevices();
+  await Promise.all([deviceStore.fetchOverview(), deviceStore.fetchDevices()]);
+  await nextTick();
+  requestAnimationFrame(() => {
+    deviceStore.loading = false;
+  });
 });
 </script>
 

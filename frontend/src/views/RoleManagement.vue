@@ -22,10 +22,9 @@
         </div>
       </div>
 
-      <!-- 角色数据表格 -->
       <el-table
         :data="roles"
-        v-loading="loading"
+        v-loading="loading && !deviceStore.loading"
         stripe
         class="custom-dark-table"
         style="width: 100%"
@@ -228,7 +227,7 @@ const savePermissions = () => {
 };
 
 onMounted(() => {
-  deviceStore.loading = false;
+  deviceStore.loading = true;
   fetchRoles();
 });
 </script>
