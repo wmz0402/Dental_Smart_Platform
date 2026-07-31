@@ -26,27 +26,13 @@
     </div>
 
     <!-- 高频遥测指标趋势图卡片 -->
-    <div class="glass-card chart-card" style="position: relative;">
+    <div class="glass-card chart-card">
       <div class="card-header flex-between">
         <h3>高频遥测指标趋势图</h3>
         <span class="subtitle">实况数据采样频率: 3秒/次</span>
       </div>
       <!-- ECharts 动态绘图容器 -->
       <div ref="chartRef" class="chart-container"></div>
-
-      <!-- 趋势图渲染监控专属遮罩 -->
-      <transition name="fade">
-        <div v-if="chartLoading" class="card-glass-loading">
-          <div class="loading-box">
-            <div class="loading-cube-wrapper">
-              <div class="loading-cube"></div>
-              <div class="loading-shadow"></div>
-            </div>
-            <div class="loading-title">高频遥测动态绘图中</div>
-            <div class="loading-sub">ECharts 矢量像素渲染中...</div>
-          </div>
-        </div>
-      </transition>
     </div>
 
     <!-- 数据日志明细表 -->

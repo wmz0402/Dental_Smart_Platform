@@ -36,17 +36,25 @@ export const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
+  const deviceStore = useDeviceStore();
 
   if (to.name !== 'Login' && !userStore.isLoggedIn) {
     next({ name: 'Login' });
   } else if (to.name === 'Login' && userStore.isLoggedIn) {
     next({ name: 'Dashboard' });
   } else {
+    if (to.name !== 'Login') {
+      deviceStore.loading = true;
+    }
     next();
   }
 });
 
 router.afterEach((to) => {
   const deviceStore = useDeviceStore();
-  deviceStore.loading = false;
+  if (to.name !== 'Login') {
+    setTimeout(() => {
+      deviceStore.loading = false;
+    }, 400);
+  }
 });

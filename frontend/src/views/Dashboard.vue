@@ -58,7 +58,7 @@
     </div>
 
     <!-- 2. 中部核心图表双栏 -->
-    <div class="charts-grid" style="position: relative;">
+    <div class="charts-grid">
       <div class="glass-card chart-card">
         <div class="card-header flex-between">
           <h3>24小时感控水质与露点趋势</h3>
@@ -73,20 +73,6 @@
         </div>
         <div ref="pieChartRef" class="chart-container"></div>
       </div>
-
-      <!-- 图表专属渲染监控毛玻璃遮罩 -->
-      <transition name="fade">
-        <div v-if="chartsLoading" class="card-glass-loading">
-          <div class="loading-box">
-            <div class="loading-cube-wrapper">
-              <div class="loading-cube"></div>
-              <div class="loading-shadow"></div>
-            </div>
-            <div class="loading-title">智能遥测图表像素渲染中</div>
-            <div class="loading-sub">感知数据与 ECharts 图层生成中...</div>
-          </div>
-        </div>
-      </transition>
     </div>
 
     <!-- 3. 下部全量感控硬件设备状态表 -->

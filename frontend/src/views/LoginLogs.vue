@@ -81,7 +81,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, nextTick } from 'vue';
 import axios from 'axios';
 import { useDeviceStore } from '@/stores/deviceStore';
 
@@ -136,9 +136,10 @@ const fetchLogs = async () => {
 
   logs.value = fetched;
   loading.value = false;
+  await nextTick();
   setTimeout(() => {
     deviceStore.loading = false;
-  }, 200);
+  }, 50);
 };
 
 const filteredLogs = computed(() => {
