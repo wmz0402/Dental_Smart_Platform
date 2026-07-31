@@ -58,7 +58,7 @@
     </div>
 
     <!-- 2. 中部核心图表双栏 -->
-    <div class="charts-grid">
+    <div class="charts-grid" style="position: relative;">
       <div class="glass-card chart-card">
         <div class="card-header flex-between">
           <h3>24小时感控水质与露点趋势</h3>
@@ -73,6 +73,20 @@
         </div>
         <div ref="pieChartRef" class="chart-container"></div>
       </div>
+
+      <!-- 图表专属渲染监控毛玻璃遮罩 -->
+      <transition name="fade">
+        <div v-if="chartsLoading" class="card-glass-loading">
+          <div class="loading-box">
+            <div class="loading-cube-wrapper">
+              <div class="loading-cube"></div>
+              <div class="loading-shadow"></div>
+            </div>
+            <div class="loading-title">智能遥测图表像素渲染中</div>
+            <div class="loading-sub">感知数据与 ECharts 图层生成中...</div>
+          </div>
+        </div>
+      </transition>
     </div>
 
     <!-- 3. 下部全量感控硬件设备状态表 -->
@@ -168,15 +182,33 @@ const getModeTagType = (mode: string) => {
   }
 };
 
+const chartsLoading = ref(true);
+
 const initCharts = () => {
   const isDark = userStore.isDarkTheme;
   const textColor = isDark ? '#94a3b8' : '#475569';
   const splitLineColor = isDark ? '#1e293b' : '#e2e8f0';
   const axisLineColor = isDark ? '#334155' : '#cbd5e1';
 
+  let trendFinished = false;
+  let pieFinished = false;
+
+  const checkChartsFinish = () => {
+    if (trendFinished && pieFinished) {
+      setTimeout(() => {
+        chartsLoading.value = false;
+        store.loading = false;
+      }, 100);
+    }
+  };
+
   if (trendChartRef.value) {
     if (trendChart) trendChart.dispose();
     trendChart = echarts.init(trendChartRef.value, isDark ? 'dark' : undefined);
+    trendChart.on('finished', () => {
+      trendFinished = true;
+      checkChartsFinish();
+    });
     trendChart.setOption({
       backgroundColor: 'transparent',
       tooltip: { trigger: 'axis' },
@@ -214,6 +246,10 @@ const initCharts = () => {
   if (pieChartRef.value) {
     if (pieChart) pieChart.dispose();
     pieChart = echarts.init(pieChartRef.value, isDark ? 'dark' : undefined);
+    pieChart.on('finished', () => {
+      pieFinished = true;
+      checkChartsFinish();
+    });
     pieChart.setOption({
       backgroundColor: 'transparent',
       tooltip: { trigger: 'item' },
@@ -235,6 +271,12 @@ const initCharts = () => {
       ]
     });
   }
+
+  // 兜底保底，防止离线/快闪状态下重复加载
+  setTimeout(() => {
+    chartsLoading.value = false;
+    store.loading = false;
+  }, 500);
 };
 
 const handleResize = () => {
@@ -260,15 +302,11 @@ const handleLock = (row: any) => {
 };
 
 onMounted(async () => {
-  store.loading = true;
+  chartsLoading.value = true;
   await Promise.all([store.fetchOverview(), store.fetchDevices()]);
   await nextTick();
   initCharts();
   window.addEventListener('resize', handleResize);
-  await nextTick();
-  setTimeout(() => {
-    store.loading = false;
-  }, 150);
 });
 
 onUnmounted(() => {

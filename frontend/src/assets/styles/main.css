@@ -731,3 +731,30 @@ html.light-theme .loading-title {
   font-weight: 400;
   margin-top: -14px;
 }
+
+/* 卡片与局域组件专属毛玻璃 Loading 遮罩 */
+.card-glass-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(11, 17, 32, 0.65) !important;
+  backdrop-filter: blur(8px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(180%) !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  border-radius: 12px;
+  pointer-events: none;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #f8fafc;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+html.light-theme .card-glass-loading {
+  background: rgba(248, 250, 252, 0.75) !important;
+  color: #0f172a !important;
+}
