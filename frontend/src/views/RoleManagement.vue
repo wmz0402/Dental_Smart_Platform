@@ -27,7 +27,7 @@
         :data="roles"
         v-loading="loading"
         stripe
-        class="custom-table"
+        class="custom-dark-table"
         style="width: 100%"
       >
         <el-table-column prop="roleCode" label="角色编码" min-width="160" />

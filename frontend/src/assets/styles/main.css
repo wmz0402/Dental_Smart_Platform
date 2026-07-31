@@ -239,6 +239,39 @@ html.light-theme .el-table {
   border: 1px solid #cbd5e1 !important;
 }
 
+/* 深色与浅色模式下的表格 Loading 遮罩与空数据样式适配 */
+.el-loading-mask {
+  background-color: rgba(11, 17, 32, 0.75) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+html.light-theme .el-loading-mask {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+.el-loading-spinner .path {
+  stroke: #38bdf8 !important;
+}
+
+html.light-theme .el-loading-spinner .path {
+  stroke: #0284c7 !important;
+}
+
+.el-table__empty-block {
+  background-color: transparent !important;
+  min-height: 120px !important;
+}
+
+.el-table__empty-text {
+  color: #94a3b8 !important;
+  font-size: 13px !important;
+}
+
+html.light-theme .el-table__empty-text {
+  color: #64748b !important;
+}
+
 .el-table,
 .el-table__expanded-cell,
 .el-table th,
@@ -658,6 +691,23 @@ html.light-theme #app-loading-screen {
   color: #0f172a !important;
 }
 
+html.light-theme .loading-title {
+  color: #0f172a !important;
+}
+
+html.light-theme .loading-sub {
+  color: #475569 !important;
+}
+
+html.light-theme .loading-cube {
+  background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%) !important;
+  box-shadow: 0 0 20px rgba(2, 132, 199, 0.35) !important;
+}
+
+html.light-theme .loading-shadow {
+  background: rgba(2, 132, 199, 0.2) !important;
+}
+
 .loading-box {
   display: flex;
   flex-direction: column;
@@ -719,10 +769,6 @@ html.light-theme #app-loading-screen {
   font-weight: 700;
   color: #f1f5f9;
   letter-spacing: 0.5px;
-}
-
-html.light-theme .loading-title {
-  color: #0f172a !important;
 }
 
 .loading-sub {

@@ -258,6 +258,8 @@ const changeLimit = (limit: number) => {
   loadHistory();
 };
 
+let resizeObserver: ResizeObserver | null = null;
+
 const handleResize = () => {
   if (chartInstance) {
     chartInstance.resize();
@@ -266,18 +268,40 @@ const handleResize = () => {
 
 watch([selectedDeviceSn, () => userStore.isDarkTheme], () => {
   loadHistory();
+  setTimeout(handleResize, 100);
+});
+
+watch(() => deviceStore.loading, (isLoading) => {
+  if (!isLoading) {
+    nextTick(() => {
+      setTimeout(handleResize, 100);
+      setTimeout(handleResize, 350);
+    });
+  }
 });
 
 onMounted(() => {
   deviceStore.fetchDevices();
   nextTick(() => {
     loadHistory();
+    if (typeof window !== 'undefined' && 'ResizeObserver' in window && chartRef.value) {
+      resizeObserver = new ResizeObserver(() => {
+        handleResize();
+      });
+      resizeObserver.observe(chartRef.value);
+    }
     window.addEventListener('resize', handleResize);
+    setTimeout(handleResize, 150);
+    setTimeout(handleResize, 400);
   });
 });
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize);
+  if (resizeObserver) {
+    resizeObserver.disconnect();
+    resizeObserver = null;
+  }
   if (chartInstance) {
     chartInstance.dispose();
   }

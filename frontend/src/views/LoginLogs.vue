@@ -50,7 +50,7 @@
         :data="filteredLogs"
         v-loading="loading"
         stripe
-        class="custom-table"
+        class="custom-dark-table"
         style="width: 100%"
       >
         <el-table-column prop="username" label="用户名" min-width="140" />

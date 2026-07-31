@@ -242,6 +242,7 @@ const initCharts = () => {
     setTimeout(() => {
       chartsLoading.value = false;
       store.loading = false;
+      handleResize();
     }, 60);
   });
 };
@@ -251,10 +252,22 @@ const handleResize = () => {
   pieChart?.resize();
 };
 
+let resizeObserver: ResizeObserver | null = null;
+
 watch(() => userStore.isDarkTheme, () => {
   nextTick(() => {
     initCharts();
+    setTimeout(handleResize, 100);
   });
+});
+
+watch(() => store.loading, (isLoading) => {
+  if (!isLoading) {
+    nextTick(() => {
+      setTimeout(handleResize, 100);
+      setTimeout(handleResize, 350);
+    });
+  }
 });
 
 const handleLock = (row: any) => {
@@ -273,11 +286,26 @@ onMounted(async () => {
   await Promise.all([store.fetchOverview(), store.fetchDevices()]);
   await nextTick();
   initCharts();
+
+  if (typeof window !== 'undefined' && 'ResizeObserver' in window) {
+    resizeObserver = new ResizeObserver(() => {
+      handleResize();
+    });
+    if (trendChartRef.value) resizeObserver.observe(trendChartRef.value);
+    if (pieChartRef.value) resizeObserver.observe(pieChartRef.value);
+  }
+
   window.addEventListener('resize', handleResize);
+  setTimeout(handleResize, 150);
+  setTimeout(handleResize, 400);
 });
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize);
+  if (resizeObserver) {
+    resizeObserver.disconnect();
+    resizeObserver = null;
+  }
   trendChart?.dispose();
   pieChart?.dispose();
 });

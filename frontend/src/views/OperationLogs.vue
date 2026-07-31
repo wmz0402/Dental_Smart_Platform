@@ -57,7 +57,7 @@
         :data="filteredLogs"
         v-loading="loading"
         stripe
-        class="custom-table"
+        class="custom-dark-table"
         style="width: 100%"
       >
         <el-table-column prop="operator" label="操作用户" min-width="140" />
