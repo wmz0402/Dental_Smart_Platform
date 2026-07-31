@@ -670,14 +670,16 @@ html.light-theme .header .user-profile:hover {
   vertical-align: middle !important;
 }
 
-/* 首屏与全局跃动 Loading 动画样式 */
+/* 首屏与全局跃动 Loading 动画样式（高颜值半透明毛玻璃质感） */
 #app-loading-screen {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: #0b1120;
+  background: rgba(11, 17, 32, 0.8) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -688,7 +690,9 @@ html.light-theme .header .user-profile:hover {
 }
 
 html.light-theme #app-loading-screen {
-  background: #f8fafc !important;
+  background: rgba(248, 250, 252, 0.85) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
   color: #0f172a !important;
 }
 
@@ -779,14 +783,16 @@ html.light-theme .loading-shadow {
   margin-top: -14px;
 }
 
-/* 全局主内容加载动画屏深浅主题绑定 */
+/* 全局主内容加载动画屏深浅主题绑定（高颜值半透明毛玻璃质感） */
 .main-content-loading-screen {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #090d16 !important;
+  background: rgba(11, 17, 32, 0.72) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -795,13 +801,19 @@ html.light-theme .loading-shadow {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color: #f8fafc;
   pointer-events: none;
-  border-radius: 8px;
-  transition: background-color 0.2s ease;
+  border-radius: 12px;
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  box-shadow: inset 0 0 40px rgba(56, 189, 248, 0.05);
+  transition: all 0.25s ease;
 }
 
 html.light-theme .main-content-loading-screen {
-  background-color: #f1f5f9 !important;
+  background: rgba(241, 245, 249, 0.78) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
   color: #0f172a !important;
+  border: 1px solid rgba(37, 99, 235, 0.12);
+  box-shadow: inset 0 0 40px rgba(37, 99, 235, 0.03);
 }
 
 html.light-theme .main-content-loading-screen .loading-title {
