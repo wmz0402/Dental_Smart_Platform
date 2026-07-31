@@ -217,7 +217,25 @@ const renderChart = (times: string[], tdsData: number[], uvData: number[]) => {
 const loadHistory = async () => {
   chartLoading.value = true;
   deviceStore.loading = true;
+
   const { times, tdsData, uvData } = generateMockPoints(sampleLimit.value);
+  
+  tableData.value = times.map((t, idx) => ({
+    id: `LOG-${Date.now() - idx * 1000}`,
+    sn: selectedDeviceSn.value,
+    tds: tdsData[idx],
+    turbidity: '0.12',
+    pressure: '0.65',
+    dewPoint: '-42.0',
+    uvIntensity: uvData[idx],
+    timestamp: t
+  }));
+
+  renderChart(times, tdsData, uvData);
+
+  await nextTick();
+  chartLoading.value = false;
+  deviceStore.loading = false;
 
   try {
     const res = await axios.get(`/api/telemetry/history?deviceSn=${selectedDeviceSn.value}&limit=${sampleLimit.value}`);
@@ -238,22 +256,8 @@ const loadHistory = async () => {
       }));
 
       renderChart(apiTimes, apiTds, apiUv);
-      return;
     }
   } catch (err) {}
-
-  tableData.value = times.map((t, idx) => ({
-    id: `LOG-${Date.now() - idx * 1000}`,
-    sn: selectedDeviceSn.value,
-    tds: tdsData[idx],
-    turbidity: '0.12',
-    pressure: '0.65',
-    dewPoint: '-42.0',
-    uvIntensity: uvData[idx],
-    timestamp: t
-  }));
-
-  renderChart(times, tdsData, uvData);
 };
 
 const changeLimit = (limit: number) => {
@@ -283,10 +287,9 @@ watch(() => deviceStore.loading, (isLoading) => {
   }
 });
 
-onMounted(() => {
-  chartLoading.value = false;
-  deviceStore.loading = false;
-  loadHistory();
+onMounted(async () => {
+  deviceStore.loading = true;
+  await loadHistory();
 
   if (typeof window !== 'undefined' && 'ResizeObserver' in window && chartRef.value) {
     resizeObserver = new ResizeObserver(() => {
@@ -295,9 +298,7 @@ onMounted(() => {
     resizeObserver.observe(chartRef.value);
   }
   window.addEventListener('resize', handleResize);
-  nextTick(() => handleResize());
-
-  deviceStore.fetchDevices();
+  setTimeout(handleResize, 100);
 });
 
 onUnmounted(() => {
