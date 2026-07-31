@@ -205,13 +205,9 @@ const getLifeTagType = (val: number) => {
   return 'danger';
 };
 
-onMounted(async () => {
-  deviceStore.loading = true;
-  await loadData();
-  await nextTick();
-  requestAnimationFrame(() => {
-    deviceStore.loading = false;
-  });
+onMounted(() => {
+  deviceStore.loading = false;
+  loadData();
 });
 </script>
 

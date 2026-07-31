@@ -203,7 +203,7 @@ const viewDetail = (row: OpLogItem) => {
 };
 
 onMounted(() => {
-  deviceStore.loading = true;
+  deviceStore.loading = false;
   fetchOpLogs();
 });
 </script>

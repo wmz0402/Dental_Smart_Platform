@@ -159,7 +159,7 @@ const resetFilter = () => {
 };
 
 onMounted(() => {
-  deviceStore.loading = true;
+  deviceStore.loading = false;
   fetchLogs();
 });
 </script>

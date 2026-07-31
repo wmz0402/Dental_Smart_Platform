@@ -228,7 +228,7 @@ const savePermissions = () => {
 };
 
 onMounted(() => {
-  deviceStore.loading = true;
+  deviceStore.loading = false;
   fetchRoles();
 });
 </script>

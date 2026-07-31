@@ -298,7 +298,7 @@ const toggleUserStatus = (row: UserItem) => {
 };
 
 onMounted(() => {
-  deviceStore.loading = true;
+  deviceStore.loading = false;
   fetchUsers();
 });
 </script>
