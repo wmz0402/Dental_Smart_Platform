@@ -149,6 +149,7 @@ import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import { Plus, Refresh } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { useDeviceStore } from '@/stores/deviceStore';
 
 interface UserItem {
   id: number;
@@ -161,6 +162,7 @@ interface UserItem {
   createdAt: string;
 }
 
+const deviceStore = useDeviceStore();
 const loading = ref(false);
 const users = ref<UserItem[]>([]);
 
@@ -188,6 +190,7 @@ const getRoleTagType = (role: string) => {
 
 const fetchUsers = async () => {
   loading.value = true;
+  deviceStore.loading = true;
   try {
     const res = await axios.get('/api/system/users');
     if (Array.isArray(res.data)) {
@@ -201,6 +204,9 @@ const fetchUsers = async () => {
     ];
   } finally {
     loading.value = false;
+    setTimeout(() => {
+      deviceStore.loading = false;
+    }, 200);
   }
 };
 

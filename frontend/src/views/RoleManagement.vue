@@ -92,6 +92,7 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { Plus, Refresh } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
+import { useDeviceStore } from '@/stores/deviceStore';
 
 interface RoleItem {
   id: number;
@@ -102,6 +103,7 @@ interface RoleItem {
   description: string;
 }
 
+const deviceStore = useDeviceStore();
 const loading = ref(false);
 const roles = ref<RoleItem[]>([]);
 
@@ -154,6 +156,7 @@ const permissionTree = [
 
 const fetchRoles = async () => {
   loading.value = true;
+  deviceStore.loading = true;
   try {
     const res = await axios.get('/api/system/roles');
     if (Array.isArray(res.data)) {
@@ -167,6 +170,9 @@ const fetchRoles = async () => {
     ];
   } finally {
     loading.value = false;
+    setTimeout(() => {
+      deviceStore.loading = false;
+    }, 200);
   }
 };
 

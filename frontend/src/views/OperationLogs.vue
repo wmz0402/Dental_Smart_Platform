@@ -117,6 +117,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
+import { useDeviceStore } from '@/stores/deviceStore';
 
 interface OpLogItem {
   id: number;
@@ -132,6 +133,7 @@ interface OpLogItem {
   opTime: string;
 }
 
+const deviceStore = useDeviceStore();
 const loading = ref(false);
 const logs = ref<OpLogItem[]>([]);
 
@@ -147,6 +149,7 @@ const currentDetailJson = ref('');
 
 const fetchOpLogs = async () => {
   loading.value = true;
+  deviceStore.loading = true;
   try {
     const res = await axios.get('/api/system/op-logs');
     if (Array.isArray(res.data)) {
@@ -161,6 +164,9 @@ const fetchOpLogs = async () => {
     ];
   } finally {
     loading.value = false;
+    setTimeout(() => {
+      deviceStore.loading = false;
+    }, 200);
   }
 };
 
