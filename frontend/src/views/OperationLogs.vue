@@ -147,20 +147,24 @@ const filterForm = ref({
 const showDetailDialog = ref(false);
 const currentDetailJson = ref('');
 
+const defaultMockOpLogs: OpLogItem[] = [
+  { id: 1, operator: 'admin', module: 'ALARM', actionName: '关闭严重告警', method: 'POST', targetType: 'ALARM', targetId: '101', result: 'SUCCESS', duration: '6 ms', ip: '127.0.0.1', opTime: '2026-07-31 09:20:15' },
+  { id: 2, operator: 'demo_operator', module: 'WORK_ORDER', actionName: '完成水路保养工单', method: 'POST', targetType: 'WORK_ORDER', targetId: '11', result: 'SUCCESS', duration: '8 ms', ip: '127.0.0.1', opTime: '2026-07-31 08:39:16' },
+  { id: 3, operator: 'demo_operator', module: 'WORK_ORDER', actionName: '添加工单备注说明', method: 'POST', targetType: 'WORK_ORDER', targetId: '11', result: 'SUCCESS', duration: '4 ms', ip: '127.0.0.1', opTime: '2026-07-31 08:39:15' },
+  { id: 4, operator: 'admin', module: 'DEVICE', actionName: '切换消毒工作模式', method: 'POST', targetType: 'DEVICE', targetId: 'W-SYS-2026-01', result: 'SUCCESS', duration: '12 ms', ip: '127.0.0.1', opTime: '2026-07-30 19:12:44' }
+];
+
 const fetchOpLogs = async () => {
   loading.value = true;
   try {
     const res = await axios.get('/api/system/op-logs');
-    if (Array.isArray(res.data)) {
+    if (Array.isArray(res.data) && res.data.length > 0) {
       logs.value = res.data;
+    } else {
+      logs.value = defaultMockOpLogs;
     }
   } catch (e) {
-    logs.value = [
-      { id: 1, operator: 'admin', module: 'ALARM', actionName: '关闭严重告警', method: 'POST', targetType: 'ALARM', targetId: '101', result: 'SUCCESS', duration: '6 ms', ip: '127.0.0.1', opTime: '2026-07-31 09:20:15' },
-      { id: 2, operator: 'demo_operator', module: 'WORK_ORDER', actionName: '完成水路保养工单', method: 'POST', targetType: 'WORK_ORDER', targetId: '11', result: 'SUCCESS', duration: '8 ms', ip: '127.0.0.1', opTime: '2026-07-31 08:39:16' },
-      { id: 3, operator: 'demo_operator', module: 'WORK_ORDER', actionName: '添加工单备注说明', method: 'POST', targetType: 'WORK_ORDER', targetId: '11', result: 'SUCCESS', duration: '4 ms', ip: '127.0.0.1', opTime: '2026-07-31 08:39:15' },
-      { id: 4, operator: 'admin', module: 'DEVICE', actionName: '切换消毒工作模式', method: 'POST', targetType: 'DEVICE', targetId: 'W-SYS-2026-01', result: 'SUCCESS', duration: '12 ms', ip: '127.0.0.1', opTime: '2026-07-30 19:12:44' }
-    ];
+    logs.value = defaultMockOpLogs;
   } finally {
     loading.value = false;
   }

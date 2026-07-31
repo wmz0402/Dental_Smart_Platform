@@ -188,21 +188,25 @@ const getRoleTagType = (role: string) => {
   return 'info';
 };
 
+const defaultMockUsers: UserItem[] = [
+  { id: 1, username: 'admin', realName: '超级管理员', role: 'SUPER_ADMIN', roleName: '超级管理员', status: 'ACTIVE', lastLogin: '2026-07-31 09:13:58', createdAt: '2026-07-18 21:04:12' },
+  { id: 2, username: 'demo_system_admin', realName: '诊所系统管理员', role: 'SYSTEM_ADMIN', roleName: '系统管理员', status: 'ACTIVE', lastLogin: '2026-07-31 08:24:12', createdAt: '2026-07-18 21:04:12' },
+  { id: 3, username: 'demo_operator', realName: '诊所主治医师', role: 'OPERATOR', roleName: '运维人员', status: 'ACTIVE', lastLogin: '2026-07-30 23:01:02', createdAt: '2026-07-18 21:04:12' }
+];
+
 const fetchUsers = async () => {
   loading.value = true;
   let fetched: UserItem[] = [];
 
   try {
     const res = await axios.get('/api/system/users');
-    if (Array.isArray(res.data)) {
+    if (Array.isArray(res.data) && res.data.length > 0) {
       fetched = res.data;
+    } else {
+      fetched = defaultMockUsers;
     }
   } catch (e) {
-    fetched = [
-      { id: 1, username: 'admin', realName: '超级管理员', role: 'SUPER_ADMIN', roleName: '超级管理员', status: 'ACTIVE', lastLogin: '2026-07-31 09:13:58', createdAt: '2026-07-18 21:04:12' },
-      { id: 2, username: 'demo_system_admin', realName: '诊所系统管理员', role: 'SYSTEM_ADMIN', roleName: '系统管理员', status: 'ACTIVE', lastLogin: '2026-07-31 08:24:12', createdAt: '2026-07-18 21:04:12' },
-      { id: 3, username: 'demo_operator', realName: '诊所主治医师', role: 'OPERATOR', roleName: '运维人员', status: 'ACTIVE', lastLogin: '2026-07-30 23:01:02', createdAt: '2026-07-18 21:04:12' }
-    ];
+    fetched = defaultMockUsers;
   }
 
   // 映射真实最新登录时间

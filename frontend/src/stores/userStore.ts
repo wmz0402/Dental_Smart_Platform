@@ -25,9 +25,20 @@ export const useUserStore = defineStore('user', {
       localStorage.removeItem('user_info');
     } catch (e) {}
     const savedUser = sessionStorage.getItem('user_info');
+    const savedTheme = localStorage.getItem('app_theme');
+    const isDark = savedTheme ? savedTheme === 'dark' : true;
+
+    if (typeof document !== 'undefined') {
+      if (isDark) {
+        document.documentElement.classList.remove('light-theme');
+      } else {
+        document.documentElement.classList.add('light-theme');
+      }
+    }
+
     return {
       user: savedUser ? JSON.parse(savedUser) : null,
-      isDarkTheme: true,
+      isDarkTheme: isDark,
       verifyCodeSent: false,
       countdown: 0,
       timer: null
@@ -47,6 +58,7 @@ export const useUserStore = defineStore('user', {
   actions: {
     toggleTheme() {
       this.isDarkTheme = !this.isDarkTheme;
+      localStorage.setItem('app_theme', this.isDarkTheme ? 'dark' : 'light');
       if (this.isDarkTheme) {
         document.documentElement.classList.remove('light-theme');
       } else {

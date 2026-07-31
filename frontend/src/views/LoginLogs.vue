@@ -106,21 +106,25 @@ const filterForm = ref({
   dateRange: null
 });
 
+const defaultMockLoginLogs: LoginLogItem[] = [
+  { id: 1, username: 'admin', result: 'SUCCESS', failReason: '—', ip: '127.0.0.1', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0.0.0', loginTime: '2026-07-31 09:13:58' },
+  { id: 2, username: 'demo_operator', result: 'SUCCESS', failReason: '—', ip: '127.0.0.1', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0.0.0', loginTime: '2026-07-31 08:14:50' },
+  { id: 3, username: 'admin', result: 'SUCCESS', failReason: '—', ip: '192.168.1.102', userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)', loginTime: '2026-07-30 20:58:13' }
+];
+
 const fetchLogs = async () => {
   loading.value = true;
   let fetched: LoginLogItem[] = [];
 
   try {
     const res = await axios.get('/api/system/login-logs');
-    if (Array.isArray(res.data)) {
+    if (Array.isArray(res.data) && res.data.length > 0) {
       fetched = res.data;
+    } else {
+      fetched = defaultMockLoginLogs;
     }
   } catch (e) {
-    fetched = [
-      { id: 1, username: 'admin', result: 'SUCCESS', failReason: '—', ip: '127.0.0.1', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0.0.0', loginTime: '2026-07-31 09:13:58' },
-      { id: 2, username: 'demo_operator', result: 'SUCCESS', failReason: '—', ip: '127.0.0.1', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0.0.0', loginTime: '2026-07-31 08:14:50' },
-      { id: 3, username: 'admin', result: 'SUCCESS', failReason: '—', ip: '192.168.1.102', userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)', loginTime: '2026-07-30 20:58:13' }
-    ];
+    fetched = defaultMockLoginLogs;
   }
 
   try {

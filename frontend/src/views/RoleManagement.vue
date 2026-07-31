@@ -154,25 +154,25 @@ const permissionTree = [
   }
 ];
 
+const defaultMockRoles: RoleItem[] = [
+  { id: 1, roleCode: 'SUPER_ADMIN', roleName: '超级管理员', status: 'ACTIVE', permissionCount: 55, description: '拥有平台全部最高管理与配置权限' },
+  { id: 2, roleCode: 'SYSTEM_ADMIN', roleName: '系统管理员', status: 'ACTIVE', permissionCount: 36, description: '负责用户、角色与机构资产管理' },
+  { id: 3, roleCode: 'OPERATOR', roleName: '运维人员', status: 'ACTIVE', permissionCount: 29, description: '负责设备监测、告警与工单处理' }
+];
+
 const fetchRoles = async () => {
   loading.value = true;
-  deviceStore.loading = true;
   try {
     const res = await axios.get('/api/system/roles');
-    if (Array.isArray(res.data)) {
+    if (Array.isArray(res.data) && res.data.length > 0) {
       roles.value = res.data;
+    } else {
+      roles.value = defaultMockRoles;
     }
   } catch (e) {
-    roles.value = [
-      { id: 1, roleCode: 'SUPER_ADMIN', roleName: '超级管理员', status: 'ACTIVE', permissionCount: 55, description: '拥有平台全部最高管理与配置权限' },
-      { id: 2, roleCode: 'SYSTEM_ADMIN', roleName: '系统管理员', status: 'ACTIVE', permissionCount: 36, description: '负责用户、角色与机构资产管理' },
-      { id: 3, roleCode: 'OPERATOR', roleName: '运维人员', status: 'ACTIVE', permissionCount: 29, description: '负责设备监测、告警与工单处理' }
-    ];
+    roles.value = defaultMockRoles;
   } finally {
     loading.value = false;
-    setTimeout(() => {
-      deviceStore.loading = false;
-    }, 200);
   }
 };
 
