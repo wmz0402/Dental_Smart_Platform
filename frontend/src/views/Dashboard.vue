@@ -173,15 +173,8 @@ const chartsLoading = ref(true);
 const initCharts = () => {
   if (!trendChartRef.value || !pieChartRef.value) return;
 
-  const widthTrend = trendChartRef.value.clientWidth;
-  const widthPie = pieChartRef.value.clientWidth;
-
-  if (widthTrend <= 0 || widthPie <= 0) {
-    requestAnimationFrame(() => {
-      setTimeout(initCharts, 60);
-    });
-    return;
-  }
+  const widthTrend = trendChartRef.value.clientWidth || trendChartRef.value.parentElement?.clientWidth || 600;
+  const widthPie = pieChartRef.value.clientWidth || pieChartRef.value.parentElement?.clientWidth || 300;
 
   const isDark = userStore.isDarkTheme;
   const textColor = isDark ? '#94a3b8' : '#475569';
@@ -260,15 +253,14 @@ let resizeObserver: ResizeObserver | null = null;
 watch(() => userStore.isDarkTheme, () => {
   nextTick(() => {
     initCharts();
-    setTimeout(handleResize, 100);
+    handleResize();
   });
 });
 
 watch(() => store.loading, (isLoading) => {
   if (!isLoading) {
     nextTick(() => {
-      setTimeout(handleResize, 100);
-      setTimeout(handleResize, 350);
+      handleResize();
     });
   }
 });
@@ -284,10 +276,8 @@ const handleLock = (row: any) => {
   }).catch(() => {});
 };
 
-onMounted(async () => {
-  chartsLoading.value = true;
-  await Promise.all([store.fetchOverview(), store.fetchDevices()]);
-  await nextTick();
+onMounted(() => {
+  chartsLoading.value = false;
   initCharts();
 
   if (typeof window !== 'undefined' && 'ResizeObserver' in window) {
@@ -299,8 +289,11 @@ onMounted(async () => {
   }
 
   window.addEventListener('resize', handleResize);
-  setTimeout(handleResize, 150);
-  setTimeout(handleResize, 400);
+  nextTick(() => handleResize());
+
+  Promise.all([store.fetchOverview(), store.fetchDevices()]).then(() => {
+    initCharts();
+  });
 });
 
 onUnmounted(() => {

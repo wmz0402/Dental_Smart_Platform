@@ -115,23 +115,18 @@ const chartLoading = ref(true);
 const renderChart = (times: string[], tdsData: number[], uvData: number[]) => {
   if (!chartRef.value) return;
 
-  const width = chartRef.value.clientWidth;
-  if (width <= 0) {
-    requestAnimationFrame(() => {
-      setTimeout(() => renderChart(times, tdsData, uvData), 60);
-    });
-    return;
-  }
+  const width = chartRef.value.clientWidth || chartRef.value.parentElement?.clientWidth || 800;
 
   const isDark = userStore.isDarkTheme;
   const textColor = isDark ? '#94a3b8' : '#475569';
   const splitLineColor = isDark ? '#1e293b' : '#e2e8f0';
   const axisLineColor = isDark ? '#334155' : '#cbd5e1';
 
-  if (chartInstance) {
-    chartInstance.dispose();
+  if (!chartInstance) {
+    chartInstance = echarts.init(chartRef.value, isDark ? 'dark' : undefined, { width, height: 380 });
+  } else {
+    chartInstance.resize({ width, height: 380 });
   }
-  chartInstance = echarts.init(chartRef.value, isDark ? 'dark' : undefined, { width, height: 380 });
 
   const option: echarts.EChartsOption = {
     backgroundColor: 'transparent',
@@ -289,19 +284,20 @@ watch(() => deviceStore.loading, (isLoading) => {
 });
 
 onMounted(() => {
+  chartLoading.value = false;
+  deviceStore.loading = false;
+  loadHistory();
+
+  if (typeof window !== 'undefined' && 'ResizeObserver' in window && chartRef.value) {
+    resizeObserver = new ResizeObserver(() => {
+      handleResize();
+    });
+    resizeObserver.observe(chartRef.value);
+  }
+  window.addEventListener('resize', handleResize);
+  nextTick(() => handleResize());
+
   deviceStore.fetchDevices();
-  nextTick(() => {
-    loadHistory();
-    if (typeof window !== 'undefined' && 'ResizeObserver' in window && chartRef.value) {
-      resizeObserver = new ResizeObserver(() => {
-        handleResize();
-      });
-      resizeObserver.observe(chartRef.value);
-    }
-    window.addEventListener('resize', handleResize);
-    setTimeout(handleResize, 150);
-    setTimeout(handleResize, 400);
-  });
 });
 
 onUnmounted(() => {
