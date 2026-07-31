@@ -12,6 +12,7 @@ import RoleManagement from '../views/RoleManagement.vue';
 import LoginLogs from '../views/LoginLogs.vue';
 import OperationLogs from '../views/OperationLogs.vue';
 import { useUserStore } from '../stores/userStore';
+import { useDeviceStore } from '../stores/deviceStore';
 
 const routes = [
   { path: '/login', name: 'Login', component: Login },
@@ -35,11 +36,25 @@ export const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
+  const deviceStore = useDeviceStore();
+
   if (to.name !== 'Login' && !userStore.isLoggedIn) {
     next({ name: 'Login' });
   } else if (to.name === 'Login' && userStore.isLoggedIn) {
     next({ name: 'Dashboard' });
   } else {
+    if (to.name !== 'Login' && from.name) {
+      deviceStore.loading = true;
+    }
     next();
+  }
+});
+
+router.afterEach((to) => {
+  const deviceStore = useDeviceStore();
+  if (to.name !== 'Login') {
+    setTimeout(() => {
+      deviceStore.loading = false;
+    }, 250);
   }
 });

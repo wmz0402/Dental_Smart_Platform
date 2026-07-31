@@ -203,6 +203,7 @@ const renderChart = (times: string[], tdsData: number[], uvData: number[]) => {
 };
 
 const loadHistory = async () => {
+  deviceStore.loading = true;
   const { times, tdsData, uvData } = generateMockPoints(sampleLimit.value);
 
   try {
@@ -218,15 +219,18 @@ const loadHistory = async () => {
         tds: apiTds[idx],
         turbidity: '0.12',
         pressure: '0.65',
-        dew_point: '-42',
-        uvIntensity: `${apiUv[idx]}%`,
+        dewPoint: '-42.0',
+        uvIntensity: apiUv[idx],
         timestamp: t
       }));
 
       renderChart(apiTimes, apiTds, apiUv);
+      setTimeout(() => {
+        deviceStore.loading = false;
+      }, 250);
       return;
     }
-  } catch (e) {}
+  } catch (err) {}
 
   tableData.value = times.map((t, idx) => ({
     id: `LOG-${Date.now() - idx * 1000}`,
@@ -234,12 +238,15 @@ const loadHistory = async () => {
     tds: tdsData[idx],
     turbidity: '0.12',
     pressure: '0.65',
-    dew_point: '-42',
-    uvIntensity: `${uvData[idx]}%`,
+    dewPoint: '-42.0',
+    uvIntensity: uvData[idx],
     timestamp: t
   }));
 
   renderChart(times, tdsData, uvData);
+  setTimeout(() => {
+    deviceStore.loading = false;
+  }, 250);
 };
 
 const changeLimit = (limit: number) => {
