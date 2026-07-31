@@ -90,9 +90,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
+import { useDeviceStore } from '@/stores/deviceStore';
+
+const deviceStore = useDeviceStore();
 
 const defaultFallbackAlarms = [
   {
@@ -202,8 +205,13 @@ const getLifeTagType = (val: number) => {
   return 'danger';
 };
 
-onMounted(() => {
-  loadData();
+onMounted(async () => {
+  deviceStore.loading = true;
+  await loadData();
+  await nextTick();
+  requestAnimationFrame(() => {
+    deviceStore.loading = false;
+  });
 });
 </script>
 

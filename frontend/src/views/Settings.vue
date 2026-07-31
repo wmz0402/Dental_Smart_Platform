@@ -120,9 +120,22 @@ const form = ref({
   autoCutoff: true
 });
 
+import { onMounted, nextTick } from 'vue';
+import { useDeviceStore } from '@/stores/deviceStore';
+
+const deviceStore = useDeviceStore();
+
 const saveSettings = () => {
   ElMessage.success('系统配置参数已成功保存并实时下发同步');
 };
+
+onMounted(async () => {
+  deviceStore.loading = true;
+  await nextTick();
+  requestAnimationFrame(() => {
+    deviceStore.loading = false;
+  });
+});
 </script>
 
 <style scoped>

@@ -88,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import axios from 'axios';
 import { Plus, Refresh } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
@@ -173,6 +173,10 @@ const fetchRoles = async () => {
     roles.value = defaultMockRoles;
   } finally {
     loading.value = false;
+    await nextTick();
+    requestAnimationFrame(() => {
+      deviceStore.loading = false;
+    });
   }
 };
 
@@ -224,6 +228,7 @@ const savePermissions = () => {
 };
 
 onMounted(() => {
+  deviceStore.loading = true;
   fetchRoles();
 });
 </script>

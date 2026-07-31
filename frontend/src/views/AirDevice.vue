@@ -151,7 +151,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, nextTick } from 'vue';
 import { useDeviceStore, type Device } from '@/stores/deviceStore';
 import { useUserStore } from '@/stores/userStore';
 import { Edit, Delete } from '@element-plus/icons-vue';
@@ -290,8 +290,13 @@ const handleDeleteDevice = (dev: Device) => {
   }).catch(() => {});
 };
 
-onMounted(() => {
-  deviceStore.fetchDevices();
+onMounted(async () => {
+  deviceStore.loading = true;
+  await deviceStore.fetchDevices();
+  await nextTick();
+  requestAnimationFrame(() => {
+    deviceStore.loading = false;
+  });
 });
 </script>
 

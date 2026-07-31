@@ -115,7 +115,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, nextTick } from 'vue';
 import axios from 'axios';
 import { useDeviceStore } from '@/stores/deviceStore';
 
@@ -167,6 +167,10 @@ const fetchOpLogs = async () => {
     logs.value = defaultMockOpLogs;
   } finally {
     loading.value = false;
+    await nextTick();
+    requestAnimationFrame(() => {
+      deviceStore.loading = false;
+    });
   }
 };
 
@@ -199,6 +203,7 @@ const viewDetail = (row: OpLogItem) => {
 };
 
 onMounted(() => {
+  deviceStore.loading = true;
   fetchOpLogs();
 });
 </script>

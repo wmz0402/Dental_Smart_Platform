@@ -50,11 +50,6 @@ router.beforeEach((to, from, next) => {
   }
 });
 
-router.afterEach((to) => {
-  const deviceStore = useDeviceStore();
-  if (to.name !== 'Login') {
-    setTimeout(() => {
-      deviceStore.loading = false;
-    }, 400);
-  }
+router.afterEach(() => {
+  // 保持加载页开启，由各个目标视图组件在 DOM 数据与图表渲染完成后自行关闭
 });

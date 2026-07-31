@@ -139,6 +139,10 @@ const fetchLogs = async () => {
 
   logs.value = fetched;
   loading.value = false;
+  await nextTick();
+  requestAnimationFrame(() => {
+    deviceStore.loading = false;
+  });
 };
 
 const filteredLogs = computed(() => {
@@ -155,6 +159,7 @@ const resetFilter = () => {
 };
 
 onMounted(() => {
+  deviceStore.loading = true;
   fetchLogs();
 });
 </script>

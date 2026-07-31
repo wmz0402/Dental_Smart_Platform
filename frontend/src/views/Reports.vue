@@ -288,7 +288,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, nextTick } from 'vue';
 import { useUserStore } from '@/stores/userStore';
 import { useDeviceStore } from '@/stores/deviceStore';
 import { ElMessage } from 'element-plus';
@@ -357,11 +357,15 @@ const exportPDF = async () => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
+  deviceStore.loading = true;
   const today = new Date().toISOString().split('T')[0];
   reportDate.value = today;
-  deviceStore.fetchOverview();
-  deviceStore.fetchDevices();
+  await Promise.all([deviceStore.fetchOverview(), deviceStore.fetchDevices()]);
+  await nextTick();
+  requestAnimationFrame(() => {
+    deviceStore.loading = false;
+  });
 });
 </script>
 
