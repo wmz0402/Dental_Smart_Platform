@@ -190,7 +190,6 @@ const getRoleTagType = (role: string) => {
 
 const fetchUsers = async () => {
   loading.value = true;
-  deviceStore.loading = true;
   let fetched: UserItem[] = [];
 
   try {
@@ -222,9 +221,6 @@ const fetchUsers = async () => {
 
   users.value = fetched;
   loading.value = false;
-  setTimeout(() => {
-    deviceStore.loading = false;
-  }, 200);
 };
 
 const filteredUsers = computed(() => {

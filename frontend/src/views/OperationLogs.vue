@@ -149,7 +149,6 @@ const currentDetailJson = ref('');
 
 const fetchOpLogs = async () => {
   loading.value = true;
-  deviceStore.loading = true;
   try {
     const res = await axios.get('/api/system/op-logs');
     if (Array.isArray(res.data)) {
@@ -164,9 +163,6 @@ const fetchOpLogs = async () => {
     ];
   } finally {
     loading.value = false;
-    setTimeout(() => {
-      deviceStore.loading = false;
-    }, 200);
   }
 };
 

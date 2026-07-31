@@ -108,7 +108,6 @@ const filterForm = ref({
 
 const fetchLogs = async () => {
   loading.value = true;
-  deviceStore.loading = true;
   let fetched: LoginLogItem[] = [];
 
   try {
@@ -136,10 +135,6 @@ const fetchLogs = async () => {
 
   logs.value = fetched;
   loading.value = false;
-  await nextTick();
-  setTimeout(() => {
-    deviceStore.loading = false;
-  }, 50);
 };
 
 const filteredLogs = computed(() => {

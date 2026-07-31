@@ -708,9 +708,7 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(11, 17, 32, 0.75) !important;
-  backdrop-filter: blur(12px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(12px) saturate(180%) !important;
+  background: #090d16 !important;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -723,7 +721,7 @@ onUnmounted(() => {
 }
 
 :global(html.light-theme) .main-content-loading-screen {
-  background: rgba(248, 250, 252, 0.85) !important;
+  background: #f1f5f9 !important;
   color: #0f172a !important;
 }
 
@@ -752,6 +750,11 @@ onUnmounted(() => {
   animation: cubeBounce 1.4s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
 }
 
+:global(html.light-theme) .loading-cube {
+  background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%) !important;
+  box-shadow: 0 0 20px rgba(2, 132, 199, 0.35) !important;
+}
+
 .loading-shadow {
   position: absolute;
   bottom: 2px;
@@ -760,6 +763,10 @@ onUnmounted(() => {
   background: rgba(56, 189, 248, 0.25);
   border-radius: 50%;
   animation: shadowScale 1.4s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
+}
+
+:global(html.light-theme) .loading-shadow {
+  background: rgba(2, 132, 199, 0.2) !important;
 }
 
 @keyframes cubeBounce {
@@ -799,6 +806,10 @@ onUnmounted(() => {
   color: #64748b;
   font-weight: 400;
   margin-top: -14px;
+}
+
+:global(html.light-theme) .loading-sub {
+  color: #475569 !important;
 }
 
 .fade-enter-active,

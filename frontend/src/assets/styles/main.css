@@ -241,12 +241,13 @@ html.light-theme .el-table {
 
 /* 深色与浅色模式下的表格 Loading 遮罩与空数据样式适配 */
 .el-loading-mask {
-  background-color: rgba(11, 17, 32, 0.75) !important;
+  background-color: rgba(11, 17, 32, 0.5) !important;
   backdrop-filter: blur(4px) !important;
+  border-radius: 8px !important;
 }
 
 html.light-theme .el-loading-mask {
-  background-color: rgba(255, 255, 255, 0.85) !important;
+  background-color: rgba(255, 255, 255, 0.6) !important;
   backdrop-filter: blur(4px) !important;
 }
 

@@ -171,80 +171,83 @@ const getModeTagType = (mode: string) => {
 const chartsLoading = ref(true);
 
 const initCharts = () => {
+  if (!trendChartRef.value || !pieChartRef.value) return;
+
+  const widthTrend = trendChartRef.value.clientWidth;
+  const widthPie = pieChartRef.value.clientWidth;
+
+  if (widthTrend <= 0 || widthPie <= 0) {
+    requestAnimationFrame(() => {
+      setTimeout(initCharts, 60);
+    });
+    return;
+  }
+
   const isDark = userStore.isDarkTheme;
   const textColor = isDark ? '#94a3b8' : '#475569';
   const splitLineColor = isDark ? '#1e293b' : '#e2e8f0';
   const axisLineColor = isDark ? '#334155' : '#cbd5e1';
 
-  if (trendChartRef.value) {
-    if (trendChart) trendChart.dispose();
-    trendChart = echarts.init(trendChartRef.value, isDark ? 'dark' : undefined);
-    trendChart.setOption({
-      backgroundColor: 'transparent',
-      tooltip: { trigger: 'axis' },
-      legend: { data: ['水质TDS(ppm)', '露点温度(°C)'], top: 10, textStyle: { color: textColor } },
-      grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-      xAxis: {
-        type: 'category',
-        data: ['02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00'],
-        axisLine: { lineStyle: { color: axisLineColor } }
+  if (trendChart) trendChart.dispose();
+  trendChart = echarts.init(trendChartRef.value, isDark ? 'dark' : undefined, { width: widthTrend, height: 320 });
+  trendChart.setOption({
+    backgroundColor: 'transparent',
+    tooltip: { trigger: 'axis' },
+    legend: { data: ['水质TDS(ppm)', '露点温度(°C)'], top: 10, textStyle: { color: textColor } },
+    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+    xAxis: {
+      type: 'category',
+      data: ['02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00'],
+      axisLine: { lineStyle: { color: axisLineColor } }
+    },
+    yAxis: [
+      { type: 'value', name: 'TDS (ppm)', splitLine: { lineStyle: { color: splitLineColor } } },
+      { type: 'value', name: '露点 (°C)', min: -50, max: -30, splitLine: { show: false } }
+    ],
+    series: [
+      {
+        name: '水质TDS(ppm)',
+        type: 'line',
+        smooth: true,
+        data: [14.2, 13.8, 14.5, 12.9, 14.1, 19.5, 15.2, 13.6, 17.1],
+        itemStyle: { color: isDark ? '#38bdf8' : '#0284c7' }
       },
-      yAxis: [
-        { type: 'value', name: 'TDS (ppm)', splitLine: { lineStyle: { color: splitLineColor } } },
-        { type: 'value', name: '露点 (°C)', min: -50, max: -30, splitLine: { show: false } }
-      ],
-      series: [
-        {
-          name: '水质TDS(ppm)',
-          type: 'line',
-          smooth: true,
-          data: [14.2, 13.8, 14.5, 12.9, 14.1, 19.5, 15.2, 13.6, 17.1],
-          itemStyle: { color: isDark ? '#38bdf8' : '#0284c7' }
-        },
-        {
-          name: '露点温度(°C)',
-          type: 'line',
-          yAxisIndex: 1,
-          smooth: true,
-          data: [-43, -42, -44, -42, -45, -43, -44, -42, -44],
-          itemStyle: { color: isDark ? '#10b981' : '#059669' }
-        }
-      ]
-    });
-  }
+      {
+        name: '露点温度(°C)',
+        type: 'line',
+        yAxisIndex: 1,
+        smooth: true,
+        data: [-43, -42, -44, -42, -45, -43, -44, -42, -44],
+        itemStyle: { color: isDark ? '#10b981' : '#059669' }
+      }
+    ]
+  }, true);
 
-  if (pieChartRef.value) {
-    if (pieChart) pieChart.dispose();
-    pieChart = echarts.init(pieChartRef.value, isDark ? 'dark' : undefined);
-    pieChart.setOption({
-      backgroundColor: 'transparent',
-      tooltip: { trigger: 'item' },
-      legend: { orient: 'vertical', right: 10, top: 'center', textStyle: { color: textColor } },
-      series: [
-        {
-          name: '运行模式',
-          type: 'pie',
-          radius: ['45%', '70%'],
-          avoidLabelOverlap: false,
-          itemStyle: { borderRadius: 8, borderColor: isDark ? '#0f172a' : '#ffffff', borderWidth: 2 },
-          label: { show: false },
-          data: [
-            { value: 4, name: '正常巡检', itemStyle: { color: '#0284c7' } },
-            { value: 2, name: '深度消毒', itemStyle: { color: '#f59e0b' } },
-            { value: 1, name: '绿色节能', itemStyle: { color: '#10b981' } }
-          ]
-        }
-      ]
-    });
-  }
+  if (pieChart) pieChart.dispose();
+  pieChart = echarts.init(pieChartRef.value, isDark ? 'dark' : undefined, { width: widthPie, height: 320 });
+  pieChart.setOption({
+    backgroundColor: 'transparent',
+    tooltip: { trigger: 'item' },
+    legend: { orient: 'vertical', right: 10, top: 'center', textStyle: { color: textColor } },
+    series: [
+      {
+        name: '运行模式',
+        type: 'pie',
+        radius: ['45%', '70%'],
+        avoidLabelOverlap: false,
+        itemStyle: { borderRadius: 8, borderColor: isDark ? '#0f172a' : '#ffffff', borderWidth: 2 },
+        label: { show: false },
+        data: [
+          { value: 4, name: '正常巡检', itemStyle: { color: '#0284c7' } },
+          { value: 2, name: '深度消毒', itemStyle: { color: '#f59e0b' } },
+          { value: 1, name: '绿色节能', itemStyle: { color: '#10b981' } }
+        ]
+      }
+    ]
+  }, true);
 
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      chartsLoading.value = false;
-      store.loading = false;
-      handleResize();
-    }, 60);
-  });
+  chartsLoading.value = false;
+  store.loading = false;
 };
 
 const handleResize = () => {
