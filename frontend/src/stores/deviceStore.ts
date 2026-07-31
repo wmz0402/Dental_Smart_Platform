@@ -92,7 +92,8 @@ export const useDeviceStore = defineStore('device', {
       } as OverviewData,
       realtimeTelemetry: {} as Record<string, TelemetryData>,
       wsConnected: false,
-      socket: null as WebSocket | null
+      socket: null as WebSocket | null,
+      loading: false
     };
   },
 
@@ -110,6 +111,7 @@ export const useDeviceStore = defineStore('device', {
     },
 
     async fetchDevices(typeOrForce?: any, force?: boolean) {
+      this.loading = true;
       try {
         const res = await axios.get('/api/devices');
         if (Array.isArray(res.data) && res.data.length > 0) {
@@ -145,6 +147,8 @@ export const useDeviceStore = defineStore('device', {
         if (this.devices.length === 0 || force) {
           this.devices = defaultFallbackDevices;
         }
+      } finally {
+        this.loading = false;
       }
     },
 

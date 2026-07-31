@@ -183,6 +183,19 @@
           </div>
         </template>
       </el-dialog>
+      <!-- 全局数据加载动画遮罩 -->
+      <transition name="fade">
+        <div v-if="deviceStore.loading" class="global-loading-screen">
+          <div class="loading-box">
+            <div class="loading-cube-wrapper">
+              <div class="loading-cube"></div>
+              <div class="loading-shadow"></div>
+            </div>
+            <div class="loading-title">智护牙境 · 口腔智能感控平台</div>
+            <div class="loading-sub">感控数据接入与同步中...</div>
+          </div>
+        </div>
+      </transition>
     </template>
   </el-container>
 </template>
@@ -642,5 +655,111 @@ onUnmounted(() => {
 
 .logout-item {
   color: #ef4444 !important;
+}
+
+.global-loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(11, 17, 32, 0.92);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #f8fafc;
+}
+
+:global(html.light-theme) .global-loading-screen {
+  background: rgba(248, 250, 252, 0.92) !important;
+  color: #0f172a !important;
+}
+
+.loading-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+
+.loading-cube-wrapper {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-cube {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+  animation: cubeBounce 1.4s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
+}
+
+.loading-shadow {
+  position: absolute;
+  bottom: 2px;
+  width: 32px;
+  height: 6px;
+  background: rgba(56, 189, 248, 0.25);
+  border-radius: 50%;
+  animation: shadowScale 1.4s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
+}
+
+@keyframes cubeBounce {
+  0%, 100% {
+    transform: translateY(-16px) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translateY(10px) rotate(90deg) scale(0.9, 1.1);
+    border-radius: 12px;
+  }
+}
+
+@keyframes shadowScale {
+  0%, 100% {
+    transform: scale(1.2);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(0.6);
+    opacity: 0.2;
+  }
+}
+
+.loading-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #f1f5f9;
+  letter-spacing: 0.5px;
+}
+
+:global(html.light-theme) .loading-title {
+  color: #0f172a !important;
+}
+
+.loading-sub {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 400;
+  margin-top: -14px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.35s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
