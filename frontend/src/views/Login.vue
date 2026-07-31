@@ -4,134 +4,99 @@
       <div class="login-header">
         <img :src="logoSvg" class="login-logo-img" alt="Logo" />
         <h2>智护牙境 - 智能管控平台登录</h2>
+        <p class="login-subtitle">口腔智能感控与设备运维管控中心</p>
       </div>
 
-      <el-tabs v-model="activeTab" class="login-tabs" stretch>
-        <!-- 1. 已注册用户——账号密码登录 -->
-        <el-tab-pane label="已注册账号登录" name="login">
-          <el-form label-position="top" class="login-form">
-            <el-form-item label="电子邮箱地址">
-              <el-input
-                v-model="loginForm.email"
-                placeholder="请输入您的邮箱"
-                size="large"
-                autocomplete="off"
-              >
-                <template #prefix>
-                  <el-icon><Message /></el-icon>
-                </template>
-              </el-input>
-            </el-form-item>
+      <!-- 纯净登录表单 -->
+      <el-form label-position="top" class="login-form">
+        <el-form-item label="登录账号用户名">
+          <el-input
+            v-model="loginForm.email"
+            placeholder="请输入账号 (如 admin)"
+            size="large"
+            autocomplete="off"
+          >
+            <template #prefix>
+              <el-icon><UserIcon /></el-icon>
+            </template>
+          </el-input>
+        </el-form-item>
 
-            <el-form-item label="登录密码">
-              <el-input
-                v-model="loginForm.password"
-                type="password"
-                show-password
-                placeholder="请输入登录密码"
-                size="large"
-                autocomplete="new-password"
-              >
-                <template #prefix>
-                  <el-icon><Lock /></el-icon>
-                </template>
-              </el-input>
-            </el-form-item>
+        <el-form-item label="登录密码">
+          <el-input
+            v-model="loginForm.password"
+            type="password"
+            show-password
+            placeholder="请输入登录密码"
+            size="large"
+            autocomplete="new-password"
+          >
+            <template #prefix>
+              <el-icon><Lock /></el-icon>
+            </template>
+          </el-input>
+        </el-form-item>
 
-            <div class="forget-link-row">
-              <el-button type="primary" link class="forget-btn" @click="showForgetDialog = true">
-                忘记密码？
-              </el-button>
+        <div class="forget-link-row">
+          <el-button type="primary" link class="forget-btn" @click="showForgetDialog = true">
+            忘记密码？
+          </el-button>
+        </div>
+
+        <el-button
+          type="primary"
+          size="large"
+          class="submit-btn"
+          @click="handlePasswordLogin"
+        >
+          验证并登录
+        </el-button>
+
+        <!-- 三个内置角色演示账号快捷选择区块 -->
+        <div class="demo-roles-section">
+          <div class="demo-roles-title">快捷体验内置角色账号</div>
+          <div class="demo-roles-grid">
+            <div
+              class="role-badge-card"
+              :class="{ active: loginForm.email === 'admin' }"
+              @click="quickSelectRole('admin', 'SUPER_ADMIN')"
+            >
+              <span class="role-badge-name">超级管理员</span>
+              <span class="role-badge-code">SUPER_ADMIN</span>
             </div>
 
-            <el-button
-              type="primary"
-              size="large"
-              class="submit-btn"
-              @click="handlePasswordLogin"
+            <div
+              class="role-badge-card"
+              :class="{ active: loginForm.email === 'demo_system_admin' }"
+              @click="quickSelectRole('demo_system_admin', 'SYSTEM_ADMIN')"
             >
-              密码验证并登录
-            </el-button>
-          </el-form>
-        </el-tab-pane>
+              <span class="role-badge-name">系统管理员</span>
+              <span class="role-badge-code">SYSTEM_ADMIN</span>
+            </div>
 
-        <!-- 2. 未注册用户——验证码 + 设置新密码注册 -->
-        <el-tab-pane label="新用户邮箱注册" name="register">
-          <el-form label-position="top" class="login-form">
-            <el-form-item label="设置注册电子邮箱">
-              <el-input
-                v-model="regForm.email"
-                placeholder="请输入您的工作电子邮箱"
-                size="large"
-                autocomplete="off"
-              >
-                <template #prefix>
-                  <el-icon><Message /></el-icon>
-                </template>
-              </el-input>
-            </el-form-item>
-
-            <el-form-item label="邮箱动态验证码">
-              <div class="code-box">
-                <el-input
-                  v-model="regForm.code"
-                  placeholder="请输入6位验证码"
-                  size="large"
-                  autocomplete="off"
-                >
-                  <template #prefix>
-                    <el-icon><Key /></el-icon>
-                  </template>
-                </el-input>
-                <el-button
-                  type="primary"
-                  size="large"
-                  :disabled="userStore.countdown > 0"
-                  @click="handleSendRegCode"
-                >
-                  {{ userStore.countdown > 0 ? `${userStore.countdown}s` : '发送验证码' }}
-                </el-button>
-              </div>
-            </el-form-item>
-
-            <el-form-item label="设置新账号密码">
-              <el-input
-                v-model="regForm.password"
-                type="password"
-                show-password
-                placeholder="请设置您的登录密码"
-                size="large"
-                autocomplete="new-password"
-              >
-                <template #prefix>
-                  <el-icon><Lock /></el-icon>
-                </template>
-              </el-input>
-            </el-form-item>
-
-            <el-button
-              type="success"
-              size="large"
-              class="submit-btn"
-              @click="handleRegister"
+            <div
+              class="role-badge-card"
+              :class="{ active: loginForm.email === 'demo_operator' }"
+              @click="quickSelectRole('demo_operator', 'OPERATOR')"
             >
-              完成注册并直接登录
-            </el-button>
-          </el-form>
-        </el-tab-pane>
-      </el-tabs>
+              <span class="role-badge-name">运维人员</span>
+              <span class="role-badge-code">OPERATOR</span>
+            </div>
+          </div>
+        </div>
+      </el-form>
     </div>
 
     <!-- 忘记密码重置弹窗 -->
     <el-dialog v-model="showForgetDialog" title="找回并重置登录密码" width="460px" destroy-on-close>
       <el-form label-position="top">
-        <el-form-item label="注册电子邮箱">
-          <el-input v-model="forgetForm.email" placeholder="请输入绑定的注册电子邮箱" autocomplete="off" />
+        <el-form-item label="内置登录账号">
+          <el-input v-model="forgetForm.email" placeholder="请输入绑定的登录账号 (如 admin)" autocomplete="off" />
         </el-form-item>
 
         <el-form-item label="邮箱验证码">
           <div class="code-box">
-            <el-input v-model="forgetForm.code" placeholder="请输入6位邮件验证码" autocomplete="off" />
+            <el-input v-model="forgetForm.code" placeholder="请输入 6 位验证码" autocomplete="off" />
             <el-button
               type="primary"
               :disabled="userStore.countdown > 0"
@@ -165,24 +130,17 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import logoSvg from '../assets/logo.svg';
 import { useUserStore } from '@/stores/userStore';
-import { Message, Lock, Key } from '@element-plus/icons-vue';
+import { User as UserIcon, Lock } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 
 const router = useRouter();
 const userStore = useUserStore();
 
-const activeTab = ref('login');
 const showForgetDialog = ref(false);
 
 const loginForm = ref({
-  email: '',
-  password: ''
-});
-
-const regForm = ref({
-  email: '',
-  code: '',
-  password: ''
+  email: 'admin',
+  password: 'admin'
 });
 
 const forgetForm = ref({
@@ -198,31 +156,29 @@ const formatError = (e: any): string => {
   return '系统处理异常，请重试';
 };
 
-const handleSendRegCode = async () => {
-  if (!regForm.value.email) {
-    return ElMessage.error('请先填写需要注册的电子邮箱地址');
-  }
-  try {
-    await userStore.sendEmailCode(regForm.value.email);
-    ElMessage.success(`验证码已成功发送至 ${regForm.value.email}`);
-  } catch (e: any) {
-    ElMessage.error(formatError(e));
-  }
+const quickSelectRole = (username: string, roleName: string) => {
+  loginForm.value.email = username;
+  loginForm.value.password = 'admin';
+  ElMessage.success(`已切换填充【${roleName}】账号: ${username}`);
 };
 
 const handleSendForgetCode = async () => {
   if (!forgetForm.value.email) {
-    return ElMessage.error('请先填写绑定的注册电子邮箱地址');
+    return ElMessage.error('请先填写绑定的登录账号');
   }
   try {
     await userStore.sendEmailCode(forgetForm.value.email);
-    ElMessage.success(`重置验证码已发送至 ${forgetForm.value.email}`);
+    ElMessage.success(`重置验证码已发送至相关邮箱`);
   } catch (e: any) {
     ElMessage.error(formatError(e));
   }
 };
 
 const handlePasswordLogin = async () => {
+  if (!loginForm.value.email || !loginForm.value.password) {
+    return ElMessage.error('请输入登录账号与密码');
+  }
+
   try {
     await userStore.loginWithPassword(loginForm.value.email, loginForm.value.password);
     ElMessage.success(`登录成功！欢迎回来: ${userStore.user?.realName}`);
@@ -232,19 +188,9 @@ const handlePasswordLogin = async () => {
   }
 };
 
-const handleRegister = async () => {
-  try {
-    await userStore.registerWithCode(regForm.value.email, regForm.value.code, regForm.value.password);
-    ElMessage.success('账号注册成功！已为您自动登录进入系统');
-    router.push('/');
-  } catch (e: any) {
-    ElMessage.error(formatError(e));
-  }
-};
-
 const handleResetPassword = async () => {
   if (!forgetForm.value.email || !forgetForm.value.code || !forgetForm.value.newPassword) {
-    return ElMessage.error('请完整填写邮箱、验证码与重置的新密码');
+    return ElMessage.error('请完整填写账号、验证码与重置的新密码');
   }
 
   try {
@@ -277,7 +223,6 @@ html.light-theme .login-container {
   background: radial-gradient(circle at 50% 30%, #ffffff 0%, #f1f5f9 100%);
 }
 
-/* 顶部与底层精致科幻光晕背景粒 */
 .login-container::before {
   content: '';
   position: absolute;
@@ -312,7 +257,7 @@ html.light-theme .login-card {
   width: 56px;
   height: 56px;
   border-radius: 12px;
-  margin: 0 auto 14px;
+  margin: 0 auto 12px;
   object-fit: contain;
   filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.5));
 }
@@ -323,35 +268,21 @@ html.light-theme .login-card {
   font-weight: 700;
 }
 
-.login-tabs {
+.login-subtitle {
+  font-size: 12px;
+  color: #38bdf8;
+  margin-top: 4px;
+}
+
+:global(html.light-theme) .login-subtitle {
+  color: #0284c7 !important;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   margin-top: 8px;
-}
-
-:deep(.el-tabs__item) {
-  color: #cbd5e1 !important;
-  font-size: 15px !important;
-  font-weight: 500 !important;
-}
-
-html.light-theme :deep(.el-tabs__item) {
-  color: #64748b !important;
-}
-
-:deep(.el-tabs__item:hover) {
-  color: #38bdf8 !important;
-}
-
-html.light-theme :deep(.el-tabs__item:hover) {
-  color: #2563eb !important;
-}
-
-:deep(.el-tabs__item.is-active) {
-  color: #38bdf8 !important;
-  font-weight: 700 !important;
-}
-
-html.light-theme :deep(.el-tabs__item.is-active) {
-  color: #2563eb !important;
 }
 
 :deep(.el-form-item__label) {
@@ -361,13 +292,6 @@ html.light-theme :deep(.el-tabs__item.is-active) {
 
 html.light-theme :deep(.el-form-item__label) {
   color: #1e293b !important;
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-top: 12px;
 }
 
 .forget-link-row {
@@ -385,19 +309,89 @@ html.light-theme .forget-btn {
   color: #2563eb !important;
 }
 
-.forget-btn:hover {
-  color: #7dd3fc !important;
-  text-decoration: underline;
+.submit-btn {
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* 3 个内置角色选择区 */
+.demo-roles-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px dashed rgba(56, 189, 248, 0.2);
+}
+
+html.light-theme .demo-roles-section {
+  border-top: 1px dashed #cbd5e1;
+}
+
+.demo-roles-title {
+  font-size: 12px;
+  color: #94a3b8;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.demo-roles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.role-badge-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 8px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+html.light-theme .role-badge-card {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+}
+
+.role-badge-card:hover,
+.role-badge-card.active {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
+  transform: translateY(-2px);
+}
+
+html.light-theme .role-badge-card:hover,
+html.light-theme .role-badge-card.active {
+  background: #eff6ff;
+  border-color: #2563eb;
+}
+
+.role-badge-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+html.light-theme .role-badge-name {
+  color: #0f172a;
+}
+
+.role-badge-code {
+  font-size: 9px;
+  color: #38bdf8;
+  font-family: monospace;
+}
+
+html.light-theme .role-badge-code {
+  color: #0284c7;
 }
 
 .code-box {
   display: flex;
   gap: 12px;
   width: 100%;
-}
-
-.submit-btn {
-  width: 100%;
-  margin-top: 12px;
 }
 </style>

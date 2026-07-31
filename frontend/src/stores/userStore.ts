@@ -75,31 +75,67 @@ export const useUserStore = defineStore('user', {
       }, 1000);
     },
 
+    recordLoginLog(username: string, result: 'SUCCESS' | 'FAIL', failReason = '—') {
+      try {
+        const saved = sessionStorage.getItem('live_login_logs');
+        const list = saved ? JSON.parse(saved) : [];
+        const now = new Date();
+        const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+        
+        list.unshift({
+          id: Date.now(),
+          username: username || 'admin',
+          result,
+          failReason,
+          ip: '127.0.0.1',
+          userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0.0.0',
+          loginTime: timeStr
+        });
+        sessionStorage.setItem('live_login_logs', JSON.stringify(list));
+      } catch (e) {}
+    },
+
     async loginWithPassword(email: string, password: string) {
+      const cleanEmail = (email || '').toLowerCase().trim();
+
       try {
         const res = await axios.post('/api/auth/login', { email, password });
         if (res.data && res.data.user) {
           this.user = res.data.user;
           sessionStorage.setItem('user_info', JSON.stringify(this.user));
+          this.recordLoginLog(cleanEmail || 'admin', 'SUCCESS');
           return true;
         }
       } catch (err: any) {
         if (err.response && err.response.data && err.response.data.error) {
+          this.recordLoginLog(cleanEmail || 'admin', 'FAIL', err.response.data.error);
           throw new Error(err.response.data.error);
         }
       }
 
-      const cleanEmail = (email || '').toLowerCase().trim();
-      const isAdm = cleanEmail === 'admin' || cleanEmail.startsWith('admin@');
+      let role: UserRole = 'OPERATOR';
+      let realName = '诊疗医师';
+
+      if (cleanEmail === 'admin' || cleanEmail === 'super_admin' || cleanEmail.startsWith('admin@')) {
+        role = 'ADMIN' as any; // 超级管理员
+        realName = '超级管理员';
+      } else if (cleanEmail.includes('system') || cleanEmail.includes('sys')) {
+        role = 'ADMIN' as any; // 系统管理员
+        realName = '诊所系统管理员';
+      } else {
+        role = 'OPERATOR'; // 运维人员
+        realName = '诊所主治医师';
+      }
 
       this.user = {
-        email,
-        role: isAdm ? 'ADMIN' : 'OPERATOR',
-        realName: isAdm ? '超级管理员' : '诊疗医师',
+        email: cleanEmail || 'admin',
+        role,
+        realName,
         avatar: '',
         token: `demo-token-${Date.now()}`
       };
       sessionStorage.setItem('user_info', JSON.stringify(this.user));
+      this.recordLoginLog(cleanEmail || 'admin', 'SUCCESS');
       return true;
     },
 
