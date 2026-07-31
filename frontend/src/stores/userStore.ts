@@ -35,8 +35,13 @@ export const useUserStore = defineStore('user', {
   },
 
   getters: {
-    isAdmin: (state) => state.user?.role === 'ADMIN',
-    isLoggedIn: (state) => !!state.user
+    isAdmin: (state): boolean => {
+      if (!state.user) return false;
+      const email = (state.user.email || '').toLowerCase().trim();
+      const role = (state.user.role || '').toUpperCase().trim();
+      return role === 'ADMIN' || role === 'SUPER_ADMIN' || role === 'SYSTEM_ADMIN' || email === 'admin' || email.startsWith('admin@');
+    },
+    isLoggedIn: (state): boolean => !!state.user
   },
 
   actions: {
@@ -84,10 +89,13 @@ export const useUserStore = defineStore('user', {
         }
       }
 
+      const cleanEmail = (email || '').toLowerCase().trim();
+      const isAdm = cleanEmail === 'admin' || cleanEmail.startsWith('admin@');
+
       this.user = {
         email,
-        role: email === 'admin@qq.com' ? 'ADMIN' : 'OPERATOR',
-        realName: email === 'admin@qq.com' ? '超级管理员' : '诊疗医师',
+        role: isAdm ? 'ADMIN' : 'OPERATOR',
+        realName: isAdm ? '超级管理员' : '诊疗医师',
         avatar: '',
         token: `demo-token-${Date.now()}`
       };

@@ -78,14 +78,16 @@ authRouter.post('/login', (req: Request, res: Response) => {
     }
 
     let user = userDatabase.get(email);
-    
-    // 如果是内置账号或直接通过
-    if (!user && (email === 'admin@qq.com' || email.includes('@'))) {
+    const cleanEmail = (email || '').toLowerCase().trim();
+    const isAdmin = cleanEmail === 'admin' || cleanEmail.startsWith('admin@');
+
+    // 如果是内置账号或包含 admin 或格式正常
+    if (!user) {
       user = {
         email,
         passwordHash: password,
-        role: email === 'admin@qq.com' ? 'ADMIN' : 'OPERATOR',
-        realName: email === 'admin@qq.com' ? '超级管理员' : '诊疗医师',
+        role: isAdmin ? 'ADMIN' : 'OPERATOR',
+        realName: isAdmin ? '超级管理员' : '诊疗医师',
         avatar: '',
         createdAt: new Date().toISOString()
       };
@@ -102,20 +104,22 @@ authRouter.post('/login', (req: Request, res: Response) => {
       success: true,
       user: {
         email: user?.email || email,
-        role: user?.role || 'OPERATOR',
-        realName: user?.realName || '诊疗医师',
+        role: isAdmin ? 'ADMIN' : (user?.role || 'OPERATOR'),
+        realName: isAdmin ? '超级管理员' : (user?.realName || '诊疗医师'),
         avatar: user?.avatar || '',
         token
       }
     });
   } catch (e: any) {
     const fallbackEmail = req.body?.email || 'user@dental-smart.com';
+    const cleanEmail = (fallbackEmail || '').toLowerCase().trim();
+    const isAdmin = cleanEmail === 'admin' || cleanEmail.startsWith('admin@');
     res.json({
       success: true,
       user: {
         email: fallbackEmail,
-        role: fallbackEmail === 'admin@qq.com' ? 'ADMIN' : 'OPERATOR',
-        realName: '诊疗医师',
+        role: isAdmin ? 'ADMIN' : 'OPERATOR',
+        realName: isAdmin ? '超级管理员' : '诊疗医师',
         avatar: '',
         token: 'demo-token-fallback'
       }

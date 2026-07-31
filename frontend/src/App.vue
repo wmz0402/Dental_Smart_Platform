@@ -289,7 +289,7 @@ const userAvatarInitial = computed(() => {
 });
 
 const userRoleLabel = computed(() => {
-  if (userStore.user?.role === 'ADMIN') return '超级管理员';
+  if (userStore.isAdmin) return '超级管理员';
   return '诊疗医师';
 });
 
