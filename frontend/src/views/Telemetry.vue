@@ -41,36 +41,38 @@
         <h3>数据日志明细 (实况遥测记录)</h3>
         <span class="badge-tag">在线数据流正常</span>
       </div>
-      <el-table :data="tableData" border stripe class="custom-dark-table" style="width: 100%">
-        <el-table-column prop="id" label="日志编号" min-width="140" />
-        <el-table-column prop="sn" label="设备编号" min-width="160" />
-        <el-table-column prop="tds" label="水质TDS (ppm)" min-width="120">
-          <template #default="{ row }">
-            <span :class="row.tds > 30 ? 'text-warn' : 'text-normal'">{{ row.tds !== undefined ? row.tds : '-' }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="turbidity" label="水质浊度 (NTU)" min-width="120">
-          <template #default="{ row }">
-            <span class="text-light">{{ row.turbidity !== undefined ? row.turbidity : '0.12' }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="pressure" label="气源压力 (MPa)" min-width="120">
-          <template #default="{ row }">
-            <span class="text-light">{{ row.pressure !== undefined ? row.pressure : '0.65' }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="dew_point" label="露点温度 (°C)" min-width="120">
-          <template #default="{ row }">
-            <span class="text-light">{{ row.dew_point !== undefined ? row.dew_point : '-42' }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="uvIntensity" label="UV强度 (%)" min-width="120">
-          <template #default="{ row }">
-            <span class="text-light">98.5%</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="timestamp" label="采样时间" min-width="180" />
-      </el-table>
+      <div class="table-responsive-wrapper">
+        <el-table :data="tableData" border stripe class="custom-dark-table" style="width: 100%; min-width: 700px;">
+          <el-table-column prop="id" label="日志编号" min-width="140" />
+          <el-table-column prop="sn" label="设备编号" min-width="160" />
+          <el-table-column prop="tds" label="水质TDS (ppm)" min-width="120">
+            <template #default="{ row }">
+              <span :class="row.tds > 30 ? 'text-warn' : 'text-normal'">{{ row.tds !== undefined ? row.tds : '-' }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="turbidity" label="水质浊度 (NTU)" min-width="120">
+            <template #default="{ row }">
+              <span class="text-light">{{ row.turbidity !== undefined ? row.turbidity : '0.12' }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="pressure" label="气源压力 (MPa)" min-width="120">
+            <template #default="{ row }">
+              <span class="text-light">{{ row.pressure !== undefined ? row.pressure : '0.65' }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="dew_point" label="露点温度 (°C)" min-width="120">
+            <template #default="{ row }">
+              <span class="text-light">{{ row.dew_point !== undefined ? row.dew_point : '-42' }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="uvIntensity" label="UV强度 (%)" min-width="120">
+            <template #default="{ row }">
+              <span class="text-light">98.5%</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="timestamp" label="采样时间" min-width="180" />
+        </el-table>
+      </div>
     </div>
   </div>
 </template>
@@ -117,7 +119,8 @@ const chartLoading = ref(true);
 const renderChart = (times: string[], tdsData: number[], uvData: number[]) => {
   if (!chartRef.value) return;
 
-  const width = chartRef.value.clientWidth || chartRef.value.parentElement?.clientWidth || 800;
+  const width = chartRef.value.clientWidth || chartRef.value.parentElement?.clientWidth || 320;
+  const height = chartRef.value.clientHeight || 280;
 
   const isDark = userStore.isDarkTheme;
   const textColor = isDark ? '#94a3b8' : '#475569';
@@ -125,9 +128,9 @@ const renderChart = (times: string[], tdsData: number[], uvData: number[]) => {
   const axisLineColor = isDark ? '#334155' : '#cbd5e1';
 
   if (!chartInstance) {
-    chartInstance = echarts.init(chartRef.value, isDark ? 'dark' : undefined, { width, height: 380 });
+    chartInstance = echarts.init(chartRef.value, isDark ? 'dark' : undefined, { width, height });
   } else {
-    chartInstance.resize({ width, height: 380 });
+    chartInstance.resize({ width, height });
   }
 
   const option: echarts.EChartsOption = {

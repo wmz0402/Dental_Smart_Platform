@@ -453,8 +453,27 @@ onMounted(async () => {
   .air-device-view {
     gap: 14px;
   }
+  .page-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 14px !important;
+  }
+  .page-header > div:last-child {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+  }
+  .page-header > div:last-child .el-button {
+    flex: 1;
+    margin: 0 !important;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+  .device-grid {
+    grid-template-columns: 1fr !important;
+  }
   .metrics-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr !important;
   }
 }
 </style>

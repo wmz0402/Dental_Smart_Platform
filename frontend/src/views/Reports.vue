@@ -541,6 +541,45 @@ onMounted(async () => {
   font-weight: bold;
 }
 
+@media (max-width: 767.98px) {
+  .reports-page {
+    gap: 14px;
+  }
+  .page-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+  .header-actions {
+    width: 100% !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .header-actions .el-date-picker,
+  .header-actions .el-button {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+  .report-preview-card {
+    padding: 16px !important;
+  }
+  .report-meta {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  .score-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+  .table-wrapper {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  .report-table {
+    min-width: 600px !important;
+  }
+}
+
 /* 离屏标准医院检验报告单模板 */
 .hospital-pdf-container {
   position: absolute;

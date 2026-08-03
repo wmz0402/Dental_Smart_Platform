@@ -881,6 +881,13 @@ html.light-theme .main-content-loading-screen .loading-shadow {
     -webkit-overflow-scrolling: touch;
   }
 
+  .table-card,
+  .table-wrapper {
+    overflow-x: auto !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
   .mobile-hide {
     display: none !important;
   }
@@ -894,4 +901,5 @@ html.light-theme .main-content-loading-screen .loading-shadow {
     align-items: stretch !important;
   }
 }
+
 

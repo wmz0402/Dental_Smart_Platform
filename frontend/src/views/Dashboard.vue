@@ -82,51 +82,53 @@
         <el-button type="primary" size="small" @click="store.fetchDevices(true)">刷新列表</el-button>
       </div>
 
-      <el-table :data="store.devices" border stripe class="custom-dark-table" style="width: 100%">
-        <el-table-column prop="sn" label="设备编号" width="180" />
-        <el-table-column prop="name" label="设备名称" min-width="220" />
-        <el-table-column prop="type" label="系统分类" width="180" align="center">
-          <template #default="{ row }">
-            <el-tag :type="row.type === 'WATER' ? 'primary' : 'success'">
-              {{ row.type === 'WATER' ? '水源消毒系统' : '气源净化系统' }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="location" label="部署位置" min-width="160" />
-        <el-table-column prop="work_mode" label="运行模式" width="140">
-          <template #default="{ row }">
-            <el-tag :type="getModeTagType(row.work_mode)">
-              {{ getModeLabel(row.work_mode) }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="filter_level" label="滤芯健康度" width="180">
-          <template #default="{ row }">
-            <el-progress
-              :percentage="row.filter_level"
-              :status="row.filter_level < 80 ? 'warning' : 'success'"
-              :stroke-width="8"
-            />
-          </template>
-        </el-table-column>
-        <el-table-column label="快捷调控" width="220" align="center" fixed="right">
-          <template #default="{ row }">
-            <div class="action-btn-group">
-              <el-button
-                size="small"
-                type="primary"
-                plain
-                @click="store.changeWorkMode(row.id, row.work_mode === 'ECO' ? 'NORMAL' : 'ECO')"
-              >
-                {{ row.work_mode === 'ECO' ? '常规模式' : '节能模式' }}
-              </el-button>
-              <el-button size="small" type="danger" plain @click="handleLock(row)">
-                切断锁止
-              </el-button>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div class="table-responsive-wrapper">
+        <el-table :data="store.devices" border stripe class="custom-dark-table" style="width: 100%; min-width: 800px;">
+          <el-table-column prop="sn" label="设备编号" width="160" />
+          <el-table-column prop="name" label="设备名称" min-width="200" />
+          <el-table-column prop="type" label="系统分类" width="140" align="center">
+            <template #default="{ row }">
+              <el-tag :type="row.type === 'WATER' ? 'primary' : 'success'">
+                {{ row.type === 'WATER' ? '水源消毒系统' : '气源净化系统' }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column prop="location" label="部署位置" min-width="160" />
+          <el-table-column prop="work_mode" label="运行模式" width="120">
+            <template #default="{ row }">
+              <el-tag :type="getModeTagType(row.work_mode)">
+                {{ getModeLabel(row.work_mode) }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column prop="filter_level" label="滤芯健康度" width="160">
+            <template #default="{ row }">
+              <el-progress
+                :percentage="row.filter_level"
+                :status="row.filter_level < 80 ? 'warning' : 'success'"
+                :stroke-width="8"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column label="快捷调控" width="200" align="center">
+            <template #default="{ row }">
+              <div class="action-btn-group">
+                <el-button
+                  size="small"
+                  type="primary"
+                  plain
+                  @click="store.changeWorkMode(row.id, row.work_mode === 'ECO' ? 'NORMAL' : 'ECO')"
+                >
+                  {{ row.work_mode === 'ECO' ? '常规模式' : '节能模式' }}
+                </el-button>
+                <el-button size="small" type="danger" plain @click="handleLock(row)">
+                  切断锁止
+                </el-button>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
     </div>
   </div>
 </template>
