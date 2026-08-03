@@ -62,8 +62,8 @@ const router = useRouter();
 const userStore = useUserStore();
 
 const loginForm = ref({
-  email: 'admin',
-  password: 'admin123'
+  email: '',
+  password: ''
 });
 
 const formatError = (e: any): string => {
