@@ -26,7 +26,8 @@ export const useUserStore = defineStore('user', {
     } catch (e) {}
     const savedUser = sessionStorage.getItem('user_info');
     const savedTheme = localStorage.getItem('app_theme');
-    const isDark = savedTheme ? savedTheme === 'dark' : true;
+    const systemPrefersDark = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = savedTheme ? savedTheme === 'dark' : systemPrefersDark;
 
     if (typeof document !== 'undefined') {
       if (isDark) {
