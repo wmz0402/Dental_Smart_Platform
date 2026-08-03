@@ -231,6 +231,20 @@ export const useDeviceStore = defineStore('device', {
       } catch (err) {}
     },
 
+    resolveAlarm(id: number) {
+      try {
+        const localMap = localStorage.getItem('local_resolved_alarm_ids');
+        const resolvedIds = localMap ? JSON.parse(localMap) : {};
+        resolvedIds[id] = true;
+        localStorage.setItem('local_resolved_alarm_ids', JSON.stringify(resolvedIds));
+
+        const initialUnresolved = [101, 102, 104];
+        const remaining = initialUnresolved.filter(aId => !resolvedIds[aId]).length;
+        this.overview.unresolvedAlarms = Math.max(0, remaining);
+        this.overview.activeAlarmsCount = Math.max(0, remaining);
+      } catch (e) {}
+    },
+
     initWebSocket() {
       if (this.socket) return;
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';

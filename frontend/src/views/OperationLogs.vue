@@ -157,18 +157,40 @@ const defaultMockOpLogs: OpLogItem[] = [
 
 const fetchOpLogs = async () => {
   loading.value = true;
+  let fetched: OpLogItem[] = [];
   try {
     const res = await axios.get('/api/system/op-logs');
-    if (Array.isArray(res.data) && res.data.length > 0) {
-      logs.value = res.data;
-    } else {
-      logs.value = defaultMockOpLogs;
+    if (Array.isArray(res.data)) {
+      fetched = res.data;
     }
-  } catch (e) {
-    logs.value = defaultMockOpLogs;
-  } finally {
-    loading.value = false;
+  } catch (e) {}
+
+  try {
+    const savedLocal = localStorage.getItem('persistent_op_logs');
+    if (savedLocal) {
+      const parsed = JSON.parse(savedLocal);
+      if (Array.isArray(parsed)) {
+        fetched = [...parsed, ...fetched];
+      }
+    }
+  } catch (e) {}
+
+  if (fetched.length === 0) {
+    fetched = defaultMockOpLogs;
   }
+
+  const map = new Map<string | number, OpLogItem>();
+  fetched.forEach(item => {
+    const key = item.id || `${item.operator}-${item.opTime}-${item.actionName}`;
+    if (!map.has(key)) {
+      map.set(key, item);
+    }
+  });
+
+  logs.value = Array.from(map.values()).sort((a, b) => {
+    return new Date(b.opTime).getTime() - new Date(a.opTime).getTime();
+  });
+  loading.value = false;
 };
 
 const filteredLogs = computed(() => {
