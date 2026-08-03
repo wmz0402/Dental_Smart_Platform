@@ -197,6 +197,16 @@ html.light-theme .forget-btn {
   margin-top: 8px;
 }
 
+@media (max-width: 767.98px) {
+  .login-card {
+    width: 94% !important;
+    padding: 20px 16px !important;
+  }
+  .login-header h2 {
+    font-size: 17px;
+  }
+}
+
 .code-box {
   display: flex;
   gap: 12px;

@@ -431,4 +431,19 @@ onUnmounted(() => {
 .mb-16 {
   margin-bottom: 16px;
 }
+
+@media (max-width: 767.98px) {
+  .telemetry-view {
+    gap: 14px;
+  }
+  .control-left, .control-right {
+    width: 100%;
+  }
+  .device-select {
+    width: 100% !important;
+  }
+  .chart-container {
+    height: 280px;
+  }
+}
 </style>

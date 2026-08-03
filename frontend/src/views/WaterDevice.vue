@@ -450,4 +450,13 @@ onMounted(async () => {
   padding-top: 16px;
   border-top: 1px solid rgba(56, 189, 248, 0.12);
 }
+
+@media (max-width: 767.98px) {
+  .water-device-view {
+    gap: 14px;
+  }
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

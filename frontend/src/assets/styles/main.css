@@ -832,3 +832,66 @@ html.light-theme .main-content-loading-screen .loading-cube {
 html.light-theme .main-content-loading-screen .loading-shadow {
   background: rgba(2, 132, 199, 0.2) !important;
 }
+
+/* 移动端全局响应式适配规则 */
+@media (max-width: 767.98px) {
+  .glass-card {
+    padding: 14px !important;
+    border-radius: 8px !important;
+  }
+
+  .el-dialog {
+    width: 92% !important;
+    margin-top: 5vh !important;
+    margin-bottom: 5vh !important;
+  }
+
+  .el-dialog__body {
+    padding: 14px 16px !important;
+  }
+
+  .el-form--inline .el-form-item {
+    margin-right: 0 !important;
+    margin-bottom: 12px !important;
+    width: 100% !important;
+  }
+
+  .el-form--inline .el-form-item__content {
+    width: 100% !important;
+  }
+
+  .el-form--inline .el-select,
+  .el-form--inline .el-input {
+    width: 100% !important;
+  }
+
+  .el-table {
+    font-size: 12px !important;
+  }
+
+  .el-table .cell {
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
+
+  /* 触摸优化与横向滚动提示 */
+  .table-responsive-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-hide {
+    display: none !important;
+  }
+
+  .mobile-full-width {
+    width: 100% !important;
+  }
+
+  .mobile-flex-column {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+}
+

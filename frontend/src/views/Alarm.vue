@@ -389,4 +389,13 @@ onMounted(async () => {
   font-size: 12px;
   color: #64748b;
 }
+
+@media (max-width: 767.98px) {
+  .alarm-view {
+    gap: 14px;
+  }
+  .consumables-grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

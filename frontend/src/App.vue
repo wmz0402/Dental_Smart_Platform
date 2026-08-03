@@ -7,22 +7,34 @@
 
     <!-- 已登录状态：渲染全屏打通顶栏控制台主框架 -->
     <template v-else>
-      <!-- 顶部 100% 贯穿打通的 Header 导航栏 (精致调窄至 52px) -->
+      <!-- 顶部 100% 贯穿打通的 Header 导航栏 -->
       <el-header height="52px" class="header flex-between">
         <div class="header-left flex-align">
+          <!-- 移动端汉堡包侧边栏展开按钮 -->
+          <el-button
+            v-if="isMobile"
+            circle
+            class="mobile-menu-btn"
+            @click="mobileDrawerOpen = true"
+          >
+            <el-icon><Expand /></el-icon>
+          </el-button>
+
           <div class="logo-area flex-align">
             <img :src="logoSvg" class="logo-icon-img" alt="Logo" />
             <div class="logo-text">
               <h1>智护牙境</h1>
-              <p>口腔智能感控平台</p>
+              <p v-if="!isMobile">口腔智能感控平台</p>
             </div>
           </div>
-          <div class="header-divider"></div>
-          <span class="clinic-tag">示范总院中心控制台</span>
+          <template v-if="!isMobile">
+            <div class="header-divider"></div>
+            <span class="clinic-tag">示范总院中心控制台</span>
+          </template>
         </div>
 
         <div class="header-right flex-align">
-          <!-- 经典深浅主题转换按钮 -->
+          <!-- 深浅主题转换按钮 -->
           <el-tooltip :content="userStore.isDarkTheme ? '切换为浅色明亮模式' : '切换为深色科技模式'" placement="bottom">
             <el-button circle class="theme-toggle-btn" @click="userStore.toggleTheme">
               <el-icon v-if="userStore.isDarkTheme"><Sunny /></el-icon>
@@ -30,8 +42,8 @@
             </el-button>
           </el-tooltip>
 
-          <!-- 系统实时打卡时间 -->
-          <div class="system-time">
+          <!-- 系统实时打卡时间（移动端隐去） -->
+          <div v-if="!isMobile" class="system-time">
             <el-icon><Clock /></el-icon>
             <span>{{ currentTime }}</span>
           </div>
@@ -46,7 +58,7 @@
               >
                 {{ userAvatarInitial }}
               </el-avatar>
-              <div class="user-info">
+              <div v-if="!isMobile" class="user-info">
                 <span class="user-email">{{ userStore.user?.email || '' }}</span>
                 <span class="user-role">{{ userRoleLabel }}</span>
               </div>
@@ -69,7 +81,8 @@
 
       <!-- 顶栏下方的 body 容器：包含侧边栏与主内容区 -->
       <el-container class="body-container">
-        <el-aside width="240px" class="sidebar">
+        <!-- 桌面端侧边栏 -->
+        <el-aside v-if="!isMobile" width="240px" class="sidebar">
           <el-menu
             :default-active="$route.path"
             router
@@ -136,11 +149,95 @@
           </div>
         </el-aside>
 
+        <!-- 移动端侧边抽屉菜单 -->
+        <el-drawer
+          v-else
+          v-model="mobileDrawerOpen"
+          direction="ltr"
+          size="260px"
+          :with-header="false"
+          class="mobile-sidebar-drawer"
+        >
+          <div class="mobile-drawer-header flex-between">
+            <div class="logo-area flex-align">
+              <img :src="logoSvg" class="logo-icon-img" alt="Logo" />
+              <div class="logo-text">
+                <h1>智护牙境</h1>
+                <p>口腔智能感控平台</p>
+              </div>
+            </div>
+          </div>
+          <el-menu
+            :default-active="$route.path"
+            router
+            class="sidebar-menu"
+            background-color="transparent"
+            text-color="#94a3b8"
+            active-text-color="#38bdf8"
+            @select="mobileDrawerOpen = false"
+          >
+            <el-menu-item index="/">
+              <el-icon><DataBoard /></el-icon>
+              <span>全局监控概览</span>
+            </el-menu-item>
+            <el-menu-item index="/water">
+              <el-icon><Filter /></el-icon>
+              <span>水源消毒处理系统</span>
+            </el-menu-item>
+            <el-menu-item index="/air">
+              <el-icon><WindPower /></el-icon>
+              <span>气源洁净处理系统</span>
+            </el-menu-item>
+            <el-menu-item index="/telemetry">
+              <el-icon><TrendCharts /></el-icon>
+              <span>实时遥测与数据流</span>
+            </el-menu-item>
+            <el-menu-item index="/alarm">
+              <el-icon><Warning /></el-icon>
+              <span>告警与预测性维护</span>
+            </el-menu-item>
+            <el-menu-item index="/reports">
+              <el-icon><Document /></el-icon>
+              <span>感控合规报表</span>
+            </el-menu-item>
+            <el-menu-item v-if="userStore.canAccessSystem" index="/settings">
+              <el-icon><Setting /></el-icon>
+              <span>系统与机构配置</span>
+            </el-menu-item>
+            <el-sub-menu v-if="userStore.canAccessSystem" index="/system">
+              <template #title>
+                <el-icon><Management /></el-icon>
+                <span>系统管理</span>
+              </template>
+              <el-menu-item index="/system/users">
+                <el-icon><Avatar /></el-icon>
+                <span>用户管理</span>
+              </el-menu-item>
+              <el-menu-item index="/system/roles">
+                <el-icon><Lock /></el-icon>
+                <span>角色管理</span>
+              </el-menu-item>
+              <el-menu-item index="/system/login-logs">
+                <el-icon><DocumentChecked /></el-icon>
+                <span>登录日志</span>
+              </el-menu-item>
+              <el-menu-item index="/system/op-logs">
+                <el-icon><Files /></el-icon>
+                <span>操作日志</span>
+              </el-menu-item>
+            </el-sub-menu>
+          </el-menu>
+          <div class="sidebar-footer">
+            <span class="status-dot green"></span>
+            <span>数据同步正常</span>
+          </div>
+        </el-drawer>
+
         <!-- 主内容容器（右侧区域） -->
         <el-main class="content-area" style="position: relative;">
           <router-view />
 
-          <!-- 唯一的右侧主内容区高颜值毛玻璃大 Loading 页面 -->
+          <!-- 唯一的右侧主内容区毛玻璃 Loading 页面 -->
           <transition name="fade">
             <div v-if="deviceStore.loading" class="main-content-loading-screen">
               <div class="loading-box">
@@ -157,7 +254,12 @@
       </el-container>
 
       <!-- 个人信息中心对话框 -->
-      <el-dialog v-model="showProfileDialog" title="个人信息中心" width="520px" destroy-on-close>
+      <el-dialog
+        v-model="showProfileDialog"
+        title="个人信息中心"
+        :width="isMobile ? '92%' : '520px'"
+        destroy-on-close
+      >
         <el-form label-position="top" class="profile-form">
           <el-form-item label="修改头像">
             <div class="avatar-edit-box">
@@ -211,10 +313,10 @@
 
         <template #footer>
           <div class="dialog-footer flex-between">
-            <el-button type="danger" plain @click="handleDeleteAccount">注销当前账户</el-button>
+            <el-button type="danger" plain @click="handleDeleteAccount">注销账户</el-button>
             <div>
               <el-button @click="showProfileDialog = false">取消</el-button>
-              <el-button type="primary" @click="saveProfile">保存个人信息</el-button>
+              <el-button type="primary" @click="saveProfile">保存</el-button>
             </div>
           </div>
         </template>
@@ -229,6 +331,7 @@ import { useRouter } from 'vue-router';
 import logoSvg from './assets/logo.svg';
 import { useUserStore } from '@/stores/userStore';
 import { useDeviceStore } from '@/stores/deviceStore';
+import { useResponsive } from '@/composables/useResponsive';
 import {
   DataBoard,
   Filter,
@@ -246,14 +349,17 @@ import {
   Avatar,
   Lock,
   DocumentChecked,
-  Files
+  Files,
+  Expand
 } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
 const router = useRouter();
 const userStore = useUserStore();
 const deviceStore = useDeviceStore();
+const { isMobile } = useResponsive();
 
+const mobileDrawerOpen = ref(false);
 const currentTime = ref('');
 let timer: any = null;
 
@@ -432,7 +538,7 @@ onUnmounted(() => {
   background: rgba(15, 23, 42, 0.95);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(56, 189, 248, 0.15);
-  padding: 0 20px;
+  padding: 0 16px;
   flex-shrink: 0;
   z-index: 100;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
@@ -443,6 +549,19 @@ onUnmounted(() => {
   border-bottom: 1px solid #e2e8f0 !important;
   color: #0f172a !important;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.mobile-menu-btn {
+  margin-right: 10px;
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  color: #38bdf8 !important;
+}
+
+:global(html.light-theme) .mobile-menu-btn {
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0284c7 !important;
 }
 
 .logo-area {
@@ -592,7 +711,7 @@ onUnmounted(() => {
 }
 
 .header-right {
-  gap: 20px;
+  gap: 12px;
 }
 
 .theme-toggle-btn {
@@ -630,8 +749,8 @@ onUnmounted(() => {
 
 .user-profile {
   cursor: pointer;
-  gap: 10px;
-  padding: 4px 8px;
+  gap: 8px;
+  padding: 4px 6px;
   border-radius: 20px;
   transition: background-color 0.2s;
 }
@@ -677,6 +796,7 @@ onUnmounted(() => {
 
 .content-area {
   padding: 24px;
+  overflow-y: auto;
 }
 
 .avatar-edit-box {
@@ -829,5 +949,27 @@ onUnmounted(() => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.mobile-drawer-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.12);
+}
+
+:global(html.light-theme) .mobile-drawer-header {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* 移动端媒体查询样式调整 */
+@media (max-width: 767.98px) {
+  .content-area {
+    padding: 12px;
+  }
+  .header {
+    padding: 0 10px;
+  }
+  .logo-text h1 {
+    font-size: 13px;
+  }
 }
 </style>

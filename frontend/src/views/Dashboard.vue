@@ -441,4 +441,33 @@ onUnmounted(() => {
 .action-btn-group .el-button {
   margin: 0 !important;
 }
+
+@media (max-width: 1024px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .dashboard-view {
+    gap: 14px;
+  }
+  .metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .charts-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .chart-container {
+    height: 260px;
+  }
+  .card-header h3 {
+    font-size: 14px;
+  }
+}
 </style>
