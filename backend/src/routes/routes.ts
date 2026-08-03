@@ -339,11 +339,9 @@ router.get('/telemetry/history', (req: Request, res: Response) => {
 // 7. 系统管理——用户管理 API
 router.get('/system/users', (req: Request, res: Response) => {
   const users = [
-    { id: 1, username: 'admin', realName: '超级管理员', role: 'SUPER_ADMIN', roleName: '超级管理员', status: 'ACTIVE', lastLogin: '2026-07-31 09:13:58', createdAt: '2026-07-18 21:04:12' },
-    { id: 2, username: 'demo_system_admin', realName: '诊所系统管理员', role: 'SYSTEM_ADMIN', roleName: '系统管理员', status: 'ACTIVE', lastLogin: '2026-07-31 08:24:12', createdAt: '2026-07-18 21:04:12' },
-    { id: 3, username: 'demo_operator', realName: '诊所主治医师', role: 'OPERATOR', roleName: '运维人员', status: 'ACTIVE', lastLogin: '2026-07-30 23:01:02', createdAt: '2026-07-18 21:04:12' },
-    { id: 4, username: 'doctor_zhang', realName: '张敏 医生', role: 'OPERATOR', roleName: '运维人员', status: 'ACTIVE', lastLogin: '2026-07-29 16:45:22', createdAt: '2026-07-20 14:12:00' },
-    { id: 5, username: 'nurse_li', realName: '李华 护士长', role: 'OPERATOR', roleName: '运维人员', status: 'INACTIVE', lastLogin: '2026-07-25 11:30:10', createdAt: '2026-07-22 09:15:30' }
+    { id: 1, username: 'admin', realName: '超级管理员', role: 'SUPER_ADMIN', roleName: '超级管理员', status: 'ACTIVE', lastLogin: '2026-08-03 11:51:45', createdAt: '2026-07-18 21:04:12' },
+    { id: 2, username: 'sysytem_admin', realName: '系统管理员', role: 'SYSTEM_ADMIN', roleName: '系统管理员', status: 'ACTIVE', lastLogin: '2026-07-31 08:24:12', createdAt: '2026-07-18 21:04:12' },
+    { id: 3, username: 'demo_operator', realName: '维修人员', role: 'OPERATOR', roleName: '维修人员', status: 'ACTIVE', lastLogin: '2026-07-30 23:01:02', createdAt: '2026-07-18 21:04:12' }
   ];
   res.json(users);
 });
@@ -353,7 +351,7 @@ router.get('/system/roles', (req: Request, res: Response) => {
   const roles = [
     { id: 1, roleCode: 'SUPER_ADMIN', roleName: '超级管理员', status: 'ACTIVE', permissionCount: 55, description: '拥有平台全部最高管理与配置权限' },
     { id: 2, roleCode: 'SYSTEM_ADMIN', roleName: '系统管理员', status: 'ACTIVE', permissionCount: 36, description: '负责用户、角色与机构资产管理' },
-    { id: 3, roleCode: 'OPERATOR', roleName: '运维人员', status: 'ACTIVE', permissionCount: 29, description: '负责设备监测、告警与工单处理' }
+    { id: 3, roleCode: 'OPERATOR', roleName: '维修人员', status: 'ACTIVE', permissionCount: 29, description: '负责设备监测、告警与工单处理' }
   ];
   res.json(roles);
 });
@@ -361,12 +359,9 @@ router.get('/system/roles', (req: Request, res: Response) => {
 // 9. 系统管理——登录日志 API
 router.get('/system/login-logs', (req: Request, res: Response) => {
   const loginLogs = [
-    { id: 1, username: 'admin', result: 'SUCCESS', failReason: '—', ip: '127.0.0.1', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36', loginTime: '2026-07-31 09:13:58' },
-    { id: 2, username: 'demo_operator', result: 'SUCCESS', failReason: '—', ip: '127.0.0.1', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36', loginTime: '2026-07-31 08:14:50' },
-    { id: 3, username: 'admin', result: 'SUCCESS', failReason: '—', ip: '192.168.1.102', userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36', loginTime: '2026-07-30 20:58:13' },
-    { id: 4, username: 'e2e_admin_lweb', result: 'FAIL', failReason: '用户名或密码错误', ip: '127.0.0.1', userAgent: 'curl/8.5.0', loginTime: '2026-07-30 15:31:34' },
-    { id: 5, username: 'doctor_zhang', result: 'SUCCESS', failReason: '—', ip: '192.168.1.108', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Edge/126.0.0.0', loginTime: '2026-07-29 16:45:22' },
-    { id: 6, username: 'nurse_li', result: 'FAIL', failReason: '验证码校验失效', ip: '192.168.1.115', userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X)', loginTime: '2026-07-28 11:30:10' }
+    { id: 1, username: 'admin', result: 'SUCCESS', failReason: '—', ip: '127.0.0.1', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36', loginTime: '2026-08-03 11:51:45' },
+    { id: 2, username: 'sysytem_admin', result: 'SUCCESS', failReason: '—', ip: '127.0.0.1', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36', loginTime: '2026-07-31 08:24:12' },
+    { id: 3, username: 'demo_operator', result: 'SUCCESS', failReason: '—', ip: '127.0.0.1', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36', loginTime: '2026-07-30 23:01:02' }
   ];
   res.json(loginLogs);
 });

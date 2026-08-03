@@ -118,6 +118,13 @@ export const useUserStore = defineStore('user', {
     async loginWithPassword(email: string, password: string) {
       const cleanEmail = (email || '').toLowerCase().trim();
 
+      const validUsers: Record<string, { pass: string; role: UserRole; realName: string }> = {
+        'admin': { pass: 'admin123', role: 'ADMIN' as any, realName: '超级管理员' },
+        'sysytem_admin': { pass: 'sysytem_admin123', role: 'ADMIN' as any, realName: '系统管理员' },
+        'system_admin': { pass: 'sysytem_admin123', role: 'ADMIN' as any, realName: '系统管理员' },
+        'demo_operator': { pass: 'demo_operator123', role: 'OPERATOR', realName: '维修人员' }
+      };
+
       try {
         const res = await axios.post('/api/auth/login', { email, password });
         if (res.data && res.data.user) {
@@ -133,30 +140,26 @@ export const useUserStore = defineStore('user', {
         }
       }
 
-      let role: UserRole = 'OPERATOR';
-      let realName = '诊疗医师';
-
-      if (cleanEmail === 'admin' || cleanEmail === 'super_admin' || cleanEmail.startsWith('admin@')) {
-        role = 'ADMIN' as any; // 超级管理员
-        realName = '超级管理员';
-      } else if (cleanEmail.includes('system') || cleanEmail.includes('sys')) {
-        role = 'ADMIN' as any; // 系统管理员
-        realName = '诊所系统管理员';
-      } else {
-        role = 'OPERATOR'; // 运维人员
-        realName = '诊所主治医师';
+      const matched = validUsers[cleanEmail];
+      if (matched) {
+        if (password !== matched.pass) {
+          this.recordLoginLog(cleanEmail, 'FAIL', '密码错误');
+          throw new Error('密码错误，请重新输入');
+        }
+        this.user = {
+          email: cleanEmail,
+          role: matched.role,
+          realName: matched.realName,
+          avatar: '',
+          token: `demo-token-${Date.now()}`
+        };
+        sessionStorage.setItem('user_info', JSON.stringify(this.user));
+        this.recordLoginLog(cleanEmail, 'SUCCESS');
+        return true;
       }
 
-      this.user = {
-        email: cleanEmail || 'admin',
-        role,
-        realName,
-        avatar: '',
-        token: `demo-token-${Date.now()}`
-      };
-      sessionStorage.setItem('user_info', JSON.stringify(this.user));
-      this.recordLoginLog(cleanEmail || 'admin', 'SUCCESS');
-      return true;
+      this.recordLoginLog(cleanEmail || 'unknown', 'FAIL', '账号不存在或已被注销');
+      throw new Error('账号不存在或已被注销');
     },
 
     async registerWithCode(email: string, code: string, password: string) {

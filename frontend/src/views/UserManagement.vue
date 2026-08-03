@@ -190,9 +190,9 @@ const getRoleTagType = (role: string) => {
 };
 
 const defaultMockUsers: UserItem[] = [
-  { id: 1, username: 'admin', realName: '超级管理员', role: 'SUPER_ADMIN', roleName: '超级管理员', status: 'ACTIVE', lastLogin: '2026-07-31 09:13:58', createdAt: '2026-07-18 21:04:12' },
-  { id: 2, username: 'demo_system_admin', realName: '诊所系统管理员', role: 'SYSTEM_ADMIN', roleName: '系统管理员', status: 'ACTIVE', lastLogin: '2026-07-31 08:24:12', createdAt: '2026-07-18 21:04:12' },
-  { id: 3, username: 'demo_operator', realName: '诊所主治医师', role: 'OPERATOR', roleName: '运维人员', status: 'ACTIVE', lastLogin: '2026-07-30 23:01:02', createdAt: '2026-07-18 21:04:12' }
+  { id: 1, username: 'admin', realName: '超级管理员', role: 'SUPER_ADMIN', roleName: '超级管理员', status: 'ACTIVE', lastLogin: '2026-08-03 11:51:45', createdAt: '2026-07-18 21:04:12' },
+  { id: 2, username: 'sysytem_admin', realName: '系统管理员', role: 'SYSTEM_ADMIN', roleName: '系统管理员', status: 'ACTIVE', lastLogin: '2026-07-31 08:24:12', createdAt: '2026-07-18 21:04:12' },
+  { id: 3, username: 'demo_operator', realName: '维修人员', role: 'OPERATOR', roleName: '维修人员', status: 'ACTIVE', lastLogin: '2026-07-30 23:01:02', createdAt: '2026-07-18 21:04:12' }
 ];
 
 const fetchUsers = async () => {
