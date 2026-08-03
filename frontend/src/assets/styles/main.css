@@ -902,4 +902,30 @@ html.light-theme .main-content-loading-screen .loading-shadow {
   }
 }
 
+/* 全局表格固定列 (fixed="right" / fixed="left") 深浅主题不透明背景强覆盖（防止滚动文本穿透） */
+.custom-dark-table .el-table__fixed-right,
+.custom-dark-table .el-table__fixed-left,
+.custom-dark-table .el-table-fixed-column--right,
+.custom-dark-table .el-table-fixed-column--left,
+.custom-dark-table th.el-table-fixed-column--right,
+.custom-dark-table td.el-table-fixed-column--right,
+.custom-dark-table th.el-table-fixed-column--left,
+.custom-dark-table td.el-table-fixed-column--left {
+  background-color: #0b1120 !important;
+  color: #f8fafc !important;
+}
+
+html.light-theme .custom-dark-table .el-table__fixed-right,
+html.light-theme .custom-dark-table .el-table__fixed-left,
+html.light-theme .custom-dark-table .el-table-fixed-column--right,
+html.light-theme .custom-dark-table .el-table-fixed-column--left,
+html.light-theme .custom-dark-table th.el-table-fixed-column--right,
+html.light-theme .custom-dark-table td.el-table-fixed-column--right,
+html.light-theme .custom-dark-table th.el-table-fixed-column--left,
+html.light-theme .custom-dark-table td.el-table-fixed-column--left {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+
 

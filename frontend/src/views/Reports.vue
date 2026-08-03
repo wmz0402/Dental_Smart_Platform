@@ -5,16 +5,17 @@
         <h2>感控合规报表与溯源系统</h2>
         <p>国标合规存档、合规问题存在率、精细对标脱敏报告生成统计与溯源</p>
       </div>
-      <div class="header-actions">
+      <div class="header-actions flex-align gap-8">
         <el-date-picker
           v-model="reportDate"
           type="date"
-          placeholder="选择报表日期"
+          placeholder="选择日期"
           format="YYYY-MM-DD"
           value-format="YYYY-MM-DD"
+          style="flex: 1; min-width: 130px;"
         />
-        <el-button type="success" @click="exportPDF" :loading="isExporting">
-          导出标准医院检验报告单 (PDF)
+        <el-button type="success" @click="exportPDF" :loading="isExporting" style="flex: 1; min-width: 120px;">
+          导出PDF报告
         </el-button>
       </div>
     </div>
@@ -552,12 +553,14 @@ onMounted(async () => {
   }
   .header-actions {
     width: 100% !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
+    flex-direction: row !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
   }
   .header-actions .el-date-picker,
   .header-actions .el-button {
-    width: 100% !important;
+    flex: 1 !important;
     margin: 0 !important;
   }
   .report-preview-card {
