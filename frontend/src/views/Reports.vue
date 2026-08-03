@@ -328,22 +328,72 @@ const exportPDF = async () => {
       backgroundColor: '#ffffff'
     });
 
-    const imgData = canvas.toDataURL('image/jpeg', 1.0);
+    // 智能获取 DOM 节点相对顶部偏移，避开表格 tr 行与区块切割
+    const containerRect = reportElement.getBoundingClientRect();
+    const elements = Array.from(
+      reportElement.querySelectorAll('.hospital-table tr, .hospital-section, .info-grid-table, .hospital-conclusion')
+    );
+    const elementPositions = elements.map((el: any) => {
+      const rect = el.getBoundingClientRect();
+      const top = (rect.top - containerRect.top) * 2; // html2canvas 放大倍数为 2
+      const bottom = (rect.bottom - containerRect.top) * 2;
+      return { top, bottom };
+    });
+
     const pdf = new jsPDF('p', 'mm', 'a4');
-    const imgWidth = 210;
-    const pageHeight = 297;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    let heightLeft = imgHeight;
-    let position = 0;
+    const pdfPageWidth = 210;
+    const pdfPageHeight = 297;
+    const pxPerMm = canvas.width / pdfPageWidth;
+    const maxPagePxHeight = pdfPageHeight * pxPerMm;
 
-    pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
+    let currentCanvasY = 0;
+    let pageIndex = 0;
 
-    while (heightLeft >= 0) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+    while (currentCanvasY < canvas.height) {
+      let sliceHeight = maxPagePxHeight;
+      const targetCanvasY = currentCanvasY + sliceHeight;
+
+      if (targetCanvasY < canvas.height) {
+        // 检索是否有表格行或区块节点被分页切断
+        for (const pos of elementPositions) {
+          if (pos.top < targetCanvasY && pos.bottom > targetCanvasY) {
+            // 若发生截断且退回点非页面最顶部，将切断线向上调整至该节点顶边边线
+            if (pos.top - currentCanvasY > 100) {
+              sliceHeight = pos.top - currentCanvasY;
+            }
+            break;
+          }
+        }
+      } else {
+        sliceHeight = canvas.height - currentCanvasY;
+      }
+
+      // 创建独立单页 Canvas 切片
+      const pageCanvas = document.createElement('canvas');
+      pageCanvas.width = canvas.width;
+      pageCanvas.height = sliceHeight;
+      const ctx = pageCanvas.getContext('2d');
+      if (ctx) {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+        ctx.drawImage(
+          canvas,
+          0, currentCanvasY, canvas.width, sliceHeight,
+          0, 0, canvas.width, sliceHeight
+        );
+      }
+
+      const imgData = pageCanvas.toDataURL('image/jpeg', 1.0);
+      const pdfSliceHeightMm = sliceHeight / pxPerMm;
+
+      if (pageIndex > 0) {
+        pdf.addPage();
+      }
+
+      pdf.addImage(imgData, 'JPEG', 0, 0, pdfPageWidth, pdfSliceHeightMm);
+
+      currentCanvasY += sliceHeight;
+      pageIndex++;
     }
 
     loadingMsg.close();
