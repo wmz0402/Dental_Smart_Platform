@@ -46,6 +46,24 @@ export interface OverviewData {
   unresolvedAlarms: number;
 }
 
+export interface AlarmItem {
+  id: number;
+  device_sn: string;
+  title: string;
+  description: string;
+  level: 'CRITICAL' | 'WARNING';
+  status: 'UNRESOLVED' | 'RESOLVED';
+  triggered_at: string;
+}
+
+export interface ConsumableItem {
+  id: number;
+  device_sn: string;
+  item_name: string;
+  life_remaining: number;
+  estimated_replace_date: string;
+}
+
 const defaultFallbackDevices: Device[] = [
   { id: 1, sn: 'W-SYS-2026-01', name: '1号口腔椅位水源精准消毒机', type: 'WATER', clinic_id: 101, clinic_name: '示范总院口腔门诊部', location: '诊室一 牙椅01', work_mode: 'DEEP_CLEAN', status: 'ONLINE', uv_status: 1, filter_level: 88, uv_lamp_health: 94 },
   { id: 2, sn: 'W-SYS-2026-02', name: '2号口腔椅位水源精准消毒机', type: 'WATER', clinic_id: 101, clinic_name: '示范总院口腔门诊部', location: '诊室一 牙椅02', work_mode: 'DEEP_CLEAN', status: 'ONLINE', uv_status: 1, filter_level: 95, uv_lamp_health: 98 },
@@ -63,20 +81,92 @@ const defaultFallbackDevices: Device[] = [
   { id: 14, sn: 'A-SYS-2026-06', name: 'VIP特诊中心高压无油无菌气源站', type: 'AIR', clinic_id: 101, clinic_name: '示范总院口腔门诊部', location: 'VIP层 气源主节点', work_mode: 'NORMAL', status: 'ONLINE', uv_status: 1, filter_level: 96, uv_lamp_health: 98 }
 ];
 
+const defaultFallbackAlarms: AlarmItem[] = [
+  {
+    id: 101,
+    device_sn: 'W-SYS-2026-01',
+    title: '紫外线杀菌辐射强度严重衰减',
+    description: 'AI算法对比光谱与辐射强度遥测，检测到紫外灯管输出效率较出厂基准下降超 85%，存在微生物超标风险，建议立即更换配件',
+    level: 'CRITICAL',
+    status: 'UNRESOLVED',
+    triggered_at: '2026-07-30 17:15:32'
+  },
+  {
+    id: 102,
+    device_sn: 'W-SYS-2026-01',
+    title: 'PP棉/超滤膜滤芯接近堵塞临界点',
+    description: 'AI预警模型计算压差上升趋势，结合水流量递减曲线评估，预计在 72 小时内发生反冲洗失效',
+    level: 'WARNING',
+    status: 'UNRESOLVED',
+    triggered_at: '2026-07-30 16:40:10'
+  },
+  {
+    id: 103,
+    device_sn: 'A-SYS-2026-01',
+    title: '气源露点温度发生微幅漂移',
+    description: '检测到吸附干燥罐效能微幅下降，露点温度由 -42°C 升至 -35°C，建议安排预警性再生保养',
+    level: 'WARNING',
+    status: 'RESOLVED',
+    triggered_at: '2026-07-30 14:22:05'
+  },
+  {
+    id: 104,
+    device_sn: 'W-SYS-2026-03',
+    title: '出水TDS溶解性固体指标突增',
+    description: '监测到水质TDS值瞬间突破 45 ppm（正常范畴 <15 ppm），系统已自动开启深度消毒与备用旁路',
+    level: 'CRITICAL',
+    status: 'UNRESOLVED',
+    triggered_at: '2026-07-30 12:05:48'
+  },
+  {
+    id: 105,
+    device_sn: 'A-SYS-2026-02',
+    title: 'HEPA高效过滤器气阻增加',
+    description: '种植手术室气源前置初效过滤器阻力增加 24%，AI耗材衰减模型评估建议于本周内完成替换',
+    level: 'WARNING',
+    status: 'RESOLVED',
+    triggered_at: '2026-07-30 09:12:15'
+  }
+];
+
+const defaultFallbackConsumables: ConsumableItem[] = [
+  { id: 1, device_sn: 'W-SYS-2026-01', item_name: '1号牙椅水路超滤膜滤芯', life_remaining: 12, estimated_replace_date: '2026-08-05' },
+  { id: 2, device_sn: 'W-SYS-2026-01', item_name: 'UV紫外线杀菌灯管(254nm)', life_remaining: 6, estimated_replace_date: '2026-08-02' },
+  { id: 3, device_sn: 'A-SYS-2026-01', item_name: '中央气源精密除水除油滤芯', life_remaining: 35, estimated_replace_date: '2026-09-10' },
+  { id: 4, device_sn: 'A-SYS-2026-02', item_name: '正畸中心无菌气源HEPA过滤器', life_remaining: 78, estimated_replace_date: '2026-11-20' },
+  { id: 5, device_sn: 'W-SYS-2026-04', item_name: 'VIP特诊间高阶反渗透膜组', life_remaining: 92, estimated_replace_date: '2026-12-30' }
+];
+
 export const useDeviceStore = defineStore('device', {
   state: () => {
-    const saved = localStorage.getItem('local_devices');
+    const savedDev = localStorage.getItem('local_devices');
     let initDevices = defaultFallbackDevices as Device[];
-    if (saved) {
+    if (savedDev) {
       try {
-        const parsed = JSON.parse(saved);
+        const parsed = JSON.parse(savedDev);
         if (Array.isArray(parsed) && parsed.length > 0) {
           initDevices = parsed;
         }
       } catch (e) {}
     }
+
+    const savedAlarms = localStorage.getItem('persistent_alarms');
+    let initAlarms = defaultFallbackAlarms;
+    if (savedAlarms) {
+      try {
+        const parsedA = JSON.parse(savedAlarms);
+        if (Array.isArray(parsedA) && parsedA.length > 0) {
+          initAlarms = parsedA;
+        }
+      } catch (e) {}
+    }
+
+    const activeCount = initAlarms.filter(a => a.status === 'UNRESOLVED').length;
+
     return {
       devices: initDevices,
+      alarms: initAlarms,
+      consumables: defaultFallbackConsumables,
       overview: {
         totalDevices: initDevices.length,
         totalClinics: 2,
@@ -87,8 +177,8 @@ export const useDeviceStore = defineStore('device', {
         airSterilizationRate: 99.85,
         airBacteriaKillRate: 99.85,
         avgAirPressure: 0.65,
-        activeAlarmsCount: 3,
-        unresolvedAlarms: 3
+        activeAlarmsCount: activeCount,
+        unresolvedAlarms: activeCount
       } as OverviewData,
       realtimeTelemetry: {} as Record<string, TelemetryData>,
       wsConnected: false,
@@ -107,6 +197,9 @@ export const useDeviceStore = defineStore('device', {
       } catch (err) {
         this.overview.totalDevices = this.devices.length;
         this.overview.onlineDevices = this.devices.filter(d => d.status === 'ONLINE').length;
+        const unresolved = this.alarms.filter(a => a.status === 'UNRESOLVED').length;
+        this.overview.activeAlarmsCount = unresolved;
+        this.overview.unresolvedAlarms = unresolved;
       }
     },
 
@@ -121,34 +214,8 @@ export const useDeviceStore = defineStore('device', {
           const localOnly = this.devices.filter(d => !serverSns.has(d.sn));
           this.devices = [...res.data, ...localOnly];
           localStorage.setItem('local_devices', JSON.stringify(this.devices));
-        } else if (this.devices.length === 0 || force) {
-          const saved = localStorage.getItem('local_devices');
-          if (saved) {
-            try {
-              const parsed = JSON.parse(saved);
-              if (Array.isArray(parsed) && parsed.length > 0) {
-                this.devices = parsed;
-                return;
-              }
-            } catch (e) {}
-          }
-          this.devices = defaultFallbackDevices;
-          localStorage.setItem('local_devices', JSON.stringify(this.devices));
         }
       } catch (err) {
-        const saved = localStorage.getItem('local_devices');
-        if (saved) {
-          try {
-            const parsed = JSON.parse(saved);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              this.devices = parsed;
-              return;
-            }
-          } catch (e) {}
-        }
-        if (this.devices.length === 0 || force) {
-          this.devices = defaultFallbackDevices;
-        }
       } finally {
         this.loading = false;
       }
@@ -232,17 +299,39 @@ export const useDeviceStore = defineStore('device', {
     },
 
     resolveAlarm(id: number) {
-      try {
-        const localMap = localStorage.getItem('local_resolved_alarm_ids');
-        const resolvedIds = localMap ? JSON.parse(localMap) : {};
-        resolvedIds[id] = true;
-        localStorage.setItem('local_resolved_alarm_ids', JSON.stringify(resolvedIds));
+      const item = this.alarms.find(a => a.id === id);
+      if (item) {
+        item.status = 'RESOLVED';
+      }
+      const unresolvedCount = this.alarms.filter(a => a.status === 'UNRESOLVED').length;
+      this.overview.activeAlarmsCount = unresolvedCount;
+      this.overview.unresolvedAlarms = unresolvedCount;
+      localStorage.setItem('persistent_alarms', JSON.stringify(this.alarms));
+    },
 
-        const initialUnresolved = [101, 102, 104];
-        const remaining = initialUnresolved.filter(aId => !resolvedIds[aId]).length;
-        this.overview.unresolvedAlarms = Math.max(0, remaining);
-        this.overview.activeAlarmsCount = Math.max(0, remaining);
-      } catch (e) {}
+    async fetchAlarms() {
+      try {
+        const res = await axios.get('/api/alarms');
+        if (Array.isArray(res.data) && res.data.length > 0) {
+          const localMap = localStorage.getItem('persistent_alarms');
+          if (localMap) {
+            const parsed = JSON.parse(localMap);
+            const resolvedSet = new Set(parsed.filter((a: any) => a.status === 'RESOLVED').map((a: any) => a.id));
+            this.alarms = res.data.map((item: any) => {
+              if (resolvedSet.has(item.id)) {
+                return { ...item, status: 'RESOLVED' };
+              }
+              return item;
+            });
+          } else {
+            this.alarms = res.data;
+          }
+          const unresolved = this.alarms.filter(a => a.status === 'UNRESOLVED').length;
+          this.overview.activeAlarmsCount = unresolved;
+          this.overview.unresolvedAlarms = unresolved;
+          localStorage.setItem('persistent_alarms', JSON.stringify(this.alarms));
+        }
+      } catch (err) {}
     },
 
     initWebSocket() {
