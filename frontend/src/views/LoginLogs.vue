@@ -107,38 +107,38 @@ const filterForm = ref({
   dateRange: null
 });
 
-const defaultMockLoginLogs: LoginLogItem[] = [
-  { id: 1, username: 'admin', result: 'SUCCESS', failReason: '—', ip: '127.0.0.1', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0.0.0', loginTime: '2026-07-31 09:13:58' },
-  { id: 2, username: 'demo_operator', result: 'SUCCESS', failReason: '—', ip: '127.0.0.1', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0.0.0', loginTime: '2026-07-31 08:14:50' },
-  { id: 3, username: 'admin', result: 'SUCCESS', failReason: '—', ip: '192.168.1.102', userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)', loginTime: '2026-07-30 20:58:13' }
-];
-
 const fetchLogs = async () => {
   loading.value = true;
   let fetched: LoginLogItem[] = [];
 
   try {
     const res = await axios.get('/api/system/login-logs');
-    if (Array.isArray(res.data) && res.data.length > 0) {
+    if (Array.isArray(res.data)) {
       fetched = res.data;
-    } else {
-      fetched = defaultMockLoginLogs;
     }
-  } catch (e) {
-    fetched = defaultMockLoginLogs;
-  }
+  } catch (e) {}
 
   try {
-    const liveSaved = sessionStorage.getItem('live_login_logs');
-    if (liveSaved) {
-      const liveList = JSON.parse(liveSaved);
-      if (Array.isArray(liveList)) {
-        fetched = [...liveList, ...fetched];
+    const pSaved = localStorage.getItem('persistent_login_logs') || sessionStorage.getItem('live_login_logs');
+    if (pSaved) {
+      const pList = JSON.parse(pSaved);
+      if (Array.isArray(pList)) {
+        fetched = [...pList, ...fetched];
       }
     }
   } catch (e) {}
 
-  logs.value = fetched;
+  const map = new Map<string | number, LoginLogItem>();
+  fetched.forEach(item => {
+    const key = item.id || `${item.username}-${item.loginTime}`;
+    if (!map.has(key)) {
+      map.set(key, item);
+    }
+  });
+
+  logs.value = Array.from(map.values()).sort((a, b) => {
+    return new Date(b.loginTime).getTime() - new Date(a.loginTime).getTime();
+  });
   loading.value = false;
 };
 

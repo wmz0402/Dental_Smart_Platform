@@ -356,14 +356,20 @@ router.get('/system/roles', (req: Request, res: Response) => {
   res.json(roles);
 });
 
+// 内存动态登录日志表 (彻底移除写死的假数据)
+const globalLoginLogsList: any[] = [];
+
 // 9. 系统管理——登录日志 API
 router.get('/system/login-logs', (req: Request, res: Response) => {
-  const loginLogs = [
-    { id: 1, username: 'admin', result: 'SUCCESS', failReason: '—', ip: '127.0.0.1', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36', loginTime: '2026-08-03 11:51:45' },
-    { id: 2, username: 'sysytem_admin', result: 'SUCCESS', failReason: '—', ip: '127.0.0.1', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36', loginTime: '2026-07-31 08:24:12' },
-    { id: 3, username: 'demo_operator', result: 'SUCCESS', failReason: '—', ip: '127.0.0.1', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36', loginTime: '2026-07-30 23:01:02' }
-  ];
-  res.json(loginLogs);
+  res.json(globalLoginLogsList);
+});
+
+router.post('/system/login-logs', (req: Request, res: Response) => {
+  const logItem = req.body;
+  if (logItem && logItem.username) {
+    globalLoginLogsList.unshift(logItem);
+  }
+  res.json({ success: true, count: globalLoginLogsList.length });
 });
 
 // 10. 系统管理——操作日志 API

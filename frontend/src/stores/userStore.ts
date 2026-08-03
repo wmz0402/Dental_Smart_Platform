@@ -90,12 +90,10 @@ export const useUserStore = defineStore('user', {
 
     recordLoginLog(username: string, result: 'SUCCESS' | 'FAIL', failReason = '—') {
       try {
-        const saved = sessionStorage.getItem('live_login_logs');
-        const list = saved ? JSON.parse(saved) : [];
         const now = new Date();
         const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
         
-        list.unshift({
+        const newLog = {
           id: Date.now(),
           username: username || 'admin',
           result,
@@ -103,13 +101,21 @@ export const useUserStore = defineStore('user', {
           ip: '127.0.0.1',
           userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0.0.0',
           loginTime: timeStr
-        });
+        };
+
+        const saved = localStorage.getItem('persistent_login_logs') || sessionStorage.getItem('live_login_logs');
+        const list = saved ? JSON.parse(saved) : [];
+        list.unshift(newLog);
+        localStorage.setItem('persistent_login_logs', JSON.stringify(list));
         sessionStorage.setItem('live_login_logs', JSON.stringify(list));
 
+        axios.post('/api/system/login-logs', newLog).catch(() => {});
+
         if (result === 'SUCCESS') {
-          const mapSaved = sessionStorage.getItem('user_last_login_map');
+          const mapSaved = localStorage.getItem('user_last_login_map') || sessionStorage.getItem('user_last_login_map');
           const map = mapSaved ? JSON.parse(mapSaved) : {};
           map[username || 'admin'] = timeStr;
+          localStorage.setItem('user_last_login_map', JSON.stringify(map));
           sessionStorage.setItem('user_last_login_map', JSON.stringify(map));
         }
       } catch (e) {}
