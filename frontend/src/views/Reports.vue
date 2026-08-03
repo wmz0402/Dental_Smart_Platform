@@ -167,12 +167,12 @@
           <table class="hospital-table">
             <thead>
               <tr>
-                <th>序号</th>
-                <th>检测项目名称</th>
-                <th>检测结果</th>
-                <th>临床参考范围/限量标准</th>
-                <th>单位</th>
-                <th>结果提示</th>
+                <th style="width: 8%;">序号</th>
+                <th style="width: 30%;">检测项目名称</th>
+                <th style="width: 14%;">检测结果</th>
+                <th style="width: 26%;">临床参考范围 / 限量标准</th>
+                <th style="width: 10%;">单位</th>
+                <th style="width: 12%;">结果提示</th>
               </tr>
             </thead>
             <tbody>
@@ -234,12 +234,12 @@
           <table class="hospital-table mini-table">
             <thead>
               <tr>
-                <th>设备编号</th>
-                <th>设备名称</th>
-                <th>系统分类</th>
-                <th>部署位置</th>
-                <th>当前运行模式</th>
-                <th>设备健康度</th>
+                <th style="width: 18%;">设备编号</th>
+                <th style="width: 26%;">设备名称</th>
+                <th style="width: 14%;">系统分类</th>
+                <th style="width: 18%;">部署位置</th>
+                <th style="width: 12%;">运行模式</th>
+                <th style="width: 12%;">健康度</th>
               </tr>
             </thead>
             <tbody>
@@ -641,12 +641,12 @@ onMounted(async () => {
 }
 
 .hospital-paper {
-  width: 800px;
-  padding: 40px 48px;
-  background-color: #ffffff;
-  color: #111827;
-  font-family: 'SimSun', 'Songti SC', serif, sans-serif;
-  box-sizing: border-box;
+  width: 900px !important;
+  padding: 40px 44px !important;
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  font-family: 'SimSun', 'Songti SC', 'SimHei', serif, sans-serif !important;
+  box-sizing: border-box !important;
 }
 
 .hospital-header {
@@ -655,18 +655,19 @@ onMounted(async () => {
 }
 
 .hospital-title {
-  font-size: 22px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  color: #000000;
-  margin-bottom: 4px;
+  font-size: 24px !important;
+  font-weight: bold !important;
+  letter-spacing: 1px !important;
+  color: #000000 !important;
+  white-space: nowrap !important;
+  margin-bottom: 6px !important;
 }
 
 .hospital-sub {
-  font-size: 10px;
-  font-family: Arial, sans-serif;
-  color: #4b5563;
-  letter-spacing: 1.5px;
+  font-size: 11px !important;
+  font-family: Arial, sans-serif !important;
+  color: #4b5563 !important;
+  letter-spacing: 1px !important;
 }
 
 .hospital-divider {
@@ -705,27 +706,29 @@ onMounted(async () => {
 }
 
 .hospital-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
+  width: 100% !important;
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
+  font-size: 13px !important;
 }
 
 .hospital-table th,
 .hospital-table td {
-  border: 1px solid #000000;
-  padding: 8px 10px;
-  text-align: center;
+  border: 1px solid #000000 !important;
+  padding: 8px 6px !important;
+  text-align: center !important;
+  word-break: break-word !important;
 }
 
 .hospital-table th {
-  background-color: #f3f4f6;
-  font-weight: bold;
-  color: #000000;
+  background-color: #f3f4f6 !important;
+  font-weight: bold !important;
+  color: #000000 !important;
 }
 
 .mini-table td {
-  font-size: 11px;
-  padding: 6px;
+  font-size: 12px !important;
+  padding: 6px 4px !important;
 }
 
 .pass-text {
