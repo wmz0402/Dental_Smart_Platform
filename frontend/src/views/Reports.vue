@@ -328,10 +328,10 @@ const exportPDF = async () => {
       backgroundColor: '#ffffff'
     });
 
-    // 智能获取 DOM 节点相对顶部偏移，避开表格 tr 行与区块切割
+    // 智能获取 DOM 节点相对顶部偏移，仅针对 tr 表格行与结论卡片精准避断
     const containerRect = reportElement.getBoundingClientRect();
     const elements = Array.from(
-      reportElement.querySelectorAll('.hospital-table tr, .hospital-section, .info-grid-table, .hospital-conclusion')
+      reportElement.querySelectorAll('.hospital-table tr, .hospital-conclusion')
     );
     const elementPositions = elements.map((el: any) => {
       const rect = el.getBoundingClientRect();
