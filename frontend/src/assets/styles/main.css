@@ -927,5 +927,20 @@ html.light-theme .custom-dark-table td.el-table-fixed-column--left {
   color: #0f172a !important;
 }
 
+/* 浅色明亮模式下移动端汉堡包侧边栏展开按钮浅色蓝灰与高对比度图标重写 */
+html.light-theme .mobile-menu-btn {
+  background-color: #f1f5f9 !important;
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0284c7 !important;
+}
+
+html.light-theme .mobile-menu-btn .el-icon,
+html.light-theme .mobile-menu-btn svg {
+  color: #0284c7 !important;
+  fill: #0284c7 !important;
+}
+
+
 
 

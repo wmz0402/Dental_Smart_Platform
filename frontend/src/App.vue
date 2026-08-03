@@ -558,9 +558,15 @@ onUnmounted(() => {
   color: #38bdf8 !important;
 }
 
-:global(html.light-theme) .mobile-menu-btn {
+:global(html.light-theme) .mobile-menu-btn,
+:global(html.light-theme .mobile-menu-btn) {
   background: #f1f5f9 !important;
   border: 1px solid #cbd5e1 !important;
+  color: #0284c7 !important;
+}
+
+:global(html.light-theme) .mobile-menu-btn .el-icon,
+:global(html.light-theme .mobile-menu-btn .el-icon) {
   color: #0284c7 !important;
 }
 
