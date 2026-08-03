@@ -37,12 +37,6 @@
           </el-input>
         </el-form-item>
 
-        <div class="forget-link-row">
-          <el-button type="primary" link class="forget-btn" @click="showForgetDialog = true">
-            忘记密码？
-          </el-button>
-        </div>
-
         <el-button
           type="primary"
           size="large"
@@ -53,42 +47,6 @@
         </el-button>
       </el-form>
     </div>
-
-    <!-- 忘记密码重置弹窗 -->
-    <el-dialog v-model="showForgetDialog" title="找回并重置登录密码" width="460px" destroy-on-close>
-      <el-form label-position="top">
-        <el-form-item label="内置登录账号">
-          <el-input v-model="forgetForm.email" placeholder="请输入绑定的登录账号 (如 admin)" autocomplete="off" />
-        </el-form-item>
-
-        <el-form-item label="邮箱验证码">
-          <div class="code-box">
-            <el-input v-model="forgetForm.code" placeholder="请输入 6 位验证码" autocomplete="off" />
-            <el-button
-              type="primary"
-              :disabled="userStore.countdown > 0"
-              @click="handleSendForgetCode"
-            >
-              {{ userStore.countdown > 0 ? `${userStore.countdown}s` : '发送验证码' }}
-            </el-button>
-          </div>
-        </el-form-item>
-
-        <el-form-item label="重置新密码">
-          <el-input
-            v-model="forgetForm.newPassword"
-            type="password"
-            show-password
-            placeholder="请输入您要设置的新密码"
-            autocomplete="new-password"
-          />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <el-button @click="showForgetDialog = false">取消</el-button>
-        <el-button type="primary" @click="handleResetPassword">确认重置新密码</el-button>
-      </template>
-    </el-dialog>
   </div>
 </template>
 
@@ -103,17 +61,9 @@ import { ElMessage } from 'element-plus';
 const router = useRouter();
 const userStore = useUserStore();
 
-const showForgetDialog = ref(false);
-
 const loginForm = ref({
   email: 'admin',
-  password: 'admin'
-});
-
-const forgetForm = ref({
-  email: '',
-  code: '',
-  newPassword: ''
+  password: 'admin123'
 });
 
 const formatError = (e: any): string => {
@@ -121,19 +71,6 @@ const formatError = (e: any): string => {
   if (typeof e === 'string') return e;
   if (e.message && typeof e.message === 'string') return e.message;
   return '系统处理异常，请重试';
-};
-
-
-const handleSendForgetCode = async () => {
-  if (!forgetForm.value.email) {
-    return ElMessage.error('请先填写绑定的登录账号');
-  }
-  try {
-    await userStore.sendEmailCode(forgetForm.value.email);
-    ElMessage.success(`重置验证码已发送至相关邮箱`);
-  } catch (e: any) {
-    ElMessage.error(formatError(e));
-  }
 };
 
 const handlePasswordLogin = async () => {
@@ -145,22 +82,6 @@ const handlePasswordLogin = async () => {
     await userStore.loginWithPassword(loginForm.value.email, loginForm.value.password);
     ElMessage.success(`登录成功！欢迎回来: ${userStore.user?.realName}`);
     router.push('/');
-  } catch (e: any) {
-    ElMessage.error(formatError(e));
-  }
-};
-
-const handleResetPassword = async () => {
-  if (!forgetForm.value.email || !forgetForm.value.code || !forgetForm.value.newPassword) {
-    return ElMessage.error('请完整填写账号、验证码与重置的新密码');
-  }
-
-  try {
-    await userStore.resetPassword(forgetForm.value.email, forgetForm.value.code, forgetForm.value.newPassword);
-    ElMessage.success('密码重置成功，已为您自动填充到登录框');
-    loginForm.value.email = forgetForm.value.email;
-    loginForm.value.password = forgetForm.value.newPassword;
-    showForgetDialog.value = false;
   } catch (e: any) {
     ElMessage.error(formatError(e));
   }
