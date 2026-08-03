@@ -86,11 +86,20 @@
         <el-table-column prop="createdAt" label="创建时间" min-width="180" />
         <el-table-column label="操作" width="160" fixed="right">
           <template #default="scope">
-            <el-button type="primary" link size="small" @click="openEditDialog(scope.row)">编辑</el-button>
+            <el-button
+              type="primary"
+              link
+              size="small"
+              :disabled="isActionDisabled(scope.row)"
+              @click="openEditDialog(scope.row)"
+            >
+              编辑
+            </el-button>
             <el-button
               :type="scope.row.status === 'ACTIVE' ? 'danger' : 'success'"
               link
               size="small"
+              :disabled="isActionDisabled(scope.row)"
               @click="toggleUserStatus(scope.row)"
             >
               {{ scope.row.status === 'ACTIVE' ? '禁用' : '启用' }}
@@ -149,7 +158,10 @@ import axios from 'axios';
 import { Plus, Refresh } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useDeviceStore } from '@/stores/deviceStore';
+import { useUserStore } from '@/stores/userStore';
 import { usePageLoading } from '@/composables/usePageLoading';
+
+const userStore = useUserStore();
 
 interface UserItem {
   id: number;
@@ -182,6 +194,16 @@ const userForm = ref({
   role: 'OPERATOR',
   password: ''
 });
+
+const isActionDisabled = (row: UserItem): boolean => {
+  if (row.role === 'SUPER_ADMIN' || row.username === 'admin') {
+    return !userStore.isSuperAdmin;
+  }
+  if (row.username === userStore.user?.email) {
+    return true;
+  }
+  return false;
+};
 
 const getRoleTagType = (role: string) => {
   if (role === 'SUPER_ADMIN') return 'danger';

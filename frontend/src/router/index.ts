@@ -34,6 +34,8 @@ export const router = createRouter({
   routes
 });
 
+import { ElMessage } from 'element-plus';
+
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
   const deviceStore = useDeviceStore();
@@ -43,6 +45,13 @@ router.beforeEach((to, from, next) => {
   } else if (to.name === 'Login' && userStore.isLoggedIn) {
     next({ name: 'Dashboard' });
   } else {
+    const isSystemRoute = to.path.startsWith('/system') || to.path === '/settings';
+    if (isSystemRoute && !userStore.canAccessSystem) {
+      ElMessage.warning('权限不足：维修人员无权访问系统配置与管理模块');
+      next({ name: 'Dashboard' });
+      return;
+    }
+
     if (to.name !== 'Login') {
       deviceStore.loading = true;
     }

@@ -102,11 +102,11 @@
               <el-icon><Document /></el-icon>
               <span>感控合规报表</span>
             </el-menu-item>
-            <el-menu-item index="/settings">
+            <el-menu-item v-if="userStore.canAccessSystem" index="/settings">
               <el-icon><Setting /></el-icon>
               <span>系统与机构配置</span>
             </el-menu-item>
-            <el-sub-menu index="/system">
+            <el-sub-menu v-if="userStore.canAccessSystem" index="/system">
               <template #title>
                 <el-icon><Management /></el-icon>
                 <span>系统管理</span>
@@ -289,8 +289,9 @@ const userAvatarInitial = computed(() => {
 });
 
 const userRoleLabel = computed(() => {
-  if (userStore.isAdmin) return '超级管理员';
-  return '诊疗医师';
+  if (userStore.isSuperAdmin) return '超级管理员';
+  if (userStore.isSystemAdmin) return '系统管理员';
+  return '维修人员';
 });
 
 const handleUserCommand = (command: string) => {

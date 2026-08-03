@@ -47,11 +47,35 @@ export const useUserStore = defineStore('user', {
   },
 
   getters: {
+    isSuperAdmin: (state): boolean => {
+      if (!state.user) return false;
+      const email = (state.user.email || '').toLowerCase().trim();
+      const role = (state.user.role || '').toUpperCase().trim();
+      return role === 'SUPER_ADMIN' || email === 'admin';
+    },
+    isSystemAdmin: (state): boolean => {
+      if (!state.user) return false;
+      const email = (state.user.email || '').toLowerCase().trim();
+      const role = (state.user.role || '').toUpperCase().trim();
+      return role === 'SYSTEM_ADMIN' || email === 'sysytem_admin' || email === 'system_admin';
+    },
+    isOperator: (state): boolean => {
+      if (!state.user) return false;
+      const email = (state.user.email || '').toLowerCase().trim();
+      const role = (state.user.role || '').toUpperCase().trim();
+      return role === 'OPERATOR' || email === 'demo_operator';
+    },
+    canAccessSystem: (state): boolean => {
+      if (!state.user) return false;
+      const email = (state.user.email || '').toLowerCase().trim();
+      const role = (state.user.role || '').toUpperCase().trim();
+      return role === 'SUPER_ADMIN' || role === 'SYSTEM_ADMIN' || role === 'ADMIN' || email === 'admin' || email === 'sysytem_admin' || email === 'system_admin';
+    },
     isAdmin: (state): boolean => {
       if (!state.user) return false;
       const email = (state.user.email || '').toLowerCase().trim();
       const role = (state.user.role || '').toUpperCase().trim();
-      return role === 'ADMIN' || role === 'SUPER_ADMIN' || role === 'SYSTEM_ADMIN' || email === 'admin' || email.startsWith('admin@');
+      return role === 'SUPER_ADMIN' || role === 'SYSTEM_ADMIN' || role === 'ADMIN' || email === 'admin' || email === 'sysytem_admin' || email === 'system_admin';
     },
     isLoggedIn: (state): boolean => !!state.user
   },
