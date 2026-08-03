@@ -960,6 +960,25 @@ onUnmounted(() => {
   border-bottom: 1px solid #e2e8f0;
 }
 
+/* 深浅主题下移动端 Drawer 抽屉背景与文字全覆盖适配 */
+:global(.mobile-sidebar-drawer) {
+  background-color: #0b1120 !important;
+  color: #f8fafc !important;
+}
+
+:global(.mobile-sidebar-drawer .el-drawer__body) {
+  background-color: #0b1120 !important;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+}
+
+:global(html.light-theme .mobile-sidebar-drawer),
+:global(html.light-theme .mobile-sidebar-drawer .el-drawer__body) {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
 /* 移动端媒体查询样式调整 */
 @media (max-width: 767.98px) {
   .content-area {

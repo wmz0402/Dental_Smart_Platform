@@ -214,4 +214,42 @@ onMounted(async () => {
   font-size: 12px;
   color: var(--text-muted);
 }
+
+@media (max-width: 767.98px) {
+  .settings-page {
+    gap: 14px;
+  }
+  .header-action {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+  .header-action .el-button {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+  .settings-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  .span-2 {
+    grid-column: span 1 !important;
+  }
+  .rules-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .rule-item {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    padding: 14px !important;
+  }
+  .rule-item > span:first-child {
+    font-weight: 600;
+  }
+  .rule-item .el-input-number {
+    width: 100% !important;
+  }
+}
 </style>

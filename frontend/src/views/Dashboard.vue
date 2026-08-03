@@ -177,21 +177,25 @@ const chartsLoading = ref(true);
 const initCharts = () => {
   if (!trendChartRef.value || !pieChartRef.value) return;
 
-  const widthTrend = trendChartRef.value.clientWidth || trendChartRef.value.parentElement?.clientWidth || 600;
-  const widthPie = pieChartRef.value.clientWidth || pieChartRef.value.parentElement?.clientWidth || 300;
+  const widthTrend = trendChartRef.value.clientWidth || trendChartRef.value.parentElement?.clientWidth || 320;
+  const heightTrend = trendChartRef.value.clientHeight || 260;
+  const widthPie = pieChartRef.value.clientWidth || pieChartRef.value.parentElement?.clientWidth || 320;
+  const heightPie = pieChartRef.value.clientHeight || 260;
 
   const isDark = userStore.isDarkTheme;
   const textColor = isDark ? '#94a3b8' : '#475569';
   const splitLineColor = isDark ? '#1e293b' : '#e2e8f0';
   const axisLineColor = isDark ? '#334155' : '#cbd5e1';
 
+  const isMobileView = widthTrend < 500;
+
   if (trendChart) trendChart.dispose();
-  trendChart = echarts.init(trendChartRef.value, isDark ? 'dark' : undefined, { width: widthTrend, height: 320 });
+  trendChart = echarts.init(trendChartRef.value, isDark ? 'dark' : undefined, { width: widthTrend, height: heightTrend });
   trendChart.setOption({
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
-    legend: { data: ['水质TDS(ppm)', '露点温度(°C)'], top: 10, textStyle: { color: textColor } },
-    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+    legend: { data: ['水质TDS(ppm)', '露点温度(°C)'], top: 5, textStyle: { color: textColor } },
+    grid: { left: '3%', right: '4%', bottom: '8%', containLabel: true },
     xAxis: {
       type: 'category',
       data: ['02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00'],
@@ -221,16 +225,19 @@ const initCharts = () => {
   }, true);
 
   if (pieChart) pieChart.dispose();
-  pieChart = echarts.init(pieChartRef.value, isDark ? 'dark' : undefined, { width: widthPie, height: 320 });
+  pieChart = echarts.init(pieChartRef.value, isDark ? 'dark' : undefined, { width: widthPie, height: heightPie });
   pieChart.setOption({
     backgroundColor: 'transparent',
     tooltip: { trigger: 'item' },
-    legend: { orient: 'vertical', right: 10, top: 'center', textStyle: { color: textColor } },
+    legend: isMobileView
+      ? { orient: 'horizontal', bottom: 0, left: 'center', textStyle: { color: textColor } }
+      : { orient: 'vertical', right: 10, top: 'center', textStyle: { color: textColor } },
     series: [
       {
         name: '运行模式',
         type: 'pie',
-        radius: ['45%', '70%'],
+        center: isMobileView ? ['50%', '38%'] : ['40%', '50%'],
+        radius: isMobileView ? ['35%', '60%'] : ['45%', '70%'],
         avoidLabelOverlap: false,
         itemStyle: { borderRadius: 8, borderColor: isDark ? '#0f172a' : '#ffffff', borderWidth: 2 },
         label: { show: false },

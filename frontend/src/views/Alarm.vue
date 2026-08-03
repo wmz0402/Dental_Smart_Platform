@@ -391,8 +391,17 @@ onMounted(async () => {
 }
 
 @media (max-width: 767.98px) {
-  .alarm-view {
+  .alarm-page {
     gap: 14px;
+  }
+  .header-action {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+  .header-action .el-button {
+    width: 100% !important;
+    margin: 0 !important;
   }
   .consumables-grid {
     grid-template-columns: 1fr;
