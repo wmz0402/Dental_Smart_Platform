@@ -135,12 +135,14 @@
 import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue';
 import { useDeviceStore } from '@/stores/deviceStore';
 import { useUserStore } from '@/stores/userStore';
+import { usePageLoading } from '@/composables/usePageLoading';
 import { Monitor, Filter, WindPower, Warning } from '@element-plus/icons-vue';
 import * as echarts from 'echarts';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
 const store = useDeviceStore();
 const userStore = useUserStore();
+const { withLoading } = usePageLoading();
 
 const trendChartRef = ref<HTMLElement | null>(null);
 const pieChartRef = ref<HTMLElement | null>(null);
@@ -240,7 +242,6 @@ const initCharts = () => {
   }, true);
 
   chartsLoading.value = false;
-  store.loading = false;
 };
 
 const handleResize = () => {
@@ -276,8 +277,7 @@ const handleLock = (row: any) => {
   }).catch(() => {});
 };
 
-onMounted(() => {
-  chartsLoading.value = false;
+onMounted(async () => {
   initCharts();
 
   if (typeof window !== 'undefined' && 'ResizeObserver' in window) {
@@ -289,11 +289,22 @@ onMounted(() => {
   }
 
   window.addEventListener('resize', handleResize);
-  nextTick(() => handleResize());
 
-  Promise.all([store.fetchOverview(), store.fetchDevices()]).then(() => {
-    initCharts();
-  });
+  // 由 composable 统一管理全局 loading：等数据拉取 + 图表重绘 + DOM 渲染全部完成
+  await withLoading(
+    [
+      () => store.fetchOverview(),
+      () => store.fetchDevices(),
+      () => {
+        initCharts();
+        return Promise.resolve();
+      }
+    ],
+    () => store.devices.length > 0 && store.overview.totalDevices > 0
+  );
+
+  // loading 关闭后再做一次 resize，确保 ECharts 容器尺寸正确
+  nextTick(() => handleResize());
 });
 
 onUnmounted(() => {

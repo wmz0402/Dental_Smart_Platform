@@ -708,7 +708,9 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: #090d16 !important;
+  background: rgba(11, 17, 32, 0.45) !important;
+  backdrop-filter: blur(12px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(180%) !important;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -718,11 +720,17 @@ onUnmounted(() => {
   color: #f8fafc;
   pointer-events: none;
   border-radius: 8px;
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  box-shadow: inset 0 0 40px rgba(56, 189, 248, 0.05);
 }
 
 :global(html.light-theme) .main-content-loading-screen {
-  background: #f1f5f9 !important;
+  background: rgba(241, 245, 249, 0.55) !important;
+  backdrop-filter: blur(12px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(180%) !important;
   color: #0f172a !important;
+  border: 1px solid rgba(37, 99, 235, 0.15);
+  box-shadow: inset 0 0 40px rgba(37, 99, 235, 0.05);
 }
 
 .loading-box {

@@ -80,9 +80,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import { useDeviceStore } from '@/stores/deviceStore';
+import { usePageLoading } from '@/composables/usePageLoading';
 
 interface LoginLogItem {
   id: number;
@@ -95,6 +96,7 @@ interface LoginLogItem {
 }
 
 const deviceStore = useDeviceStore();
+const { withLoading } = usePageLoading();
 const loading = ref(false);
 const logs = ref<LoginLogItem[]>([]);
 
@@ -138,10 +140,6 @@ const fetchLogs = async () => {
 
   logs.value = fetched;
   loading.value = false;
-  await nextTick();
-  requestAnimationFrame(() => {
-    deviceStore.loading = false;
-  });
 };
 
 const filteredLogs = computed(() => {
@@ -157,9 +155,11 @@ const resetFilter = () => {
   filterForm.value = { username: '', result: '', ip: '', dateRange: null };
 };
 
-onMounted(() => {
-  deviceStore.loading = true;
-  fetchLogs();
+onMounted(async () => {
+  await withLoading(
+    [() => fetchLogs()],
+    () => logs.value.length > 0
+  );
 });
 </script>
 

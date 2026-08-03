@@ -288,15 +288,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useUserStore } from '@/stores/userStore';
 import { useDeviceStore } from '@/stores/deviceStore';
+import { usePageLoading } from '@/composables/usePageLoading';
 import { ElMessage } from 'element-plus';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
 const userStore = useUserStore();
 const deviceStore = useDeviceStore();
+const { withLoading } = usePageLoading();
 
 const reportDate = ref('2026-07-30');
 const currentTime = ref(new Date().toLocaleString());
@@ -358,14 +360,12 @@ const exportPDF = async () => {
 };
 
 onMounted(async () => {
-  deviceStore.loading = true;
   const today = new Date().toISOString().split('T')[0];
   reportDate.value = today;
-  await Promise.all([deviceStore.fetchOverview(), deviceStore.fetchDevices()]);
-  await nextTick();
-  requestAnimationFrame(() => {
-    deviceStore.loading = false;
-  });
+  await withLoading(
+    [() => deviceStore.fetchOverview(), () => deviceStore.fetchDevices()],
+    () => deviceStore.devices.length > 0 && deviceStore.overview.totalDevices > 0
+  );
 });
 </script>
 

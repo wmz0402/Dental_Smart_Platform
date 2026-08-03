@@ -90,12 +90,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import { useDeviceStore } from '@/stores/deviceStore';
+import { usePageLoading } from '@/composables/usePageLoading';
 
 const deviceStore = useDeviceStore();
+const { withLoading } = usePageLoading();
 
 const defaultFallbackAlarms = [
   {
@@ -206,12 +208,10 @@ const getLifeTagType = (val: number) => {
 };
 
 onMounted(async () => {
-  deviceStore.loading = true;
-  await loadData();
-  await nextTick();
-  requestAnimationFrame(() => {
-    deviceStore.loading = false;
-  });
+  await withLoading(
+    [() => loadData()],
+    () => alarmList.value.length > 0
+  );
 });
 </script>
 

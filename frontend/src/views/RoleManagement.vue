@@ -87,11 +87,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { Plus, Refresh } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 import { useDeviceStore } from '@/stores/deviceStore';
+import { usePageLoading } from '@/composables/usePageLoading';
 
 interface RoleItem {
   id: number;
@@ -103,6 +104,7 @@ interface RoleItem {
 }
 
 const deviceStore = useDeviceStore();
+const { withLoading } = usePageLoading();
 const loading = ref(false);
 const roles = ref<RoleItem[]>([]);
 
@@ -172,10 +174,6 @@ const fetchRoles = async () => {
     roles.value = defaultMockRoles;
   } finally {
     loading.value = false;
-    await nextTick();
-    requestAnimationFrame(() => {
-      deviceStore.loading = false;
-    });
   }
 };
 
@@ -226,9 +224,11 @@ const savePermissions = () => {
   showPermissionDialog.value = false;
 };
 
-onMounted(() => {
-  deviceStore.loading = true;
-  fetchRoles();
+onMounted(async () => {
+  await withLoading(
+    [() => fetchRoles()],
+    () => roles.value.length > 0
+  );
 });
 </script>
 

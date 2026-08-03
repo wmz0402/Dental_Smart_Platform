@@ -144,11 +144,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import { Plus, Refresh } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useDeviceStore } from '@/stores/deviceStore';
+import { usePageLoading } from '@/composables/usePageLoading';
 
 interface UserItem {
   id: number;
@@ -162,6 +163,7 @@ interface UserItem {
 }
 
 const deviceStore = useDeviceStore();
+const { withLoading } = usePageLoading();
 const loading = ref(false);
 const users = ref<UserItem[]>([]);
 
@@ -224,10 +226,6 @@ const fetchUsers = async () => {
 
   users.value = fetched;
   loading.value = false;
-  await nextTick();
-  requestAnimationFrame(() => {
-    deviceStore.loading = false;
-  });
 };
 
 const filteredUsers = computed(() => {
@@ -296,9 +294,11 @@ const toggleUserStatus = (row: UserItem) => {
     }).catch(() => {});
 };
 
-onMounted(() => {
-  deviceStore.loading = true;
-  fetchUsers();
+onMounted(async () => {
+  await withLoading(
+    [() => fetchUsers()],
+    () => users.value.length > 0
+  );
 });
 </script>
 

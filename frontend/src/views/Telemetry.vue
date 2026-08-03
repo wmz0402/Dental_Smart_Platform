@@ -79,12 +79,14 @@
 import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue';
 import { useDeviceStore } from '@/stores/deviceStore';
 import { useUserStore } from '@/stores/userStore';
+import { usePageLoading } from '@/composables/usePageLoading';
 import { Refresh } from '@element-plus/icons-vue';
 import * as echarts from 'echarts';
 import axios from 'axios';
 
 const deviceStore = useDeviceStore();
 const userStore = useUserStore();
+const { withLoading } = usePageLoading();
 const selectedDeviceSn = ref('W-SYS-2026-01');
 const sampleLimit = ref(30);
 const chartRef = ref<HTMLElement | null>(null);
@@ -216,10 +218,9 @@ const renderChart = (times: string[], tdsData: number[], uvData: number[]) => {
 
 const loadHistory = async () => {
   chartLoading.value = true;
-  deviceStore.loading = true;
 
   const { times, tdsData, uvData } = generateMockPoints(sampleLimit.value);
-  
+
   tableData.value = times.map((t, idx) => ({
     id: `LOG-${Date.now() - idx * 1000}`,
     sn: selectedDeviceSn.value,
@@ -235,7 +236,6 @@ const loadHistory = async () => {
 
   await nextTick();
   chartLoading.value = false;
-  deviceStore.loading = false;
 
   try {
     const res = await axios.get(`/api/telemetry/history?deviceSn=${selectedDeviceSn.value}&limit=${sampleLimit.value}`);
@@ -243,7 +243,7 @@ const loadHistory = async () => {
       const apiTimes = res.data.map(d => d.timestamp);
       const apiTds = res.data.map(d => d.tds || 14);
       const apiUv = res.data.map((d, idx) => Number(d.uvIntensity || (94.5 + Math.sin(idx * 0.45) * 3.5 + (Math.random() - 0.5) * 1.5).toFixed(1)));
-      
+
       tableData.value = apiTimes.map((t, idx) => ({
         id: `LOG-${Date.now() - idx * 1000}`,
         sn: selectedDeviceSn.value,
@@ -288,8 +288,10 @@ watch(() => deviceStore.loading, (isLoading) => {
 });
 
 onMounted(async () => {
-  deviceStore.loading = true;
-  await loadHistory();
+  await withLoading(
+    [() => loadHistory()],
+    () => tableData.value.length > 0
+  );
 
   if (typeof window !== 'undefined' && 'ResizeObserver' in window && chartRef.value) {
     resizeObserver = new ResizeObserver(() => {

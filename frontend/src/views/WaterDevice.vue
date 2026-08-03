@@ -162,14 +162,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useDeviceStore, type Device } from '@/stores/deviceStore';
 import { useUserStore } from '@/stores/userStore';
+import { usePageLoading } from '@/composables/usePageLoading';
 import { ArrowDown, Edit, Delete } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
 const deviceStore = useDeviceStore();
 const userStore = useUserStore();
+const { withLoading } = usePageLoading();
 const showAddDialog = ref(false);
 const showEditDialog = ref(false);
 
@@ -292,12 +294,11 @@ const handleDeleteDevice = (dev: Device) => {
 };
 
 onMounted(async () => {
-  deviceStore.loading = true;
-  await deviceStore.fetchDevices();
-  await nextTick();
-  requestAnimationFrame(() => {
-    deviceStore.loading = false;
-  });
+  // 已有数据时跳过 loading；否则走完整加载流程，确保所有设备卡片渲染完毕才关 loading
+  await withLoading(
+    [() => deviceStore.fetchDevices()],
+    () => deviceStore.devices.length > 0
+  );
 });
 </script>
 

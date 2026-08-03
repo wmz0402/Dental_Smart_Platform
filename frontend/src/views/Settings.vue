@@ -120,21 +120,20 @@ const form = ref({
   autoCutoff: true
 });
 
-import { onMounted, nextTick } from 'vue';
+import { onMounted } from 'vue';
 import { useDeviceStore } from '@/stores/deviceStore';
+import { usePageLoading } from '@/composables/usePageLoading';
 
 const deviceStore = useDeviceStore();
+const { finishLoading } = usePageLoading();
 
 const saveSettings = () => {
   ElMessage.success('系统配置参数已成功保存并实时下发同步');
 };
 
 onMounted(async () => {
-  deviceStore.loading = true;
-  await nextTick();
-  requestAnimationFrame(() => {
-    deviceStore.loading = false;
-  });
+  // 设置页无远程数据请求，仅需等待表单 DOM 渲染完成即可关 loading
+  await finishLoading();
 });
 </script>
 

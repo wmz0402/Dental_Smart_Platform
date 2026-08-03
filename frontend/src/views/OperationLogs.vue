@@ -114,9 +114,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import { useDeviceStore } from '@/stores/deviceStore';
+import { usePageLoading } from '@/composables/usePageLoading';
 
 interface OpLogItem {
   id: number;
@@ -133,6 +134,7 @@ interface OpLogItem {
 }
 
 const deviceStore = useDeviceStore();
+const { withLoading } = usePageLoading();
 const loading = ref(false);
 const logs = ref<OpLogItem[]>([]);
 
@@ -166,10 +168,6 @@ const fetchOpLogs = async () => {
     logs.value = defaultMockOpLogs;
   } finally {
     loading.value = false;
-    await nextTick();
-    requestAnimationFrame(() => {
-      deviceStore.loading = false;
-    });
   }
 };
 
@@ -201,9 +199,11 @@ const viewDetail = (row: OpLogItem) => {
   showDetailDialog.value = true;
 };
 
-onMounted(() => {
-  deviceStore.loading = true;
-  fetchOpLogs();
+onMounted(async () => {
+  await withLoading(
+    [() => fetchOpLogs()],
+    () => logs.value.length > 0
+  );
 });
 </script>
 
